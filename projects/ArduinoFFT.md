@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: images/ArduinoFFT.jpg
+image: images/ArduinoFFT.png
 title: Arduino Fast Fourier Transform
 permalink: projects/ArduinoFFT
 # All dates must be YYYY-MM-DD format!
