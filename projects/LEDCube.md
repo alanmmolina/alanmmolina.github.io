@@ -16,8 +16,7 @@ It was a project developed in November 2016 as a requirement for approval in Dig
 
 <iframe src="https://albumizr.com/a/ID7k" scrolling="no" frameborder="0" allowfullscreen width="700" height="400"></iframe>
 
-<iframe src="https://player.vimeo.com/video/239754667" width="640" height="360" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
-<p><a href="https://vimeo.com/239754667">Cubo de LEDs</a> from <a href="https://vimeo.com/user73076671">Alan Molina</a> on <a href="https://vimeo.com">Vimeo</a>.</p>
+<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/239754667?title=0&byline=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
 
 
