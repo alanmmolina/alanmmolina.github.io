@@ -5,7 +5,7 @@ image: images/BenchSupply.jpg
 title: Adjustable Bench Power Supply
 permalink: projects/BenchSupply
 # All dates must be YYYY-MM-DD format!
-date: 2016-12-15
+date: {}
 labels:
   - Prototyping
   - Maker
