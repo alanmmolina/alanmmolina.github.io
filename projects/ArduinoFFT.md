@@ -10,7 +10,10 @@ labels:
   - FFT
   - Arduino
   - Music
-summary: A text adventure game I developed for ICS 313.
+summary: >-
+  My team developed a robotic mouse that won first place in the 2015 UH
+  Micromouse competition.
+published: true
 ---
 
 <iframe src="https://albumizr.com/a/z4UQ" scrolling="no" frameborder="0" allowfullscreen width="700" height="400"></iframe>
