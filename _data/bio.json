@@ -1,57 +1,50 @@
 {
   "basics": {
-    "name": "Molly Maluhia",
-    "label": "Student",
-    "picture": "https://techfolios.github.io/template/images/molly.png",
-    "email": "molly@hawaii.edu",
-    "phone": "808-333-4444",
+    "name": "Alan Molina",
+    "label": "Control and Automation Engineering Student",
+    "picture": "https://alanmmolina.github.io/template/images/molly.png",
+    "email": "mmolina.alan@gmail.com",
+    "phone": "+55 15 99119-7697",
     "website": "https://mmaluhia.github.io",
-    "summary": "I am studying for a B.S. in Computer Science in the Department of Information and Computer Sciences at the University of Hawaii. I expect to graduate in Spring, 2020.",
+    "summary": "I'm a student of the 8th period of Control and Automation Engineering at the São Paulo State University - Institute of Science and Technology of Sorocaba. Currently, I have a scholarship for Scientific Initiation from FAPESP and I've been working with the Group of Automation and Integrated Systems of UNESP. My project includes research and prototyping to ally Internet of Things with energy efficiency. I'm one of the founder members of the Mashina Robotics group, a project associated with tutoring work in Microprocessors Systems class. I'm also a private tutor in Mathematics and Physics for Middle and High School students.",
     "location": {
       "address": "",
-      "postalCode": "96822",
-      "city": "Honolulu",
-      "countryCode": "USA",
-      "region": "Hawaii"
+      "postalCode": "",
+      "city": "Sorocaba",
+      "countryCode": "BR",
+      "region": "São Paulo"
     },
     "profiles": [
       {
-        "network": "github",
-        "username": "mmaluhia",
-        "url": "http://github.com/changeme"
-      },
-      {
         "network": "linkedin",
-        "username": "mollymaluhia",
-        "url": "http://linkedin.com/in/changeme"
-      },
-      {
-        "network": "twitter",
-        "username": "mollymal",
-        "url": "http://twitter.com/changeme"
-      },
-      {
-        "network": "instagram",
-        "username": "molly",
-        "url": "http://instagram.com/changeme"
+        "username": "alanmmolina",
+        "url": "http://linkedin.com/in/alanmmolina"
       }
     ]
   },
   "interests": [
     {
-      "name": "internet of things",
-      "keywords": [
-        "Arduino",
-        "TI MSP430"
-      ]
-    },
-    {
-      "name": "data mining",
+      "name": "Engineering",
       "keywords": [
       ]
     },
     {
-      "name": "artificial intelligence",
+      "name": "Robotics",
+      "keywords": [
+      ]
+    },
+    {
+      "name": "Prototyping",
+      "keywords": [
+      ]
+    },
+    {
+      "name": "Internet of Things",
+      "keywords": [
+      ]
+    },
+    {
+      "name": "Data Science",
       "keywords": [
       ]
     }
