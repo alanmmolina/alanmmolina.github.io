@@ -11,6 +11,7 @@ labels:
   - Maker
   - Tool Idea
 summary: A responsive web application for travel planning that my team developed in ICS 415.
+published: true
 ---
 
 It's a personal project developed in December 2016. The adjustable power supply is an essential tool to do tests in electronic circuits and, in general, is one of the most important apparatus in a "maker" bench. Since the professional power supplies are too expensive, I chose to build a very low cost version that meets the requirements of simple circuits, sensors and microcontrollers.
