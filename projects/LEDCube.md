@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: images/Foto - Cubo de LEDs.png
+image: images/LEDCube.png
 title: LED Cube with Digital Logic Design
 permalink: projects/LEDCube
 # All dates must be YYYY-MM-DD format!
