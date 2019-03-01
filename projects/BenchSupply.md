@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: images/BenchSupply.jpg
+image: images/BenchSupply.png
 title: Adjustable Bench Power Supply
 permalink: projects/BenchSupply
 # All dates must be YYYY-MM-DD format!
