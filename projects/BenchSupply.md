@@ -10,7 +10,9 @@ labels:
   - Prototyping
   - Maker
   - Tool Idea
-summary: A responsive web application for travel planning that my team developed in ICS 415.
+summary: >-
+  My team developed a robotic mouse that won first place in the 2015 UH
+  Micromouse competition.
 published: true
 ---
 
