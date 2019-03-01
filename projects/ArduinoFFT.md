@@ -5,7 +5,7 @@ image: images/ArduinoFFT.jpg
 title: Arduino Fast Fourier Transform
 permalink: projects/ArduinoFFT
 # All dates must be YYYY-MM-DD format!
-date: 2014-04-12
+date: 2017-06-22
 labels:
   - FFT
   - Arduino
