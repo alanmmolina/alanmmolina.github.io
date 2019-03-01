@@ -5,7 +5,7 @@ image: images/BenchSupply.jpg
 title: Adjustable Bench Power Supply
 permalink: projects/BenchSupply
 # All dates must be YYYY-MM-DD format!
-date: {}
+date: 2016-12-30
 labels:
   - Prototyping
   - Maker
@@ -20,6 +20,7 @@ It's a personal project developed in December 2016. The adjustable power supply 
 
 <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/239296153?color=3b8ab3&title=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
-  
+<p><p>
+
 <iframe src="https://albumizr.com/a/tMJv" scrolling="no" frameborder="0" allowfullscreen width="700" height="400"></iframe>
 
