@@ -5,7 +5,7 @@ image: images/SumoRobot.png
 title: Low Cost Autonomous Mini Sumo Robot
 permalink: projects/SumoRobot
 # All dates must be YYYY-MM-DD format!
-date: 2015-07-01
+date: 2017-10-18
 labels:
   - Prototyping
   - Robotics
