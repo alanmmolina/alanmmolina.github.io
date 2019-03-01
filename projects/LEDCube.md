@@ -18,6 +18,6 @@ It was a project developed in November 2016 as a requirement for approval in Dig
 
 <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/239754667?color=3b8ab3&title=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
-<br />
+<p><p>
 
 <iframe src="https://albumizr.com/a/ID7k" scrolling="no" frameborder="0" allowfullscreen width="700" height="400"></iframe>
