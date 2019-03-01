@@ -4,7 +4,8 @@ type: project
 image: images/Foto - Cubo de LEDs.png
 title: LED Cube with Digital Logic Design
 permalink: projects/LEDCube
-date: {}
+# All dates must be YYYY-MM-DD format!
+date: 2018-01-01
 labels:
   - Prototyping
   - Digital Circuits
