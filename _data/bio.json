@@ -5,7 +5,7 @@
     "picture": "https://alanmmolina.github.io/images/Foto - Portfolio.png",
     "email": "mmolina.alan@gmail.com",
     "phone": "+55 15 99119-7697",
-    "website": "https://mmaluhia.github.io",
+    "website": "",
     "summary": "I'm a student of the 8th period of Control and Automation Engineering at the São Paulo State University - Institute of Science and Technology of Sorocaba. Currently, I have a scholarship for Scientific Initiation from FAPESP and I've been working with the Group of Automation and Integrated Systems of UNESP. My project includes research and prototyping to ally Internet of Things with energy efficiency. I'm one of the founder members of the Mashina Robotics group, a project associated with tutoring work in Microprocessors Systems class. I'm also a private tutor in Mathematics and Physics for Middle and High School students.",
     "location": {
       "address": "",
@@ -23,11 +23,6 @@
     ]
   },
   "interests": [
-    {
-      "name": "Engineering",
-      "keywords": [
-      ]
-    },
     {
       "name": "Robotics",
       "keywords": [
