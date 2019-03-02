@@ -27,7 +27,7 @@
       </div>
       <div class="center aligned content">
         <div class="description">
-          <b>Interests - </b>
+          <b>Interests: </b>
           {% for interest in site.data.bio.interests %}
             {{ interest.name }}{% if forloop.last != true %}, {% endif %}
           {% endfor %}
@@ -39,10 +39,10 @@
       </div>
       <div class="center aligned content">
         <a href="{{ site.baseurl}}/projects/">
-          <button class="ui basic button">Projects ({{ num_projects }})</button>
+          <button class="ui basic button"><b>Projects ({{ num_projects }})</b></button>
         </a>
         <a href="{{ site.baseurl}}/bio/">
-          <button class="ui basic button">{{ site.bio-page-label }}</button>
+          <button class="ui basic button"><b>{{ site.bio-page-label }}</b></button>
         </a>
       </div>
     </div>
