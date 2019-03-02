@@ -7,9 +7,9 @@ permalink: projects/StrangerThings
 # All dates must be YYYY-MM-DD format!
 date: 2018-01-10
 labels:
-  - Robotics
+  - Prototyping
   - Arduino
-  - C++
+  - Android
 summary: My team developed a robotic mouse that won first place in the 2015 UH Micromouse competition.
 ---
 
