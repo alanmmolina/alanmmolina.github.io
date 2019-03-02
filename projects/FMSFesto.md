@@ -1,7 +1,7 @@
 ---
 layout: project
 type: project
-image: images/FMSFesto.jpg
+image: images/FMSFesto.png
 title: FMS Festo Stations Automation
 permalink: projects/FMSFesto
 # All dates must be YYYY-MM-DD format!
