@@ -1,7 +1,54 @@
----
-layout: default
----
+<!DOCTYPE HTML>
+<html lang="{{ page.lang | default: site.lang | default: en }}">
 
-{% include menubar.html active="bio"%}
+{% include head.html %}
 
-{{ content }}
+<body>
+{% include sidebar.html %}
+{% include header.html %}
+<div class="sidebar-topnav-mobile resume"></div>
+<!-- Wrap is the content to shift when toggling the sidebar. We content-cover the
+     content to avoid any CSS collisions with our real content. -->
+<!-- Format screen correctly on mobile -->
+<div class="resume-mobile-screen">
+</div>
+<div class="content-cover">
+  <div style="margin-top:80px" class="ui middle aligned centered grid text container">
+    <h1 class="ui center aligned header no-bottom">Resume</h1>
+  </div>
+
+  <div style="margin-top:20px; padding-bottom:30px" id="pdf-download-container"
+       class="ui middle aligned centered grid text container">
+    <a href="{{site.url}}/downloads/Nathan_Lam_Resume_r14nl.pdf">
+      <button id="resume-pdf-download" class="ui green button">PDF Version</button>
+    </a>
+  </div>
+  <hr>
+  <div class="cd-container">
+    <div class="ui grid container">
+
+      <div class="sixteen wide column no-bottom">
+        <h2 class="ui center aligned header no-bottom name">{{ site.data.bio.basics.name }}</h2>
+      </div>
+
+      <div class="eight wide left aligned column resume">
+        {% include bio-network-links.html %}
+      </div>
+
+      <div class="eight wide right aligned column">
+        {% include bio-address.html %}
+      </div>
+    </div>
+    <div style="margin-bottom: 5px" class="ui stackable grid container info">
+      {% include bio-interests-1.html %}
+      {% include bio-skills-1.html %}
+      {% include bio-education-1.html %}
+      {% include bio-work-1.html %}
+      {% include bio-projects-1.html %}
+      {% include bio-volunteer-1.html %}
+      {% include bio-publications-1.html %}
+      {% include bio-awards-1.html %}
+      {% include bio-references-1.html %}
+    </div>
+  </div>
+</div>
