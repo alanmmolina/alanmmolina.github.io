@@ -1,12 +1,12 @@
 {
   "basics": {
     "name": "Alan Molina",
-    "label": "Control and Automation Engineering Student",
+    "label": "Estudante | Engenharia de Controle e Automação",
     "picture": "https://alanmmolina.github.io/images/Foto - Portfolio.png",
     "email": "mmolina.alan@gmail.com",
     "phone": "+55 15 99119-7697",
     "website": "https://alanmmolina.github.io",
-    "summary": "I'm a student of the 8th period of Control and Automation Engineering at the São Paulo State University - Institute of Science and Technology of Sorocaba. Currently, I have a scholarship for Scientific Initiation from FAPESP and I've been working with the Group of Automation and Integrated Systems of UNESP. My project includes research and prototyping to ally Internet of Things with energy efficiency. I'm one of the founder members of the Mashina Robotics group, a project associated with tutoring work in Microprocessors Systems class. I'm also a private tutor in Mathematics and Physics for Middle and High School students.",
+    "summary": "Cursando o 8º semestre de Engenharia de Controle e Automação pela Universidade Estadual Paulista Júlio de Mesquita Filho - Instituto de Ciência e Tecnologia de Sorocaba. É bolsista de Iniciação Científica pela FAPESP junto ao Grupo de Automação e Sistemas Integráveis da UNESP, realizando projeto de pesquisa e prototipagem na área de Internet das Coisas e eficiência energética. É um dos membros fundadores do grupo Mashina Robotics, participando do desenvolvimento de kits e materiais didáticos para disseminação de conhecimentos em robótica móvel. Ministra aulas particulares de reforço em Matemática e Física para alunos de Ensino Fundamental e Médio. Apaixonado por criar, encontrou na engenharia e na cultura maker uma forma de dar vida às suas ideias.",
     "location": {
       "address": "",
       "postalCode": "",
@@ -29,22 +29,22 @@
   },
   "interests": [
     {
-      "name": "Robotics",
+      "name": "Robótica",
       "keywords": [
       ]
     },
     {
-      "name": "Prototyping",
+      "name": "Prototipagem",
       "keywords": [
       ]
     },
     {
-      "name": "Internet of Things",
+      "name": "Internet das Coisas",
       "keywords": [
       ]
     },
     {
-      "name": "Data Science",
+      "name": "Ciência de Dados",
       "keywords": [
       ]
     }
