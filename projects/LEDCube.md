@@ -2,7 +2,7 @@
 layout: project
 type: project
 image: images/LEDCube.png
-title: Cubo de LEDs e Programação de Memórias
+title: Cubo de LEDs e Memórias
 permalink: projects/LEDCube
 # All dates must be YYYY-MM-DD format!
 date: 2016-11-15
