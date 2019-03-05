@@ -2,20 +2,20 @@
 layout: project
 type: project
 image: images/LEDCube.png
-title: LED Cube with Digital Logic Design
+title: Cubo de LEDs e Programação de Memórias
 permalink: projects/LEDCube
 # All dates must be YYYY-MM-DD format!
 date: 2016-11-15
 labels:
-  - Prototyping
-  - Digital Circuits
+  - Prototipagem
+  - Memória
+  - Lógica Digital
 summary: >-
-  My team developed a robotic mouse that won first place in the 2015 UH
-  Micromouse competition.
+  Circuito para controle do acionamento de um cubo de LEDs utilizando técnicas de dimensionamento de circuitos digitais e programação de memórias.
 published: true
 ---
 
-It was a project developed in November 2016 as a requirement for approval in Digital Circuits II class of the São Paulo State University. As requested by the teacher, the project employs the architecture and implementation of a prototype using digital logic devices and memory programming. The elaboration of the project allowed consolidating theory concepts in a practical way and with creative freedom in function of initially defined parameters.
+Projeto desenvolvido em Novembro de 2016 como requisito para aprovação na disciplina de Circuitos Digitais II. O requisito proposto pelo docente foi a utilização apenas de dispositivos digitais e memórias na implementação de um circuito complexo; baseado na ideia do acionamento digital, foi proposta a construção de uma matriz tridimensional capaz de ser acionada de diversas maneiras de acordo com a escolha do usuário. Para tal, foi dimensionado um circuito de entrada, capaz de lidar com prioridades entre quatro opções de sequências de acionamento; projetou-se um circuito oscilador de frequência variável cujo objetivo foi permitir diferentes velocidades de acionamento das sequências propostas; a matrix foi indexada e os acionamentos codificados e, então, programados em duas memórias.
 
 <div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/239754667?color=3b8ab3&title=0&portrait=0" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>
 
