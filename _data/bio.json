@@ -102,7 +102,7 @@
       "position": "Monitoria",
       "website": "",
       "startDate": "2018-04-01",
-      "endDate": "",
+      "endDate": "2018",
       "summary": "Atividade de tutoria em disciplina do curso de Engenharia de Controle e Automação da UNESP de Sorocaba. O trabalho realizado envolveu, dentre outras atividades, a elaboração de tutoriais para programação, realização de um workshop para montagem dos robôs supracitados e organização de um torneio com os alunos da disciplina em questão.",
       "highlights": [
       ]
@@ -111,21 +111,30 @@
   "volunteer": [
     {
       "organization": "",
-      "website": "https://www.udemy.com/share/1001AGA0AfcVhQQn4=/",
+      "website": "udemy.com/python-para-data-science-e-machine-learning",
       "position": "Python para Data Science e Machine Learning",
       "startDate": "2018-12-01",
       "endDate": "o momento",
-      "summary": "Curso oferecido na plataforma online Udemy",
+      "summary": "Curso oferecido na plataforma online Udemy.",
       "highlights": [
       ]
     },
     {
       "organization": "",
-      "website": "https://www.udemy.com/share/1000c2A0AfcVhQQn4=/",
+      "website": "udemy.com/curso-excel-completo",
       "position": "Curso Completo de Microsoft Excel",
       "startDate": "2017",
       "endDate": "",
-      "summary": "",
+      "summary": "Curso oferecido na plataforma online Udemy.",
+      "highlights": [
+      ]
+    },
+    }      "organization": "",
+      "website": "cursoemvideo.com/course/curso-de-algoritmos",
+      "position": "Algoritmos e Lógica",
+      "startDate": "2015",
+      "endDate": "",
+      "summary": "Curso oferecido na plataforma online Curso em Vídeo.",
       "highlights": [
       ]
     }
