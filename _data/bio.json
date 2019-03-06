@@ -78,27 +78,33 @@
   ],
   "work": [
     {
-      "company": "UH Manoa Board of Publications",
-      "position": "Web Developer",
+      "company": "FAPESP",
+      "position": "Bolsista de Iniciação Científica",
       "website": "",
-      "startDate": "2015-08-01",
-      "endDate": "Present",
-      "summary": "Head of online presence for Ka Leo",
+      "startDate": "2018-04-01",
+      "endDate": "o momento",
+      "summary": "Projeto que possui como objetivo o desenvolvimento e análise de viabilidade de um medidor de vazão industrial energeticamente sustentável e integrado à Internet das Coisas. O trabalho realizado tem gerado resultados extremamente promissores e foi selecionado para participação na 2ª fase do 30º Congresso de Iniciação Científica da UNESP.",
       "highlights": [
-        "Maintain, update, and oversee official college newspaper website",
-        "Drive, design and build student-community projects for UH Manoa"
       ]
     },
     {
-      "company": "UH Information Technology Services",
-      "position": "Help Desk Consultant",
-      "website": "http://www.hawaii.edu/its/",
-      "startDate": "2015-01-01",
-      "endDate": "2016-03-15",
-      "summary": "",
+      "company": "Mashina Robotics",
+      "position": "Membro/Cofundador",
+      "website": "",
+      "startDate": "2018-02-01",
+      "endDate": "2019-01-01",
+      "summary": "Grupo de pesquisa e prototipagem direcionado a competições acadêmicas de robótica autônoma e associado à UNESP de Sorocaba. Estive ativamente envolvido no projeto e construção de kits de pequenos robôs para uso didático em disciplinas do câmpus.",
       "highlights": [
-        "Troubleshoot software, hardware and networking issues over the phone",
-        "Answer phone and email responses to the ITS Help Desk"
+      ]
+    },
+        {
+      "company": "Sistemas Microprocessados I e II",
+      "position": "Monitoria",
+      "website": "",
+      "startDate": "2018-04-01",
+      "endDate": "2018-12-01",
+      "summary": "Atividade de tutoria em disciplina do curso de Engenharia de Controle e Automação da UNESP de Sorocaba. O trabalho realizado envolveu, dentre outras atividades, a elaboração de tutoriais para programação, realização de um workshop para montagem dos robôs supracitados e organização de um torneio com os alunos da disciplina em questão.",
+      "highlights": [
       ]
     }
   ],
