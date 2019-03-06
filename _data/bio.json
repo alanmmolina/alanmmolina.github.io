@@ -129,7 +129,8 @@
       "highlights": [
       ]
     },
-    }      "organization": "",
+    {      
+      "organization": "",
       "website": "cursoemvideo.com/course/curso-de-algoritmos",
       "position": "Algoritmos e Lógica",
       "startDate": "2015",
