@@ -37,7 +37,8 @@
   <div class="sixteen wide column no-bottom">
     {% for entry in site.data.bio.awards %}
       {% if entry.type != "grant" %}
-          <b> {{ entry.title }}</b> | {{ entry.summary }};
+        <p class="ui no-bottom">
+          <b> {{ entry.title }}</b> | {{ entry.summary }}</p>
       {% endif %}
     {% endfor %}
   </div>
