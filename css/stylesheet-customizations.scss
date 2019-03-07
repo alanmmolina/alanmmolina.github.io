@@ -22,7 +22,7 @@ body {
 
 // General links
 a {
-  color: lighten(#3b8ab3, 10%);
+  color: darken(#3b8ab3, 10%);
   &:hover {
     color: #3b8ab3;
   }
