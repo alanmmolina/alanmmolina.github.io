@@ -38,9 +38,7 @@
     {% for entry in site.data.bio.awards %}
       {% if entry.type != "grant" %}
         <p class="ui no-bottom">
-          <b>{{ entry.title }}</b>, {{ entry.awarder }}, {{ entry.date }}
-        </p>
-        <p class="ui">{{ entry.summary }}</p>
+          <b>{{ entry.title }}</b> | (<p class="ui">{{ entry.summary }}</p>);
       {% endif %}
     {% endfor %}
   </div>
