@@ -8,8 +8,8 @@ permalink: projects/LaCasaDePapel
 date: 2018-12-30
 labels:
   - Hobby
-  - Custom
-  - Boneco
+  - Customização
+  - Estatueta
 summary: Transformação de uma figura de ação de baixa qualidade em uma estatueta de um dos personagens da série La Casa de Papel.
 ---
 
