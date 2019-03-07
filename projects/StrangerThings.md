@@ -2,7 +2,7 @@
 layout: project
 type: project
 image: images/StrangerThings.png
-title: Painel Interativo de Stranger Things
+title: Stranger Things | Painel Interativo
 permalink: projects/StrangerThings
 # All dates must be YYYY-MM-DD format!
 date: 2018-01-10
