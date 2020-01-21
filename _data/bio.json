@@ -1,12 +1,12 @@
 {
   "basics": {
     "name": "Alan Molina",
-    "label": "Estudante | Engenharia de Controle e Automação",
+    "label": "Part-time Consultant | VISAGIO Tecnologia",
     "picture": "https://alanmmolina.github.io/images/Foto 2.png",
     "email": "mmolina.alan@gmail.com",
     "phone": "",
     "website": "https://alanmmolina.github.io",
-    "summary": "Cursando o 8º semestre de Engenharia de Controle e Automação pela Universidade Estadual Paulista Júlio de Mesquita Filho - Instituto de Ciência e Tecnologia de Sorocaba. É bolsista de Iniciação Científica pela FAPESP junto ao Grupo de Automação e Sistemas Integráveis da UNESP, realizando projeto de pesquisa e prototipagem na área de Internet das Coisas e eficiência energética. É um dos membros fundadores do grupo Mashina Robotics, participando do desenvolvimento de kits e materiais didáticos para disseminação de conhecimentos em robótica móvel. Ministra aulas particulares de reforço em Matemática e Física para alunos de Ensino Fundamental e Médio. Apaixonado por criar, encontrou na engenharia e na cultura maker uma forma de dar vida às suas ideias.",
+    "summary": "Cursando o 10º semestre de Engenharia de Controle e Automação pela Universidade Estadual Paulista Júlio de Mesquita Filho - Instituto de Ciência e Tecnologia de Sorocaba. Foi bolsista de Iniciação Científica pela FAPESP junto ao Grupo de Automação e Sistemas Integráveis da UNESP, realizando projeto de pesquisa e prototipagem na área de Internet das Coisas e eficiência energética. É um dos membros fundadores do grupo Mashina Robotics, participando do desenvolvimento de kits e materiais didáticos para disseminação de conhecimentos em robótica móvel. Atualmente realiza estágio como consultor na Visagio Tecnologia, atuando no desenvolvimento, infraestrutura e gestão na área de Engenharia de Dados. Apaixonado por criar, encontrou na tecnologia e na cultura maker uma forma de dar vida às suas ideias.",
     "location": {
       "address": "",
       "postalCode": "",
@@ -34,12 +34,12 @@
       ]
     },
     {
-      "name": "Prototipagem",
+      "name": "Tecnologia",
       "keywords": [
       ]
     },
     {
-      "name": "Ciência de Dados",
+      "name": "Engenharia de Dados",
       "keywords": [
       ]
     }
@@ -82,12 +82,22 @@
     }
   ],
   "work": [
+        {
+      "company": "VISAGIO Tecnologia",
+      "position": "Part-time Consultant",
+      "website": "",
+      "startDate": "2019-07-03",
+      "endDate": "o momento",
+      "summary": "Projeto e execução de soluções de tecnologia envolvendo otimização de recursos, automatização de processos e gestão. Emprego de metodologia ágil de desenvolvimento na área de Engenharia de Dados.",
+      "highlights": [
+      ]
+    },
     {
       "company": "FAPESP",
       "position": "Bolsista de Iniciação Científica",
       "website": "",
       "startDate": "2018-04-01",
-      "endDate": "o momento",
+      "endDate": "2019-07-01",
       "summary": "Projeto que possui como objetivo o desenvolvimento e análise de viabilidade de um medidor de vazão industrial energeticamente sustentável e integrado à Internet das Coisas. O trabalho realizado tem gerado resultados extremamente promissores e foi selecionado para participação na 2ª fase do 30º Congresso de Iniciação Científica da UNESP.",
       "highlights": [
       ]
