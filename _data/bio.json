@@ -1,7 +1,7 @@
 {
   "basics": {
     "name": "Alan Molina",
-    "label": "Part-time Consultant | VISAGIO Tecnologia",
+    "label": "Part-time Consultant | Visagio Technology",
     "picture": "https://alanmmolina.github.io/images/Foto 2.png",
     "email": "mmolina.alan@gmail.com",
     "phone": "",
@@ -29,12 +29,12 @@
       ]
     },
      {
-      "name": "Inovação",
+      "name": "Engenharia",
       "keywords": [
       ]
     },
     {
-      "name": "Engenharia de Dados",
+      "name": "Inovação",
       "keywords": [
       ]
     }
@@ -78,7 +78,7 @@
   ],
   "work": [
         {
-      "company": "VISAGIO Tecnologia",
+      "company": "Visagio Technology",
       "position": "Part-time Consultant",
       "website": "",
       "startDate": "2019-07-03",
