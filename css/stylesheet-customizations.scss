@@ -17,13 +17,13 @@ body {
 
 // Customize the home page icon colors
 .icon-color {
-  color: #013a63;
+  color: #404040;
 }
 
 // General links
 a {
-  color: darken(#013a63, 10%);
+  color: darken(#3b8ab3, 10%);
   &:hover {
-    color: #013a63;
+    color: #3b8ab3;
   }
 }
