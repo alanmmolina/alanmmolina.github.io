@@ -9,7 +9,7 @@ import * as Plugin from "./quartz/plugins"
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "alanmmolina",
-    pageTitleSuffix: "",
+    pageTitleSuffix: "Test",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
@@ -23,9 +23,9 @@ const config: QuartzConfig = {
       fontOrigin: "googleFonts",
       cdnCaching: true,
       typography: {
-        header: "Geo",
+        header: "Blinker",
         body: "Roboto",
-        code: "IBM Plex Mono",
+        code: "Fira Code",
       },
       colors: {
         lightMode: {
