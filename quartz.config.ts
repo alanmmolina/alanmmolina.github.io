@@ -9,7 +9,7 @@ import * as Plugin from "./quartz/plugins"
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "~/.alanmmolina",
-    pageTitleSuffix: " | alanmmolina",
+    pageTitleSuffix: " ~/.alanmmolina",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
