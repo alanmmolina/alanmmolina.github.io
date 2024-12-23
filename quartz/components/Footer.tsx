@@ -41,8 +41,9 @@ export default ((opts?: Options) => {
           ))}
         </ul>
         <p class="footer-credits">
-          {i18n(cfg.locale).components.footer.createdWith}{" "}
-          <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a> © {year}
+          Created by <strong>Alan Molina</strong> © {year}{" "}
+          | Built with <a href="https://quartz.jzhao.xyz/">Quartz v{version}</a>{" "}
+          <span style="text-decoration: line-through;"> and fueled by coffee</span>
         </p>
       </footer>
     )
