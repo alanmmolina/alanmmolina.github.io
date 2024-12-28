@@ -26,7 +26,7 @@ export default {
       noBacklinksFound: "No backlinks found",
     },
     themeToggle: {
-      lightMode: "Light mode",
+      lightMode: "Don't click. Light attracts bugs!",
       darkMode: "Dark mode",
     },
     explorer: {
@@ -36,7 +36,7 @@ export default {
       createdWith: "Created with",
     },
     graph: {
-      title: "Graph View",
+      title: "Mind Map",
     },
     recentNotes: {
       title: "Recent Notes",
