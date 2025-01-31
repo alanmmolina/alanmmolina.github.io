@@ -28,14 +28,14 @@ Because Data Engineering should be more than just building pipelines for work �
 
 This is just the beginning. Over the coming weeks (and maybe months), I’ll be sharing updates on how **Lakeground** is shaping up. You can expect detailed write-ups on design decisions, hands-on exploration of open-source tools, and maybe even a few missteps along the way.  
 
-I’ll also be setting up a monorepo on GitHub, where each component of **Lakeground** will live as a separate directory (a submodule). These components will not only function independently but also come together to form a complete stack. This modularity will make it easier to experiment with specific tools or workflows without needing to set up the entire pipeline every time.
+I’ll also be setting up a _monorepo_ on GitHub, where each component of **Lakeground** will live as a separate directory (a _submodule_). These components will not only function independently but also come together to form a complete stack. This modularity will make it easier to experiment with specific tools or workflows without needing to set up the entire pipeline every time.
 
 > [!faq]- monorepo
-> A monorepo (short for _monolithic repository_) is a single Git repository that houses the code for multiple projects or components.  Instead of separating each part of a system into its own repo, everything lives together, making it easier to share code, manage dependencies, and ensure consistency.  
+> A monorepo (short for _monolithic repository_) is a single Git repository that houses the code for multiple projects or components.  Instead of separating each part of a system into its own repo, everything lives together, making it easier to share code, manage dependencies, and ensure consistency.  ^monorepo
 
 > [!faq]- submodule
 > A Git submodule is a repository embedded within another repository. It allows you to manage multiple, independent projects while keeping them connected.
 
 ---
 
-If this project sparks your curiosity, I’d love for you to follow along. Whether you’re here for the code, the tools, or just the learning process, there’s plenty to look forward to. And if you have any suggestions, ideas, or tools you think I should explore, don’t hesitate to reach out!
+If this project sparks your curiosity, I’d be happy if you followed along with the journey. Whether you’re here for the code, the tools, or just the learning process, there’s plenty to look forward to. And if you have any suggestions, ideas, or tools you think I should explore, don’t hesitate to reach out!
