@@ -19,7 +19,9 @@ const config: QuartzConfig = {
     baseUrl: "alanmmolina.github.io",
     ignorePatterns: ["private", "templates", ".obsidian"],
     defaultDateType: "created",
-    generateSocialImages: true,
+    generateSocialImages: {
+      colorScheme: "darkMode"
+    },
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
