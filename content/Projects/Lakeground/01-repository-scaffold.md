@@ -1,5 +1,5 @@
 ---
-title: Repository Scaffold
+title: 01. Repository Scaffold
 date: 2025-02-08
 draft: false
 tags:
@@ -10,7 +10,7 @@ tags:
 ---
 ---
 
-The foundation of [[00. Concept & Motivation|Lakeground]] is all about modularity without sacrificing cohesion. To achieve this, I’m structuring the project around a **monorepo-ish** design, where all components live under a single repository. At the same time, I want each major part to stay self-contained. That’s where `git` **submodules** come in—they let each component function as an independent repository while still being part of the larger whole. It might sound a bit unconventional (or just plain confusing) at first, but by the end of this article, I promise it’ll make a lot more sense.
+The foundation of [[00-concept-and-motivation|Lakeground]] is all about modularity without sacrificing cohesion. To achieve this, I’m structuring the project around a **monorepo-ish** design, where all components live under a single repository. At the same time, I want each major part to stay self-contained. That’s where `git` **submodules** come in—they let each component function as an independent repository while still being part of the larger whole. It might sound a bit unconventional (or just plain confusing) at first, but by the end of this article, I promise it’ll make a lot more sense.
 
 ---
 
@@ -35,7 +35,7 @@ That’s why I’m structuring the project around a **core-repo**—a _single en
 
 ## Why Submodules?
 
-The first time I saw a GitHub repo where a folder was actually a link to another repository, I was fascinated. It felt awesome—having a single central repository while keeping multiple projects independent but connected. With `git` **submodules**, each component of [[00. Concept & Motivation|Lakeground]] remains its own separate repository, meaning I can version and manage them independently while still linking them back to the main structure.
+The first time I saw a GitHub repo where a folder was actually a link to another repository, I was fascinated. It felt awesome—having a single central repository while keeping multiple projects independent but connected. With `git` **submodules**, each component of [[00-concept-and-motivation|Lakeground]] remains its own separate repository, meaning I can version and manage them independently while still linking them back to the main structure.
 
 **Submodules** allow me to develop a component in isolation and then seamlessly integrate it into the broader project. This approach keeps things clean and avoids the typical downsides of a massive monolithic repository where everything is tangled together.
 
@@ -104,7 +104,7 @@ Each section corresponds to a **submodule** and contains its name, the path wher
 
 With the **core-repo** and **components** design in place, the next challenge is managing Python environments efficiently across all these components. That’s where [uv](https://docs.astral.sh/uv/) comes in. It offers a _workspace_ feature that aligns perfectly with this modular structure, allowing me to maintain separate dependencies for each submodule while keeping everything under one roof.
 
-In the next post, I’ll dive into **uv** and how it fits into the [[00. Concept & Motivation|Lakeground]] ecosystem.
+In the next post, I’ll dive into **uv** and how it fits into the [[00-concept-and-motivation|Lakeground]] ecosystem.
 
 ---
 
