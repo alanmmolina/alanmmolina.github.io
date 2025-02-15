@@ -1,5 +1,5 @@
 ---
-title: 01. Repository Scaffold
+title: Repository Scaffold
 date: 2025-02-08
 draft: false
 tags:

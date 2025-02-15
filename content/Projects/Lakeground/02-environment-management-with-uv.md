@@ -1,5 +1,5 @@
 ---
-title: 02. Environment Management with uv
+title: Environment Management with uv
 date: 2025-02-15
 draft: false
 tags:
