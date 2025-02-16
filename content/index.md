@@ -4,6 +4,8 @@ title: " "
 
 # `whoami`
 
+---
+
 Hey there! :)
 
 I’m **Alan Molina**, a **Data Engineer** passionate about crafting elegant solutions for messy data problems. With over 5 years of experience, I’ve had plenty of opportunities to navigate the world of data pipelines, mostly solving puzzles that come with big (and sometimes chaotic) datasets. I hold a degree in **Control and Automation Engineering**, and while I once dabbled in robotics, I eventually found my true calling in data. 
