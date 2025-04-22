@@ -1,5 +1,5 @@
 ---
-title: Concept & Motivation
+title: _ Concept & Motivation
 date: 2025-02-01
 draft: false
 tags:
