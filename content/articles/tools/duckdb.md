@@ -11,12 +11,12 @@ tags:
 ---
 ---
 
-There’s something great about a tool that just works—no setup drama, no unnecessary complexity. That’s exactly what DuckDB brings to the table. It’s a zero-fuss analytical database that runs directly in your application, effortlessly handling .csv or .parquet files, and even Pandas or Polars DataFrames. While the data world keeps chasing bigger, more distributed architectures, DuckDB flips the script—fast, local, and refreshingly simple.  
+There’s something great about a tool that just works - no setup drama, no unnecessary complexity. That’s exactly what DuckDB brings to the table. It’s a zero-fuss analytical database that runs directly in your application, effortlessly handling .csv or .parquet files, and even Pandas or Polars DataFrames. While the data world keeps chasing bigger, more distributed architectures, DuckDB flips the script - fast, local, and refreshingly simple.  
 
 ---
 ## The Minds Behind it
 
-[DuckDB](https://duckdb.org/) wasn’t born in a Silicon Valley startup—it came out of [CWI - Centrum Wiskunde & Informatica](https://www.cwi.nl/en/), a research institute in the Netherlands, the same place where [Guido van Rossum](https://www.linkedin.com/in/guido-van-rossum-4a0756/) first created Python. Its creators, [Hannes Mühleisen](https://www.linkedin.com/in/hfmuehleisen/) and [Mark Raasveldt](https://www.linkedin.com/in/mark-raasveldt-256b9a70/), weren’t chasing the next cloud-based behemoth. Instead, they wanted something simple, local, and ridiculously fast—a database that works _inside the application_, not outside of it.  
+[DuckDB](https://duckdb.org/) wasn’t born in a Silicon Valley startup - it came out of [CWI - Centrum Wiskunde & Informatica](https://www.cwi.nl/en/), a research institute in the Netherlands, the same place where [Guido van Rossum](https://www.linkedin.com/in/guido-van-rossum-4a0756/) first created Python. Its creators, [Hannes Mühleisen](https://www.linkedin.com/in/hfmuehleisen/) and [Mark Raasveldt](https://www.linkedin.com/in/mark-raasveldt-256b9a70/), weren’t chasing the next cloud-based behemoth. Instead, they wanted something simple, local, and ridiculously fast - a database that works _inside the application_, not outside of it.  
 
 The name? That’s where it gets fun. When Hannes was living on a boat, he wanted a pet that wouldn’t panic if it ended up in the water. A duck seemed like the obvious choice. That’s how he ended up with **Wilbur**, a feathered companion perfectly suited for the floating lifestyle. So when it came time to name their database, DuckDB just made sense.
 
@@ -32,10 +32,10 @@ Alongside them, [Pedro Holanda](https://www.linkedin.com/in/pdet/), a fellow Bra
 ---
 ## Built to Stay Open
 
-Today, DuckDB is _open-source_ and _MIT-licensed_ **forever**, thanks to the [DuckDB Foundation](https://duckdb.org/foundation/), a non-profit that owns its intellectual property—no risk of a corporate rug-pull. Unlike projects controlled by a single company, DuckDB’s intellectual property isn’t tied to a business that could change direction, seek profit, or get acquired. The foundation exists solely to protect DuckDB’s _open-source_ status, and because it's a legal entity with a defined mission, it can’t just decide to revoke or relicense the code for financial gain. This structure makes a rug pull not just unlikely, but practically impossible.
+Today, DuckDB is _open-source_ and _MIT-licensed_ **forever**, thanks to the [DuckDB Foundation](https://duckdb.org/foundation/), a non-profit that owns its intellectual property - no risk of a corporate rug-pull. Unlike projects controlled by a single company, DuckDB’s intellectual property isn’t tied to a business that could change direction, seek profit, or get acquired. The foundation exists solely to protect DuckDB’s _open-source_ status, and because it's a legal entity with a defined mission, it can’t just decide to revoke or relicense the code for financial gain. This structure makes a rug pull not just unlikely, but practically impossible.
 
 > [!question] Corporate rug-pull?  
-> A **rug-pull** happens when the creators of a project—usually in open-source, crypto, or tech startups—suddenly change the rules in a way that harms users, often for their own financial gain. This can mean closing off access, changing the licensing model, or abandoning the project after securing funding.  
+> A **rug-pull** happens when the creators of a project - usually in open-source, crypto, or tech startups - suddenly change the rules in a way that harms users, often for their own financial gain. This can mean closing off access, changing the licensing model, or abandoning the project after securing funding.  
 >
 > In _open-source_ software, this usually starts with a company launching a project under a permissive license, like MIT or Apache, to attract users and contributors. As adoption grows and businesses start relying on it, the company suddenly switches to a more restrictive license, such as SSPL or BSL. This change limits how others can use or monetize the project, effectively forcing companies to either start paying for commercial licenses or scramble to find an alternative. It’s a move that has happened before.
 
@@ -56,7 +56,7 @@ Databases generally fall into two camps:
 - **OLTP (Online Transaction Processing)** – Think PostgreSQL, MySQL, SQLite. These databases handle _frequent, small transactions_, like updating a user profile or processing an online order.  
 - **OLAP (Online Analytical Processing)** – Think Snowflake, BigQuery, DuckDB. These databases are designed for _complex queries on large datasets_, like computing monthly revenue across millions of transactions.  
 
-While most OLAP databases live in the cloud with a client-server architecture, DuckDB flips the script by keeping everything **local**. No clusters, no network latency—just raw analytical power on your machine.  
+While most OLAP databases live in the cloud with a client-server architecture, DuckDB flips the script by keeping everything **local**. No clusters, no network latency - just raw analytical power on your machine.  
 
 ---
 ## The Big Data Myth
@@ -67,24 +67,24 @@ While most OLAP databases live in the cloud with a client-server architecture, D
   <a href="https://unsplash.com/pt-br/@sortino" target="_blank" style="color: gray;">Joshua Sortino</a>.
 </p>
 
-Somewhere along the way, _Big Data_ became the default mindset. If you’re working with data, the assumption is that you need a distributed system, a cloud cluster, and an army of node just to run a few queries. But let’s be real—**most workloads aren’t that big**. What we actually need is fast, efficient processing on modern hardware—and that’s exactly where DuckDB shines.  
+Somewhere along the way, _Big Data_ became the default mindset. If you’re working with data, the assumption is that you need a distributed system, a cloud cluster, and an army of node just to run a few queries. But let’s be real - **most workloads aren’t that big**. What we actually need is fast, efficient processing on modern hardware - and that’s exactly where DuckDB shines.  
 
-Distributed systems are great when you truly need them, but they come with complexity, cost, and operational headaches. Debugging across multiple nodes? Painful. Managing clusters? Expensive. The truth is, modern local machines are ridiculously powerful—multi-core CPUs, plenty of RAM, fast SSDs. You can process millions of rows locally without breaking a sweat.  
+Distributed systems are great when you truly need them, but they come with complexity, cost, and operational headaches. Debugging across multiple nodes? Painful. Managing clusters? Expensive. The truth is, modern local machines are ridiculously powerful - multi-core CPUs, plenty of RAM, fast SSDs. You can process millions of rows locally without breaking a sweat.  
 
-That’s why DuckDB goes against the grain. Instead of scaling out, it **scales down**, running entirely in-process. No clusters, no network overhead—just raw speed. It’s designed to handle analytical workloads efficiently on a single machine, avoiding the unnecessary baggage of distributed architectures.  
+That’s why DuckDB goes against the grain. Instead of scaling out, it **scales down**, running entirely in-process. No clusters, no network overhead - just raw speed. It’s designed to handle analytical workloads efficiently on a single machine, avoiding the unnecessary baggage of distributed architectures.  
 
 So before spinning up a fleet of servers, ask yourself: do you really need it? If your dataset fits in memory, if you’re doing ad-hoc analysis, or if you just want a simple, no-fuss analytics engine, DuckDB might be all you need. In a world obsessed with scaling out, sometimes the best move is to keep it local.
 
 ---
 ## Into Action
 
-DuckDB is ridiculously easy to get started with—no servers, no setup headaches. You can run it directly from the command line, embed it inside applications, or use it as a database library in languages like C++, Python, Rust, and so on. But for me, the real magic happens in Python.  
+DuckDB is ridiculously easy to get started with - no servers, no setup headaches. You can run it directly from the command line, embed it inside applications, or use it as a database library in languages like C++, Python, Rust, and so on. But for me, the real magic happens in Python.  
 
-With its seamless integration into Pandas, Polars, and Apache Arrow, DuckDB feels like it was made for data analysis. Instead of dealing with a heavyweight database setup, you can just load your data, run SQL queries on DataFrames, and get results instantly—all within a Python environment.
+With its seamless integration into Pandas, Polars, and Apache Arrow, DuckDB feels like it was made for data analysis. Instead of dealing with a heavyweight database setup, you can just load your data, run SQL queries on DataFrames, and get results instantly - all within a Python environment.
 
-When it comes to exploring data like this, **Jupyter Notebooks** are my go-to—whether it’s a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or even [Google Colab](https://colab.google/). They’re great for prototyping because you can run each step independently, check the results instantly, and tweak things without rerunning the entire script or setting up breakpoints. It’s a fast, flexible way to iterate, making it a perfect match for DuckDB. So let’s skip the fluff and get it running.  
+When it comes to exploring data like this, **Jupyter Notebooks** are my go-to - whether it’s a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or even [Google Colab](https://colab.google/). They’re great for prototyping because you can run each step independently, check the results instantly, and tweak things without rerunning the entire script or setting up breakpoints. It’s a fast, flexible way to iterate, making it a perfect match for DuckDB. So let’s skip the fluff and get it running.  
 
-DuckDB can be installed directly from [PyPI](https://pypi.org/project/duckdb/). Since it's a pre-compiled binary, there are no external dependencies—just install and go. Pretty slick.
+DuckDB can be installed directly from [PyPI](https://pypi.org/project/duckdb/). Since it's a pre-compiled binary, there are no external dependencies - just install and go. Pretty slick.
 
 ```sh
 pip install duckdb
@@ -103,7 +103,7 @@ dependencies = [
 ]
 ```
 
-We’re not here to play with toy datasets—let’s work with real-world data. I found [MovieLens 32M](https://grouplens.org/datasets/movielens/32m/), a dataset containing 32 million ratings and 2 million tag applications across 87,585 movies from 200,948 users. It comes as a compressed `.zip` file, so the following snippet will download and extract everything for us.
+We’re not here to play with toy datasets - let’s work with real-world data. I found [MovieLens 32M](https://grouplens.org/datasets/movielens/32m/), a dataset containing 32 million ratings and 2 million tag applications across 87,585 movies from 200,948 users. It comes as a compressed `.zip` file, so the following snippet will download and extract everything for us.
 
 ```python
 import zipfile
@@ -174,7 +174,7 @@ connection.query("SELECT * FROM movies LIMIT 10")
 └────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Did you notice something interesting? We referenced a Python variable inside an SQL query. Since DuckDB runs inside Python, it can access local variables—meaning you can directly query Python datasets using SQL.
+Did you notice something interesting? We referenced a Python variable inside an SQL query. Since DuckDB runs inside Python, it can access local variables - meaning you can directly query Python datasets using SQL.
 
 For example, let’s create a dataset in Pandas and query it using DuckDB:
 
@@ -234,7 +234,7 @@ polars_df = connection.query("SELECT * FROM movies").pl()
 arrow_df = connection.query("SELECT * FROM movies").arrow()
 ```
 
-If you're used to SQL, DuckDB has some neat tricks up its sleeve. It offers what they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)"—a set of enhancements that make queries more concise and powerful. 
+If you're used to SQL, DuckDB has some neat tricks up its sleeve. It offers what they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)" - a set of enhancements that make queries more concise and powerful. 
 
 Let’s extract the year from the movie `title` using regex:
 
@@ -297,7 +297,7 @@ connection.query("""
 └───────────────────────────────────────────────┘
 ```
 
-So far, we've been running everything in-memory, which is great for quick analysis. But sometimes, we need something more permanent—maybe you want to store multiple tables, perform joins, or keep your data available across sessions. That’s where DuckDB’s **persistent** storage comes in. Instead of parsing `.csv` files every time, we can load everything into a `.duckdb` file and even store it in the cloud.
+So far, we've been running everything in-memory, which is great for quick analysis. But sometimes, we need something more permanent - maybe you want to store multiple tables, perform joins, or keep your data available across sessions. That’s where DuckDB’s **persistent** storage comes in. Instead of parsing `.csv` files every time, we can load everything into a `.duckdb` file and even store it in the cloud.
 
 ```python
 connection = duckdb.connect(database="database.duckdb", read_only=False)
@@ -366,7 +366,7 @@ connection.sql("SELECT * FROM ratings LIMIT 20")
 └───────────────────────────────────────┘
 ```
 
-As expected, each row represents a user’s rating for a specific movie. And yes, the dataset lives up to its name—running `COUNT(*)` on the ratings table gives us over 32 million rows. To make things easier, let’s compute the average rating for each movie and save it as a new table.
+As expected, each row represents a user’s rating for a specific movie. And yes, the dataset lives up to its name - running `COUNT(*)` on the ratings table gives us over 32 million rows. To make things easier, let’s compute the average rating for each movie and save it as a new table.
 
 ```python
 connection.sql("""
@@ -445,4 +445,4 @@ For now, it’s my go-to for personal projects. Haven’t had a chance to use it
 Want to learn more? I highly recommend following [Mehdio](https://www.mehdio.com/) from MotherDuck and checking out the [Talk Python to Me](https://talkpython.fm/) episode [#491](https://talkpython.fm/episodes/show/491/duckdb-and-python-ducks-and-snakes-living-together) with [Alex Monahan](https://www.linkedin.com/in/alex-monahan-64814292/) from DuckDB Labs.
 
 Have you worked with DuckDB? How does it fit into your workflow? 
-Reach out—I’d love to hear your thoughts and experiences!
+Reach out - I’d love to hear your thoughts and experiences!

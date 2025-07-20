@@ -13,9 +13,9 @@ tags:
 
 [[articles/tools/dagster|Dagster]]'s asset-first approach offers a refreshing perspective on data orchestration. Today, I want to share a hands-on journey building a complete Spotify Data Pipeline that puts these ideas into practice. It's remarkable how shifting to think in terms of assets can transform the way you approach pipeline development.
 
-I've always found that the best way to understand a new tool is to build something meaningful with it. We'll extract artist data from Spotify, transform it through a Medallion Architecture (`bronze` → `silver` → `gold`), and create consolidated artist insights ready for analysis. This project represents a practical implementation of the concepts we've discussed—bringing theory into the realm of working code.
+I've always found that the best way to understand a new tool is to build something meaningful with it. We'll extract artist data from Spotify, transform it through a Medallion Architecture (`bronze` → `silver` → `gold`), and create consolidated artist insights ready for analysis. This project represents a practical implementation of the concepts we've discussed - bringing theory into the realm of working code.
 
-Data Engineering with a soundtrack—let's get started.
+Data Engineering with a soundtrack - let's get started.
 
 ---
 ## Project Overview
@@ -30,14 +30,14 @@ Our pipeline will collect and process artist data from Spotify through three inc
 2. **`silver`**: transformed and structured `.parquet` data using [[articles/tools/duckdb|DuckDB]].
 3. **`gold`**: consolidated insights combining metrics into `.parquet` format using [[articles/tools/duckdb|DuckDB]].
 
-This structure provides clarity to our data transformation process. Raw data arrives first, then gets transformed into something more structured, and finally becomes refined into business-ready insights. Each layer has a distinct purpose—`bronze` captures the raw API responses, `silver` provides cleaned and normalized information in an analytics-friendly format, and `gold` delivers the final transformed insights ready for analysis. This approach lets us focus on demonstrating [[articles/tools/dagster|Dagster]]'s capabilities rather than building a complete Data Lake with historical versioning.
+This structure provides clarity to our data transformation process. Raw data arrives first, then gets transformed into something more structured, and finally becomes refined into business-ready insights. Each layer has a distinct purpose - `bronze` captures the raw API responses, `silver` provides cleaned and normalized information in an analytics-friendly format, and `gold` delivers the final transformed insights ready for analysis. This approach lets us focus on demonstrating [[articles/tools/dagster|Dagster]]'s capabilities rather than building a complete Data Lake with historical versioning.
 
 ---
 ## Setting the Stage
 
-Now that we understand the components of our pipeline, let's set up the development environment. Since [[articles/tools/dagster|Dagster]] is fundamentally a Python framework, we only need a Python environment to handle the entire project. This is one of [[articles/tools/dagster|Dagster]]'s strengths—it doesn't require separate infrastructure or services to get started.
+Now that we understand the components of our pipeline, let's set up the development environment. Since [[articles/tools/dagster|Dagster]] is fundamentally a Python framework, we only need a Python environment to handle the entire project. This is one of [[articles/tools/dagster|Dagster]]'s strengths - it doesn't require separate infrastructure or services to get started.
 
-For dependency management, I'm using `uv`, a blazing-fast Python package installer and resolver. If you're not familiar with it, it's worth checking out—it makes virtual environment management much more pleasant than traditional tools. Our project requires just a few dependencies, which we'll add to our `pyproject.toml`:
+For dependency management, I'm using `uv`, a blazing-fast Python package installer and resolver. If you're not familiar with it, it's worth checking out - it makes virtual environment management much more pleasant than traditional tools. Our project requires just a few dependencies, which we'll add to our `pyproject.toml`:
 
 ```toml
 dependencies = [
@@ -60,7 +60,7 @@ include = ["project"]
 
 ```
 
-I called this project `project` — yes, I know, I’ve truly been blessed with the gift of creativity.
+I called this project `project` - yes, I know, I’ve truly been blessed with the gift of creativity.
 
 For larger projects, you might want a more structured approach with separate folders for each component type, but for our demonstration, a flat structure works well. Here's our project layout:
 
@@ -78,7 +78,7 @@ For larger projects, you might want a more structured approach with separate fol
 └── pyproject.toml
 ```
 
-The structure aligns perfectly with our Medallion Architecture, with dedicated directories for each layer's output. Within the Python package, we've organized our code to match [[articles/tools/dagster|Dagster]]'s component model—separating **assets**, **resources** and **partitions** while keeping them all accessible.
+The structure aligns perfectly with our Medallion Architecture, with dedicated directories for each layer's output. Within the Python package, we've organized our code to match [[articles/tools/dagster|Dagster]]'s component model - separating **assets**, **resources** and **partitions** while keeping them all accessible.
 
 Finally, we need a `.env` file in the root directory to store our Spotify API credentials. This simple approach works for this tutorial, but in production, you might want a more robust solution like a secrets management service.
 
@@ -87,7 +87,7 @@ SPOTIFY_API_CLIENT_ID=...
 SPOTIFY_API_CLIENT_SECRET=...
 ```
 
-And that's it. We are all set—now we can start the show.
+And that's it. We are all set - now we can start the show.
 
 ---
 ## Setting Up the Resources
@@ -268,12 +268,12 @@ ARTISTS = StaticPartitionsDefinition(
 
 This approach allows us to process data for each artist independently. We can run operations in parallel, selectively refresh data for specific artists, and add more artists without modifying our pipeline code. The partitions create a natural organization that makes our pipeline both scalable and maintainable.
 
-For this implementation, I've populated the partitions with my favorite artists—from the lyrical storytelling of Johnny Cash to the raw energy of Linkin Park. There's something satisfying about building a data pipeline that analyzes the music that's been the soundtrack to different phases of my life. It turns what could be just another technical exercise into something personally meaningful.
+For this implementation, I've populated the partitions with my favorite artists - from the lyrical storytelling of Johnny Cash to the raw energy of Linkin Park. There's something satisfying about building a data pipeline that analyzes the music that's been the soundtrack to different phases of my life. It turns what could be just another technical exercise into something personally meaningful.
 
 ---
 ## Defining Our Assets
 
-First things first—let's import everything we'll need to create this module:
+First things first - let's import everything we'll need to create this module:
 
 ```python
 #./assets.py
@@ -327,7 +327,7 @@ class Layer:
 
 The `Layer` class addresses path management in our Data Lake architecture. It creates a consistent interface for accessing data at different stages of processing, handles directory creation automatically, and maintains naming conventions across the pipeline. This simple utility prevents those frustrating troubleshooting sessions when files aren't where you expect them to be.
 
-This seemingly simple utility actually solves a substantial challenge in Data Engineering—maintaining consistency in how data is organized and accessed. By abstracting path management, we can focus on the transformations themselves rather than worrying about file locations and directory structures.
+This seemingly simple utility actually solves a substantial challenge in Data Engineering - maintaining consistency in how data is organized and accessed. By abstracting path management, we can focus on the transformations themselves rather than worrying about file locations and directory structures.
 
 ---
 ### `bronze`
@@ -363,7 +363,7 @@ def bronze__artist(context: AssetExecutionContext, spotify: SpotifyAPI) -> Mater
     )
 ```
 
-This `bronze` asset has a clear responsibility—extract artist data from the Spotify API and store it as raw `.json`. The simplicity is intentional; we want reliable data capture with minimal processing. The code focuses purely on extraction—there's no transformation logic mixed in, keeping concerns properly separated.
+This `bronze` asset has a clear responsibility - extract artist data from the Spotify API and store it as raw `.json`. The simplicity is intentional; we want reliable data capture with minimal processing. The code focuses purely on extraction - there's no transformation logic mixed in, keeping concerns properly separated.
 
 There are several design choices worth highlighting here. We're using partitioning to process one artist at a time, which gives us flexibility in how we schedule and execute the pipeline. The asset returns detailed metadata about what it produced, making monitoring easier through [[articles/tools/dagster|Dagster]]'s UI. We're also using a consistent path structure via our `Layer` utility.
 
@@ -578,7 +578,7 @@ These assets apply similar transformations to their respective datasets. The alb
 ---
 ### `gold`
 
-The `gold` layer represents the culmination of our pipeline—where transformed data becomes meaningful insights:
+The `gold` layer represents the culmination of our pipeline - where transformed data becomes meaningful insights:
 
 ```python
 #./assets.py
@@ -701,9 +701,9 @@ def gold__artist_insights(context: AssetExecutionContext, duckdb: DuckDBResource
 
 Our `gold` asset combines data from all three `silver` datasets into a consolidated view of **artist insights**. Unlike the `bronze` and `silver` assets that process one artist at a time, this `gold` asset aggregates across all artists to create a comprehensive dataset.
 
-The SQL query is more complex for good reason—it's creating something genuinely valuable. It creates CTEs for each aspect of artist data, including base information, album metrics, and track metrics. The query calculates meaningful aggregations such as average tracks per album and average track popularity across each artist's catalog. It identifies each artist's most popular track, providing a quick reference point for their standout content. Finally, it joins all this information together into a single, analysis-ready dataset that provides a complete picture of each artist.
+The SQL query is more complex for good reason - it's creating something genuinely valuable. It creates CTEs for each aspect of artist data, including base information, album metrics, and track metrics. The query calculates meaningful aggregations such as average tracks per album and average track popularity across each artist's catalog. It identifies each artist's most popular track, providing a quick reference point for their standout content. Finally, it joins all this information together into a single, analysis-ready dataset that provides a complete picture of each artist.
 
-This thoughtfully designed asset creates a dataset that answers important questions: Which artist has the highest track popularity? How does track duration correlate with popularity? What percentage of an artist's content is explicit? The `gold` layer is where data becomes insight—where we transform technically accurate information into business-relevant knowledge. This is the layer that typically gets presented to stakeholders, and the one that ultimately justifies all the careful engineering that came before it.
+This thoughtfully designed asset creates a dataset that answers important questions: Which artist has the highest track popularity? How does track duration correlate with popularity? What percentage of an artist's content is explicit? The `gold` layer is where data becomes insight - where we transform technically accurate information into business-relevant knowledge. This is the layer that typically gets presented to stakeholders, and the one that ultimately justifies all the careful engineering that came before it.
 
 ---
 ## Setting Up the Definitions
@@ -738,7 +738,7 @@ defs = Definitions(
 )
 ```
 
-When [[articles/tools/dagster|Dagster]] initializes, it will load everything included in the `Definitions` object. If we had created **jobs**, **schedules**, or **sensors**, they would also be included here. This acts as a central entry point for the project deployment—for a component to be deployed and visible in the [[articles/tools/dagster|Dagster]] UI, it must be set in a `Definitions` object.
+When [[articles/tools/dagster|Dagster]] initializes, it will load everything included in the `Definitions` object. If we had created **jobs**, **schedules**, or **sensors**, they would also be included here. This acts as a central entry point for the project deployment - for a component to be deployed and visible in the [[articles/tools/dagster|Dagster]] UI, it must be set in a `Definitions` object.
 
 For this demonstration, we're using [[articles/tools/duckdb|DuckDB]]'s in-memory mode, which is perfect for our needs. Since we're only using [[articles/tools/duckdb|DuckDB]] as a processing engine to transform data between our layers and materializing all results as `.parquet`  files, we don't need to persist the database itself.
 
@@ -758,17 +758,17 @@ This will initialize the entire project and open the local UI:
   <img src="dagster-spotify-init-ui.png" alt="Dagster UI" width="100%">
 </p>
 
-I won't make a full tour of the UI in this project, but instead focus on the assets themselves. As you can see, our code is rendered in this stylish dark-themed lineage graph (you can change it to a light theme too if you prefer), where you can clearly see the asset dependencies flowing from left to right and their current status. Since we haven't materialized any assets yet—which means executing the code to generate the actual data outputs and store them in physical storage, all asset partitions are marked as missing and our `gold` asset shows _Never materialized.
+I won't make a full tour of the UI in this project, but instead focus on the assets themselves. As you can see, our code is rendered in this stylish dark-themed lineage graph (you can change it to a light theme too if you prefer), where you can clearly see the asset dependencies flowing from left to right and their current status. Since we haven't materialized any assets yet - which means executing the code to generate the actual data outputs and store them in physical storage, all asset partitions are marked as missing and our `gold` asset shows _Never materialized.
 
 A nice touch is the tags at the bottom of each asset (like `bronze`, `python`, `json`) that visually indicate the purpose and technology behind each component without requiring us to examine the code. There's an extensive list of [kind tags](https://docs.dagster.io/guides/build/assets/metadata-and-tags/kind-tags) available in [[articles/tools/dagster|Dagster]], and the system is open to contributions if you need custom ones.
 
-Let's try materializing a single partition of one asset to see how it works. Right-click on any `bronze` asset and select **Materialize**. The materialization context will show you the list of available partitions—you can choose one or more partitions to start the materialization or select them all (which would lead to a backfill run). Let's choose a single one and click **Launch run**. You'll see the asset status changing in real-time, and when the materialization finishes, we can examine the asset details in the **Asset Catalog**:
+Let's try materializing a single partition of one asset to see how it works. Right-click on any `bronze` asset and select **Materialize**. The materialization context will show you the list of available partitions - you can choose one or more partitions to start the materialization or select them all (which would lead to a backfill run). Let's choose a single one and click **Launch run**. You'll see the asset status changing in real-time, and when the materialization finishes, we can examine the asset details in the **Asset Catalog**:
 
 <p align="center">
   <img src="dagster-spotify-single-partition-materialization.png" alt="Single Asset (and Partition) Materialization" width="100%">
 </p>
 
-Notice how the metadata we configured in our code is displayed here in the **Overview** tab. If a metadata item is numeric, [[articles/tools/dagster|Dagster]] can also generate plots automatically—particularly useful for tracking the volume of rows if the asset represents a table. This metadata can even be accessed programmatically by other [[articles/tools/dagster|Dagster]] components.
+Notice how the metadata we configured in our code is displayed here in the **Overview** tab. If a metadata item is numeric, [[articles/tools/dagster|Dagster]] can also generate plots automatically - particularly useful for tracking the volume of rows if the asset represents a table. This metadata can even be accessed programmatically by other [[articles/tools/dagster|Dagster]] components.
 
 There are several other tabs worth exploring: the **Partitions** tab shows the status of each partition with timestamps and run IDs; the **Events** tab displays all actions related to the asset, providing a complete history of materializations; the **Checks** tab shows quality tests for your assets (a powerful feature we're not using in this demo); and the **Lineage** tab visualizes the upstream and downstream dependencies of the selected asset.
 
@@ -807,13 +807,13 @@ And we get something like:
 ```
 
 - The artist with the highest number of followers is Eminem (nearly 100 million!) and, to no one's surprise, 100% of his tracks we extracted have explicit content. 
-- Imagine Dragons has the second-highest follower count at 57 million, but interestingly, Linkin Park is marked as more popular—according to Spotify's API docs, an artist's popularity is calculated from the popularity of all their tracks rather than just follower count.
+- Imagine Dragons has the second-highest follower count at 57 million, but interestingly, Linkin Park is marked as more popular - according to Spotify's API docs, an artist's popularity is calculated from the popularity of all their tracks rather than just follower count.
 - I think few would disagree that Johnny Cash's version of Hurt is superior to the original by Nine Inch Nails, and our data shows it's indeed his most popular track. 
 - I'm also delighted to see Imagine Dragons' Believer as their top track; it's actually my favorite song and was even part of my wedding ceremony.
 
 ---
 
-That's it! We've built an entire data pipeline from scratch using only free and open-source tools. This pipeline pattern can adapt to much larger workloads—the architecture remains valid whether processing data for a handful of artists or scaling to thousands. [[articles/tools/dagster|Dagster]]'s asset-oriented approach grows with your needs while maintaining the same fundamental principles.
+That's it! We've built an entire data pipeline from scratch using only free and open-source tools. This pipeline pattern can adapt to much larger workloads - the architecture remains valid whether processing data for a handful of artists or scaling to thousands. [[articles/tools/dagster|Dagster]]'s asset-oriented approach grows with your needs while maintaining the same fundamental principles.
 
 If you want to experiment further, you might try adding more artists, implementing scheduled refreshes using [[articles/tools/dagster|Dagster]]'s scheduling capabilities, or connecting a visualization tool to create dashboards from the insights data.
 
@@ -954,6 +954,6 @@ When we start our local [[articles/tools/dagster|Dagster]] instance, the `bronze
   <img src="dagster-spotify-factory-bronze-models.png" alt="Factory Generated Bronze Assets" width="100%">
 </p>
 
-The beauty of this approach is that adding a new asset requires no code changes—just a simple addition to the `.yaml` file. This separation of configuration from implementation embodies best practices in modern Data Engineering, making your codebase more resilient and adaptable.
+The beauty of this approach is that adding a new asset requires no code changes - just a simple addition to the `.yaml` file. This separation of configuration from implementation embodies best practices in modern Data Engineering, making your codebase more resilient and adaptable.
 
-Is it worth the extra abstraction? Well, ask yourself this: would you rather write the same code pattern 10 times, or write one smart pattern that works for all 10 cases? If you're handling more than 3-4 similar assets, the factory approach isn't just elegant—it's practical time-saving engineering. Remember, the goal isn't abstraction for abstraction's sake. It's about spending your mental energy on solving new problems rather than typing the same definitions over and over.
+Is it worth the extra abstraction? Well, ask yourself this: would you rather write the same code pattern 10 times, or write one smart pattern that works for all 10 cases? If you're handling more than 3-4 similar assets, the factory approach isn't just elegant - it's practical time-saving engineering. Remember, the goal isn't abstraction for abstraction's sake. It's about spending your mental energy on solving new problems rather than typing the same definitions over and over.

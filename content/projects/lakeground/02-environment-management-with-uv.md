@@ -11,19 +11,19 @@ tags:
 ---
 ---
 
-Building a modular data engineering stack requires more than just choosing the right tools—it also means keeping everything organized, reproducible, and easy to manage. Since [[00-concept-and-motivation|Lakeground]] will be made up of multiple independent components, I need a way to handle Python environments in a way that’s both flexible and efficient. That’s where [`uv`](https://github.com/astral-sh/uv) comes in.
+Building a modular data engineering stack requires more than just choosing the right tools - it also means keeping everything organized, reproducible, and easy to manage. Since [[00-concept-and-motivation|Lakeground]] will be made up of multiple independent components, I need a way to handle Python environments in a way that’s both flexible and efficient. That’s where [`uv`](https://github.com/astral-sh/uv) comes in.
 
 ---
 ## Why `uv`?  
 
-Python has no shortage of package and environment managers, but `uv` brings something fresh to the table. Built with Rust by the creators of [Ruff](https://docs.astral.sh/ruff/), `uv` is a modern, high-performance tool designed to be _fast_, _lightweight_, and _developer-friendly_. It tackles many of the pain points found in traditional tools like `pip`, `venv`, and `virtualenv`, offering a unified approach to package and environment management. True to its name—_Unified Vision_—`uv` consolidates the best features of these tools into a single, streamlined utility.  
+Python has no shortage of package and environment managers, but `uv` brings something fresh to the table. Built with Rust by the creators of [Ruff](https://docs.astral.sh/ruff/), `uv` is a modern, high-performance tool designed to be _fast_, _lightweight_, and _developer-friendly_. It tackles many of the pain points found in traditional tools like `pip`, `venv`, and `virtualenv`, offering a unified approach to package and environment management. True to its name - _Unified Vision_ - `uv` consolidates the best features of these tools into a single, streamlined utility.  
 
 But what really makes `uv` a perfect fit for [[00-concept-and-motivation|Lakeground]] is its [workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/#using-workspaces) feature.
 
 > [!tip] What about Rust?
-> There are plenty of modern tools built with Rust that are so good they've become staples in my development setup—like [Polars](https://pola.rs/) and [Starship](https://starship.rs/). A few months ago, I decided to explore Rust while taking a Software Architecture course, and I have to say, the language feels amazing. But for those of us who treat Python as almost a native language, the transition isn’t exactly smooth. Rust forces you to dive deeper into Computer Engineering concepts that Python abstracts away entirely. 
+> There are plenty of modern tools built with Rust that are so good they've become staples in my development setup - like [Polars](https://pola.rs/) and [Starship](https://starship.rs/). A few months ago, I decided to explore Rust while taking a Software Architecture course, and I have to say, the language feels amazing. But for those of us who treat Python as almost a native language, the transition isn’t exactly smooth. Rust forces you to dive deeper into Computer Engineering concepts that Python abstracts away entirely. 
 > 
-> That said, its package manager, `cargo`, is a joy to work with, and the logs and stack traces are some of the most detailed and intuitive I’ve seen. I ~~suffered~~ coded with Rust for just a short time, so I barely scratched the surface—but it’s definitely worth the investment. I’ll probably come back to it at some point.
+> That said, its package manager, `cargo`, is a joy to work with, and the logs and stack traces are some of the most detailed and intuitive I’ve seen. I ~~suffered~~ coded with Rust for just a short time, so I barely scratched the surface - but it’s definitely worth the investment. I’ll probably come back to it at some point.
 >  
 > If you work with data like I do, [Data With Rust](https://datawithrust.com/) by Karim Jedda is a great reference to keep an eye on.  
 
@@ -49,7 +49,7 @@ Getting `uv` up and running is surprisingly straightforward. The easiest way to 
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Now, here’s where the magic happens—you don’t even need Python installed on your machine to start a Python project. `uv` takes care of that for you. Let’s install Python 3.13:
+Now, here’s where the magic happens - you don’t even need Python installed on your machine to start a Python project. `uv` takes care of that for you. Let’s install Python 3.13:
 
 ```sh
 uv python install 3.13
@@ -61,7 +61,7 @@ You can also check which Python versions are installed:
 uv python list --only-installed
 ```
 
-This is a super handy command. It’s common to have multiple Python versions floating around—some globally installed, others tied to specific projects. Keeping track of them can quickly turn into a mess, but `uv` helps keep things organized.
+This is a super handy command. It’s common to have multiple Python versions floating around - some globally installed, others tied to specific projects. Keeping track of them can quickly turn into a mess, but `uv` helps keep things organized.
 
 Now, let’s initialize our Python project. Just run:
 
@@ -101,7 +101,7 @@ This will generate a `.venv` folder, which contains everything needed for the vi
 source .venv/bin/activate
 ```
 
-Now, let’s take a look at the `pyproject.toml` file—this is the heart of our package management. Right now, the `dependencies` section is empty. This is where all external dependencies will be listed, along with any internal components we might add later:
+Now, let’s take a look at the `pyproject.toml` file - this is the heart of our package management. Right now, the `dependencies` section is empty. This is where all external dependencies will be listed, along with any internal components we might add later:
 
 ```toml
 [project]
@@ -135,13 +135,13 @@ Need to remove a package? No problem:
 uv remove pydantic
 ```
 
-If you make any changes to the `pyproject.toml` file—whether adding, updating, or removing dependencies—you can synchronize the project with:
+If you make any changes to the `pyproject.toml` file - whether adding, updating, or removing dependencies - you can synchronize the project with:
 
 ```sh
 uv sync
 ```
 
-You might have also noticed a `uv.lock` file in your project. This file keeps track of all package references and metadata, ensuring reproducibility. You **should not** edit it manually—`uv` manages it for you.
+You might have also noticed a `uv.lock` file in your project. This file keeps track of all package references and metadata, ensuring reproducibility. You **should not** edit it manually - `uv` manages it for you.
 
 Speaking of dependencies, `uv` provides a really handy command to visualize them:
 
@@ -203,7 +203,7 @@ Finally, we can run the _Hello World_ script that comes with `uv init`:
 uv run hello.py
 ```
 
-This executes the script within the managed environment—no need to manually activate the virtual environment.
+This executes the script within the managed environment - no need to manually activate the virtual environment.
 
 ## Working with `uv` workspaces
 
@@ -272,16 +272,16 @@ lakeground v0.1.0
     └── typing-extensions v4.12.2
 ```
 
-But wait—there’s no `uv.lock` file inside the component directory, so where does `uv` store its dependencies?
+But wait - there’s no `uv.lock` file inside the component directory, so where does `uv` store its dependencies?
 
 If you check the root `uv.lock` file, you’ll see that `polars` has been added there, as part of the parent project. The component project also _shares the same virtual environment_ as the root project, meaning all dependencies are managed in a single place.
 
-This setup is incredibly efficient. Each subproject can define its own dependencies without running into version conflicts, since `uv` ensures compatibility across the workspace. Instead of juggling multiple lockfiles, everything stays in sync under one, making dependency resolution seamless. And because the virtual environment is shared, switching between components feels effortless—no need to constantly reactivate environments or worry about mismatched package versions.
+This setup is incredibly efficient. Each subproject can define its own dependencies without running into version conflicts, since `uv` ensures compatibility across the workspace. Instead of juggling multiple lockfiles, everything stays in sync under one, making dependency resolution seamless. And because the virtual environment is shared, switching between components feels effortless - no need to constantly reactivate environments or worry about mismatched package versions.
 
 ---
 ## What’s Next?  
 
-The foundation is set, and now it’s time to start _filling the Lake_—not with water, but with data. That’s where [dlt](https://dlthub.com/) comes in. This lightweight ingestion library will help us pull data from APIs and other sources straight into our [[00-concept-and-motivation|Lakeground]], setting the stage for everything that comes next.
+The foundation is set, and now it’s time to start _filling the Lake_ - not with water, but with data. That’s where [dlt](https://dlthub.com/) comes in. This lightweight ingestion library will help us pull data from APIs and other sources straight into our [[00-concept-and-motivation|Lakeground]], setting the stage for everything that comes next.
 
 In the next article, I’ll walk through setting up an ingestion pipeline, loading the first datasets, and making sure our [[00-concept-and-motivation|Lakeground]] is ready to handle real-world data.
 
