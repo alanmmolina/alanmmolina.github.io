@@ -27,10 +27,10 @@ export default {
     },
     themeToggle: {
       lightMode: "Don't click. Light attracts bugs!",
-      darkMode: "Dark mode",
+      darkMode: "Enable dark mode",
     },
     readerMode: {
-      title: "Reader mode",
+      title: "Focus mode",
     },
     explorer: {
       title: "Explorer",

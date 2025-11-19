@@ -29,19 +29,19 @@
 }
 
 :root[saved-theme="dark"] .darkmode {
-  & > .dayIcon {
+  & > .lightOnIcon {
     display: none;
   }
-  & > .nightIcon {
+  & > .lightOffIcon {
     display: inline;
   }
 }
 
 :root .darkmode {
-  & > .dayIcon {
+  & > .lightOnIcon {
     display: inline;
   }
-  & > .nightIcon {
+  & > .lightOffIcon {
     display: none;
   }
 }

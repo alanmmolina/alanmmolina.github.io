@@ -31,4 +31,22 @@
       opacity: 1;
     }
   }
+
+  & .readermode {
+    & > .readerOffIcon {
+      display: none;
+    }
+    & > .readerOnIcon {
+      display: inline;
+    }
+  }
+}
+
+:root .readermode {
+  & > .readerOffIcon {
+    display: inline;
+  }
+  & > .readerOnIcon {
+    display: none;
+  }
 }
