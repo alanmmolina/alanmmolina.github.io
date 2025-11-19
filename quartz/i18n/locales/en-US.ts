@@ -29,6 +29,9 @@ export default {
       lightMode: "Don't click. Light attracts bugs!",
       darkMode: "Dark mode",
     },
+    readerMode: {
+      title: "Reader mode",
+    },
     explorer: {
       title: "Explorer",
     },
