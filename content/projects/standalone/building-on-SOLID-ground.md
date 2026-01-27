@@ -70,7 +70,7 @@ Now imagine cramming all of that into a single mega-station. The person running 
   <img src="single-responsibility-principle.svg" alt="Single Responsibility Principle" width="100%">
 </p><p align="center" style="font-size: 0.9em; color: gray;">A single station doing all operations vs multiple stations, each handling a specific part of the pipeline.</p>
 
-> [!failure] Mega-station anti-pattern
+> [!failure] The mega-station
 > ```python
 > class MegaLine:
 >     def run(self, sku: str, color: str) -> Box:
@@ -424,4 +424,20 @@ def run_line(sku: str, color: str, defect_store: DefectStore) -> Box:
 
 Each station focuses on one concern, new behaviors arrive as new components rather than edits to existing ones, every station delivers what its interface promises, interfaces stay small and purposeful, and dependencies flow through abstractions. The five principles reinforce each other in ways that only become obvious once you start applying them together.
 
-None of this should be applied as religious doctrine. The value isn't in following rules, it's in having a vocabulary for diagnosing problems. When you're staring at a tangled mess of code wondering why every change breaks something unrelated, `SOLID` offers a framework for thinking about what went wrong and how to fix it.
+---
+
+## ... My Final Thoughts
+
+This tiny project was exactly what I needed to make these principles stick. Reading about `SOLID` is one thing, but actually writing the code, drawing the station diagrams, and stretching the factory analogy until it broke helped me understand the ideas in a way that articles and videos never could. I tried to focus on the core wisdom behind each principle rather than just the patterns.
+
+My final takeaway about applying `SOLID` in real projects is simply "it depends." I would never use these principles as a checklist to enforce across a codebase. Whether the abstractions and indirection make sense depends on the project, the company culture, the team's experience, and the constraints you're operating under.
+
+To be honest, I think:
+
+> [!failure] this is not a wrong way to do it
+
+> [!success] this is not the right way to do it
+
+These are different approaches to the same problems, each with its own trade-offs. The context determines which one fits better. The code examples throughout this article show clearly that applying these principles adds indirection and abstraction, and that complexity only pays off when the system actually needs the flexibility. The goal is maintainability and adaptability, not architectural elegance for its own sake.
+
+This is engineering, not a religion.
