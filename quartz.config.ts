@@ -9,19 +9,15 @@ import * as Plugin from "./quartz/plugins"
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "~/.alanmmolina",
-    pageTitleSuffix: " ~/.alanmmolina",
     enableSPA: true,
     enablePopovers: true,
     analytics: {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "alanmmolina.github.io",
-    ignorePatterns: ["private", "templates", ".obsidian"],
+    baseUrl: "alanmmolina.com",
+    ignorePatterns: ["private", "templates", ".obsidian", ".research"],
     defaultDateType: "created",
-    generateSocialImages: {
-      colorScheme: "darkMode"
-    },
     theme: {
       fontOrigin: "googleFonts",
       cdnCaching: true,
@@ -91,10 +87,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      // Comment out CustomOgImages to speed up build time
-      Plugin.CustomOgImages({
-        colorScheme: "darkMode",
-      }),
+      Plugin.CustomOgImages({colorScheme: "darkMode"}),
     ],
   },
 }
