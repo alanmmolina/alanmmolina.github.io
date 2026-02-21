@@ -843,7 +843,7 @@ bronze:
     description: Artist top tracks from Spotify API in raw json format.
 ```
 
-Now, let's strengthen our abstraction with some Pydantic models to ensure type safety and validation:
+Now, let's strengthen our abstraction with some [[articles/tools/pydantic|Pydantic]] models to ensure type safety and validation:
 
 ```python
 # encore/assets.py
@@ -914,7 +914,7 @@ class AssetFactory:
         return _
 ```
 
-Finally, we need an `AssetLoader` component to inject the `.yaml` configuration into our factory. This component reads our configuration file, transforms it into validated Pydantic models, and feeds those to our factory:
+Finally, we need an `AssetLoader` component to inject the `.yaml` configuration into our factory. This component reads our configuration file, transforms it into validated [[articles/tools/pydantic|Pydantic]] models, and feeds those to our factory:
 
 ```python
 # encore/assets.py

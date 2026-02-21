@@ -22,7 +22,7 @@ That said, let's talk about the core wisdom behind the `SOLID` principles. They 
 
 I might not be perfectly accurate in every definition, but I'm prioritizing practical understanding over textbook correctness. To make the ideas concrete, I'll use a toy car factory as a running analogy. If you've built data pipelines before, the mental model should feel familiar: products move through stations, each station does one thing and passes the result forward, and the whole line produces something useful at the end.
 
-Before diving into each principle, let's set up the domain. Each car toy has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use Pydantic to model these entities since schemas and validation are already second nature to Data Engineers.
+Before diving into each principle, let's set up the domain. Each car toy has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use [[articles/tools/pydantic|Pydantic]] to model these entities since schemas and validation are already second nature to Data Engineers.
 
 ```python
 from typing import Literal
