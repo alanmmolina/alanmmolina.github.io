@@ -3,7 +3,7 @@ title: Dagster
 date: 2025-04-05
 draft: false
 tags:
-  - articles
+  - notes
   - tools
   - data-engineering
   - orchestration
@@ -117,6 +117,6 @@ Dagster is particularly valuable for teams looking to scale their data platforms
 
 Data work doesn't have to be a collection of loosely connected scripts with unpredictable behavior. With the right tooling and approach, it can be as disciplined and reliable as modern Software Engineering. Dagster isn't just another orchestrator - it's a philosophy about how data work can be thoughtful, maintainable, and even joyful.
 
-In the next few days, I'll be publishing a hands-on tutorial showing how to build an end-to-end data pipeline entirely in Dagster. I decided to split this into a separate article since combining both the conceptual overview and the practical implementation would be a bit overwhelming for one reading session.
+In the next few days, I'll be publishing a hands-on tutorial showing how to build an end-to-end data pipeline entirely in Dagster. I decided to split this into a separate note since combining both the conceptual overview and the practical implementation would be a bit overwhelming for one reading session.
 
 Have you tried Dagster yet? I'd love to hear your thoughts and experiences!

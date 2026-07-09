@@ -10,7 +10,7 @@ tags:
 ---
 ---
 
-The foundation of [[00-concept-and-motivation|Lakeground]] is all about modularity without sacrificing cohesion. To achieve this, I’m structuring the project around a **monorepo-ish** design, where all components live under a single repository. At the same time, I want each major part to stay self-contained. That’s where `git` **submodules** come in - they let each component function as an independent repository while still being part of the larger whole. It might sound a bit unconventional (or just plain confusing) at first, but by the end of this article, I promise it’ll make a lot more sense.
+The foundation of [[00-concept-and-motivation|Lakeground]] is all about modularity without sacrificing cohesion. To achieve this, I’m structuring the project around a **monorepo-ish** design, where all components live under a single repository. At the same time, I want each major part to stay self-contained. That’s where `git` **submodules** come in - they let each component function as an independent repository while still being part of the larger whole. It might sound a bit unconventional (or just plain confusing) at first, but by the end of this note, I promise it’ll make a lot more sense.
 
 ---
 

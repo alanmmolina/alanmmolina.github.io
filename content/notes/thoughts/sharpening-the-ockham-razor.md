@@ -3,7 +3,7 @@ title: Sharpening the Ockham's Razor
 date: 2025-08-31
 draft: false
 tags:
-  - articles
+  - notes
   - thoughts
   - engineering
 ---

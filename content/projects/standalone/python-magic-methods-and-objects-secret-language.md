@@ -10,7 +10,7 @@ tags:
 ---
 ---
 
-What if your Python objects could respond to operators, built-in functions, and even behave like containers - without any extra methods hanging off them? That’s the power of **magic methods** (aka **dunder methods**). This article explores how these behind-the-scenes hooks give custom classes the same superpowers as Python’s built-in types. From intuitive behavior to clean API design, it dives into how these methods make user-defined objects feel like first-class Python citizens - no wands required.
+What if your Python objects could respond to operators, built-in functions, and even behave like containers - without any extra methods hanging off them? That’s the power of **magic methods** (aka **dunder methods**). This note explores how these behind-the-scenes hooks give custom classes the same superpowers as Python’s built-in types. From intuitive behavior to clean API design, it dives into how these methods make user-defined objects feel like first-class Python citizens - no wands required.
 
 ---
 

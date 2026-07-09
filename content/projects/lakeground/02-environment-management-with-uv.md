@@ -283,7 +283,7 @@ This setup is incredibly efficient. Each subproject can define its own dependenc
 
 The foundation is set, and now it’s time to start _filling the Lake_ - not with water, but with data. That’s where [dlt](https://dlthub.com/) comes in. This lightweight ingestion library will help us pull data from APIs and other sources straight into our [[00-concept-and-motivation|Lakeground]], setting the stage for everything that comes next.
 
-In the next article, I’ll walk through setting up an ingestion pipeline, loading the first datasets, and making sure our [[00-concept-and-motivation|Lakeground]] is ready to handle real-world data.
+In the next note, I’ll walk through setting up an ingestion pipeline, loading the first datasets, and making sure our [[00-concept-and-motivation|Lakeground]] is ready to handle real-world data.
 
 ---  
 
