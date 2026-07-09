@@ -159,7 +159,7 @@ export const CrawlLinks: QuartzTransformerPlugin<Partial<Options>> = (userOpts) 
               }
             })
 
-            file.data.links = [...outgoing]
+            file.data.links = [...outgoing].filter((slug) => slug !== "" && slug !== "/" && slug !== "index")
           }
         },
       ]

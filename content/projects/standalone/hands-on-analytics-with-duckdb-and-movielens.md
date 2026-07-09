@@ -11,17 +11,17 @@ tags:
 ---
 ---
 
-[[articles/tools/duckdb|DuckDB]] has been making waves as a no-fuss, high-performance database you can run right from your laptop. Forget clusters, forget setup headaches - this thing just works. To see what it can really do, let's play with the MovieLens dataset: 32 million ratings across nearly 90,000 movies. Instead of toy data, we’ll dive into something messy, real, and big enough to push [[articles/tools/duckdb|DuckDB]] a little harder.
+[[notes/tools/duckdb|DuckDB]] has been making waves as a no-fuss, high-performance database you can run right from your laptop. Forget clusters, forget setup headaches - this thing just works. To see what it can really do, let's play with the MovieLens dataset: 32 million ratings across nearly 90,000 movies. Instead of toy data, we’ll dive into something messy, real, and big enough to push [[notes/tools/duckdb|DuckDB]] a little harder.
 
 ---
 
-[[articles/tools/duckdb|DuckDB]] is ridiculously easy to get started with - no servers, no setup headaches. You can run it directly from the command line, embed it inside applications, or use it as a database library in languages like C++, Python, Rust, and so on. But for me, the real magic happens in Python.
+[[notes/tools/duckdb|DuckDB]] is ridiculously easy to get started with - no servers, no setup headaches. You can run it directly from the command line, embed it inside applications, or use it as a database library in languages like C++, Python, Rust, and so on. But for me, the real magic happens in Python.
 
-With its seamless integration into Pandas, Polars, and Apache Arrow, [[articles/tools/duckdb|DuckDB]] feels like it was made for data analysis. Instead of dealing with a heavyweight database setup, you can just load your data, run SQL queries on DataFrames, and get results instantly - all within a Python environment.
+With its seamless integration into Pandas, Polars, and Apache Arrow, [[notes/tools/duckdb|DuckDB]] feels like it was made for data analysis. Instead of dealing with a heavyweight database setup, you can just load your data, run SQL queries on DataFrames, and get results instantly - all within a Python environment.
 
-When it comes to exploring data like this, **Jupyter Notebooks** are my go-to - whether it’s a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or even [Google Colab](https://colab.google/). They’re great for prototyping because you can run each step independently, check the results instantly, and tweak things without rerunning the entire script or setting up breakpoints. It’s a fast, flexible way to iterate, making it a perfect match for [[articles/tools/duckdb|DuckDB]]. So let’s skip the fluff and get it running.
+When it comes to exploring data like this, **Jupyter Notebooks** are my go-to - whether it’s a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or even [Google Colab](https://colab.google/). They’re great for prototyping because you can run each step independently, check the results instantly, and tweak things without rerunning the entire script or setting up breakpoints. It’s a fast, flexible way to iterate, making it a perfect match for [[notes/tools/duckdb|DuckDB]]. So let’s skip the fluff and get it running.
 
-[[articles/tools/duckdb|DuckDB]] can be installed directly from [PyPI](https://pypi.org/project/duckdb/). Since it's a pre-compiled binary, there are no external dependencies - just install and go. Pretty slick.
+[[notes/tools/duckdb|DuckDB]] can be installed directly from [PyPI](https://pypi.org/project/duckdb/). Since it's a pre-compiled binary, there are no external dependencies - just install and go. Pretty slick.
 
 ```sh
 pip install duckdb
@@ -73,7 +73,7 @@ ml-32m
 └── tags.csv
 ```
 
-Let’s fire up [[articles/tools/duckdb|DuckDB]] as an **in-memory** database:
+Let’s fire up [[notes/tools/duckdb|DuckDB]] as an **in-memory** database:
 
 ```python
 import duckdb
@@ -110,9 +110,9 @@ connection.query("SELECT * FROM movies LIMIT 10")
 └────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Did you notice something interesting? We referenced a Python variable inside an SQL query. Since [[articles/tools/duckdb|DuckDB]] runs inside Python, it can access local variables - meaning you can directly query Python datasets using SQL.
+Did you notice something interesting? We referenced a Python variable inside an SQL query. Since [[notes/tools/duckdb|DuckDB]] runs inside Python, it can access local variables - meaning you can directly query Python datasets using SQL.
 
-For example, let’s create a dataset in Pandas and query it using [[articles/tools/duckdb|DuckDB]]:
+For example, let’s create a dataset in Pandas and query it using [[notes/tools/duckdb|DuckDB]]:
 
 ```python
 import pandas as pd
@@ -146,13 +146,13 @@ connection.query("SELECT * FROM fast_and_furious")
 
 It’s a nice trick, but honestly, it feels like too much magic for me.
 
-Instead of relying on [[articles/tools/duckdb|DuckDB]] automatically recognizing variable names, I prefer to explicitly register Python variables as tables. This keeps the code a bit more readable, preventing unexpected behavior in larger scripts.
+Instead of relying on [[notes/tools/duckdb|DuckDB]] automatically recognizing variable names, I prefer to explicitly register Python variables as tables. This keeps the code a bit more readable, preventing unexpected behavior in larger scripts.
 
 ```python
 connection.register("movies", movies)
 ```
 
-Switching between [[articles/tools/duckdb|DuckDB]] and Pandas is effortless. We can take any query result and turn it into a [Pandas DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) in a single step:
+Switching between [[notes/tools/duckdb|DuckDB]] and Pandas is effortless. We can take any query result and turn it into a [Pandas DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) in a single step:
 
 ```python
 pandas_df = connection.query("SELECT * FROM movies").df()
@@ -170,7 +170,7 @@ polars_df = connection.query("SELECT * FROM movies").pl()
 arrow_df = connection.query("SELECT * FROM movies").arrow()
 ```
 
-If you're used to SQL, [[articles/tools/duckdb|DuckDB]] has some neat tricks up its sleeve. It offers what they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)" - a set of enhancements that make queries more concise and powerful.
+If you're used to SQL, [[notes/tools/duckdb|DuckDB]] has some neat tricks up its sleeve. It offers what they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)" - a set of enhancements that make queries more concise and powerful.
 
 Let’s extract the year from the movie `title` using regex:
 
@@ -202,7 +202,7 @@ connection.query("""
 └────────────────────────────────────────────────────────┘
 ```
 
-The `genres` column is another great example. Each movie can have multiple genres stored as a pipe-separated string. [[articles/tools/duckdb|DuckDB]] lets us split these:
+The `genres` column is another great example. Each movie can have multiple genres stored as a pipe-separated string. [[notes/tools/duckdb|DuckDB]] lets us split these:
 
 ```python
 connection.query("""
@@ -233,13 +233,13 @@ connection.query("""
 └───────────────────────────────────────────────┘
 ```
 
-So far, we've been running everything in-memory, which is great for quick analysis. But sometimes, we need something more permanent - maybe you want to store multiple tables, perform joins, or keep your data available across sessions. That’s where [[articles/tools/duckdb|DuckDB]]’s **persistent** storage comes in. Instead of parsing `.csv` files every time, we can load everything into a `.duckdb` file and even store it in the cloud.
+So far, we've been running everything in-memory, which is great for quick analysis. But sometimes, we need something more permanent - maybe you want to store multiple tables, perform joins, or keep your data available across sessions. That’s where [[notes/tools/duckdb|DuckDB]]’s **persistent** storage comes in. Instead of parsing `.csv` files every time, we can load everything into a `.duckdb` file and even store it in the cloud.
 
 ```python
 connection = duckdb.connect(database="database.duckdb", read_only=False)
 ```
 
-To automate the process, let’s load all the CSV files into [[articles/tools/duckdb|DuckDB]] with a quick loop:
+To automate the process, let’s load all the CSV files into [[notes/tools/duckdb|DuckDB]] with a quick loop:
 
 ```python
 for file in Path("ml-32m").glob("*.csv"):
@@ -374,4 +374,4 @@ The final result? A solid must-watch list.
 
 ---
 
-We scratched the surface of [[articles/tools/duckdb|DuckDB]]’s capabilities, but it’s already clear that this tool has serious potential. It’s being used in production by some of the biggest names in data, and I wouldn’t be surprised if it keeps growing its adoption. For now, it’s my go-to for personal projects. Haven’t had a chance to use it in production yet, but I’m pretty sure that opportunity will come soon.
+We scratched the surface of [[notes/tools/duckdb|DuckDB]]’s capabilities, but it’s already clear that this tool has serious potential. It’s being used in production by some of the biggest names in data, and I wouldn’t be surprised if it keeps growing its adoption. For now, it’s my go-to for personal projects. Haven’t had a chance to use it in production yet, but I’m pretty sure that opportunity will come soon.

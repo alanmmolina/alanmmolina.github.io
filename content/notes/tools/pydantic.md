@@ -3,7 +3,7 @@ title: Pydantic
 date: 2026-02-21
 draft: false
 tags:
-  - articles
+  - notes
   - tools
   - software-engineering
   - python

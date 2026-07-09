@@ -3,7 +3,7 @@ title: DuckDB
 date: 2025-03-01
 draft: false
 tags:
-  - articles
+  - notes
   - tools
   - data-engineering
   - databases

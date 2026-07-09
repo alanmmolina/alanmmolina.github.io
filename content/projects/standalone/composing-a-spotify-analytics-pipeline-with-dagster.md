@@ -11,7 +11,7 @@ tags:
 ---
 ---
 
-[[articles/tools/dagster|Dagster]]'s asset-first approach offers a refreshing perspective on data orchestration. Today, I want to share a hands-on journey building a complete Spotify Data Pipeline that puts these ideas into practice. It's remarkable how shifting to think in terms of assets can transform the way you approach pipeline development.
+[[notes/tools/dagster|Dagster]]'s asset-first approach offers a refreshing perspective on data orchestration. Today, I want to share a hands-on journey building a complete Spotify Data Pipeline that puts these ideas into practice. It's remarkable how shifting to think in terms of assets can transform the way you approach pipeline development.
 
 I've always found that the best way to understand a new tool is to build something meaningful with it. We'll extract artist data from Spotify, transform it through a Medallion Architecture (`bronze` → `silver` → `gold`), and create consolidated artist insights ready for analysis. This project represents a practical implementation of the concepts we've discussed - bringing theory into the realm of working code.
 
@@ -27,15 +27,15 @@ Data Engineering with a soundtrack - let's get started.
 Our pipeline will collect and process artist data from Spotify through three increasingly refined layers:
 
 1. **`bronze`**: raw `.json` data extracted directly from Spotify's API using Python.
-2. **`silver`**: transformed and structured `.parquet` data using [[articles/tools/duckdb|DuckDB]].
-3. **`gold`**: consolidated insights combining metrics into `.parquet` format using [[articles/tools/duckdb|DuckDB]].
+2. **`silver`**: transformed and structured `.parquet` data using [[notes/tools/duckdb|DuckDB]].
+3. **`gold`**: consolidated insights combining metrics into `.parquet` format using [[notes/tools/duckdb|DuckDB]].
 
-This structure provides clarity to our data transformation process. Raw data arrives first, then gets transformed into something more structured, and finally becomes refined into business-ready insights. Each layer has a distinct purpose - `bronze` captures the raw API responses, `silver` provides cleaned and normalized information in an analytics-friendly format, and `gold` delivers the final transformed insights ready for analysis. This approach lets us focus on demonstrating [[articles/tools/dagster|Dagster]]'s capabilities rather than building a complete Data Lake with historical versioning.
+This structure provides clarity to our data transformation process. Raw data arrives first, then gets transformed into something more structured, and finally becomes refined into business-ready insights. Each layer has a distinct purpose - `bronze` captures the raw API responses, `silver` provides cleaned and normalized information in an analytics-friendly format, and `gold` delivers the final transformed insights ready for analysis. This approach lets us focus on demonstrating [[notes/tools/dagster|Dagster]]'s capabilities rather than building a complete Data Lake with historical versioning.
 
 ---
 ## Setting the Stage
 
-Now that we understand the components of our pipeline, let's set up the development environment. Since [[articles/tools/dagster|Dagster]] is fundamentally a Python framework, we only need a Python environment to handle the entire project. This is one of [[articles/tools/dagster|Dagster]]'s strengths - it doesn't require separate infrastructure or services to get started.
+Now that we understand the components of our pipeline, let's set up the development environment. Since [[notes/tools/dagster|Dagster]] is fundamentally a Python framework, we only need a Python environment to handle the entire project. This is one of [[notes/tools/dagster|Dagster]]'s strengths - it doesn't require separate infrastructure or services to get started.
 
 For dependency management, I'm using `uv`, a blazing-fast Python package installer and resolver. If you're not familiar with it, it's worth checking out - it makes virtual environment management much more pleasant than traditional tools. Our project requires just a few dependencies, which we'll add to our `pyproject.toml`:
 
@@ -48,7 +48,7 @@ dependencies = [
 ]
 ```
 
-[[articles/tools/dagster|Dagster]] needs some specific configuration to work smoothly with modern Python tooling. Let's add these properties to our `pyproject.toml`:
+[[notes/tools/dagster|Dagster]] needs some specific configuration to work smoothly with modern Python tooling. Let's add these properties to our `pyproject.toml`:
 
 ```toml
 [tool.dagster]
@@ -78,7 +78,7 @@ For larger projects, you might want a more structured approach with separate fol
 └── pyproject.toml
 ```
 
-The structure aligns perfectly with our Medallion Architecture, with dedicated directories for each layer's output. Within the Python package, we've organized our code to match [[articles/tools/dagster|Dagster]]'s component model - separating **assets**, **resources** and **partitions** while keeping them all accessible.
+The structure aligns perfectly with our Medallion Architecture, with dedicated directories for each layer's output. Within the Python package, we've organized our code to match [[notes/tools/dagster|Dagster]]'s component model - separating **assets**, **resources** and **partitions** while keeping them all accessible.
 
 Finally, we need a `.env` file in the root directory to store our Spotify API credentials. This simple approach works for this tutorial, but in production, you might want a more robust solution like a secrets management service.
 
@@ -237,7 +237,7 @@ class SpotifyAPI(ConfigurableResource):
 
 This `SpotifyAPI` resource does more than just wrap the Spotify API. It thoughtfully handles authentication with automatic token refresh (saving us from those mid-run failures), provides dedicated exceptions for error handling, implements caching to reduce API calls, and offers clean interfaces for retrieving the exact data we need.
 
-The design separates _how to access Spotify_ from our pipeline logic, which is exactly what resources in [[articles/tools/dagster|Dagster]] are meant to do. This separation makes our code more testable and maintainable. When testing, we can substitute this resource with a mock version without changing any pipeline code, giving us confidence that our tests reflect real-world scenarios.
+The design separates _how to access Spotify_ from our pipeline logic, which is exactly what resources in [[notes/tools/dagster|Dagster]] are meant to do. This separation makes our code more testable and maintainable. When testing, we can substitute this resource with a mock version without changing any pipeline code, giving us confidence that our tests reflect real-world scenarios.
 
 The difference between a fragile pipeline and a robust one often comes down to how carefully resources like these are designed. Taking the time to build a thoughtful abstraction pays dividends when you're not frantically debugging authentication failures at inconvenient times.
 
@@ -365,7 +365,7 @@ def bronze__artist(context: AssetExecutionContext, spotify: SpotifyAPI) -> Mater
 
 This `bronze` asset has a clear responsibility - extract artist data from the Spotify API and store it as raw `.json`. The simplicity is intentional; we want reliable data capture with minimal processing. The code focuses purely on extraction - there's no transformation logic mixed in, keeping concerns properly separated.
 
-There are several design choices worth highlighting here. We're using partitioning to process one artist at a time, which gives us flexibility in how we schedule and execute the pipeline. The asset returns detailed metadata about what it produced, making monitoring easier through [[articles/tools/dagster|Dagster]]'s UI. We're also using a consistent path structure via our `Layer` utility.
+There are several design choices worth highlighting here. We're using partitioning to process one artist at a time, which gives us flexibility in how we schedule and execute the pipeline. The asset returns detailed metadata about what it produced, making monitoring easier through [[notes/tools/dagster|Dagster]]'s UI. We're also using a consistent path structure via our `Layer` utility.
 
 Using the same pattern, we create similar `bronze` assets for **albums** and **top tracks**:
 
@@ -474,9 +474,9 @@ def silver__artist(context: AssetExecutionContext, duckdb: DuckDBResource) -> Ma
     )
 ```
 
-This asset transforms raw artist `.json` into structured `.parquet` format using [[articles/tools/duckdb|DuckDB]]. The SQL query performs several key operations. It selects only the fields we need, such as `name`, `id`, and `genres`, avoiding the overhead of carrying unused data forward. It flattens nested structures like the `followers` object, making the data easier to query and analyze. Finally, the output is partitioned by artist, maintaining our organization pattern throughout the pipeline.
+This asset transforms raw artist `.json` into structured `.parquet` format using [[notes/tools/duckdb|DuckDB]]. The SQL query performs several key operations. It selects only the fields we need, such as `name`, `id`, and `genres`, avoiding the overhead of carrying unused data forward. It flattens nested structures like the `followers` object, making the data easier to query and analyze. Finally, the output is partitioned by artist, maintaining our organization pattern throughout the pipeline.
 
-For the `silver` and `gold` transformations, [[articles/tools/duckdb|DuckDB]] proves to be an excellent choice. It handles `.json` parsing remarkably well with functions like `read_json_auto()`, which automatically infers the schema from nested structures. The SQL syntax is both familiar and powerful, supporting advanced operations like `UNNEST` for those nested arrays of artists. Perhaps most importantly, [[articles/tools/duckdb|DuckDB]]'s seamless integration with `.parquet` files creates a natural fit for our Medallion Architecture, efficiently transforming our `.json` data into columnar storage optimized for the analytical queries.
+For the `silver` and `gold` transformations, [[notes/tools/duckdb|DuckDB]] proves to be an excellent choice. It handles `.json` parsing remarkably well with functions like `read_json_auto()`, which automatically infers the schema from nested structures. The SQL syntax is both familiar and powerful, supporting advanced operations like `UNNEST` for those nested arrays of artists. Perhaps most importantly, [[notes/tools/duckdb|DuckDB]]'s seamless integration with `.parquet` files creates a natural fit for our Medallion Architecture, efficiently transforming our `.json` data into columnar storage optimized for the analytical queries.
 
 Following the same pattern, we create `silver` assets for the **albums** and **top tracks**:
 
@@ -708,7 +708,7 @@ This thoughtfully designed asset creates a dataset that answers important questi
 ---
 ## Setting Up the Definitions
 
-To finish our project, we now only need to put it all together to enable [[articles/tools/dagster|Dagster]] to load these components. This can be done in a *dunder init* file, but to make it clearer, let's create a dedicated file to centralize this concern:
+To finish our project, we now only need to put it all together to enable [[notes/tools/dagster|Dagster]] to load these components. This can be done in a *dunder init* file, but to make it clearer, let's create a dedicated file to centralize this concern:
 
 ```python
 # ./definitions.py
@@ -738,15 +738,15 @@ defs = Definitions(
 )
 ```
 
-When [[articles/tools/dagster|Dagster]] initializes, it will load everything included in the `Definitions` object. If we had created **jobs**, **schedules**, or **sensors**, they would also be included here. This acts as a central entry point for the project deployment - for a component to be deployed and visible in the [[articles/tools/dagster|Dagster]] UI, it must be set in a `Definitions` object.
+When [[notes/tools/dagster|Dagster]] initializes, it will load everything included in the `Definitions` object. If we had created **jobs**, **schedules**, or **sensors**, they would also be included here. This acts as a central entry point for the project deployment - for a component to be deployed and visible in the [[notes/tools/dagster|Dagster]] UI, it must be set in a `Definitions` object.
 
-For this demonstration, we're using [[articles/tools/duckdb|DuckDB]]'s in-memory mode, which is perfect for our needs. Since we're only using [[articles/tools/duckdb|DuckDB]] as a processing engine to transform data between our layers and materializing all results as `.parquet`  files, we don't need to persist the database itself.
+For this demonstration, we're using [[notes/tools/duckdb|DuckDB]]'s in-memory mode, which is perfect for our needs. Since we're only using [[notes/tools/duckdb|DuckDB]] as a processing engine to transform data between our layers and materializing all results as `.parquet`  files, we don't need to persist the database itself.
 
 ---
 
 ## Pressing Play
 
-With our code and configuration in place, let's see the pipeline in action. Once your Python virtual environment is activated, starting a local [[articles/tools/dagster|Dagster]] development instance requires a simple command:
+With our code and configuration in place, let's see the pipeline in action. Once your Python virtual environment is activated, starting a local [[notes/tools/dagster|Dagster]] development instance requires a simple command:
 
 ```sh
 dagster dev
@@ -760,7 +760,7 @@ This will initialize the entire project and open the local UI:
 
 I won't make a full tour of the UI in this project, but instead focus on the assets themselves. As you can see, our code is rendered in this stylish dark-themed lineage graph (you can change it to a light theme too if you prefer), where you can clearly see the asset dependencies flowing from left to right and their current status. Since we haven't materialized any assets yet - which means executing the code to generate the actual data outputs and store them in physical storage, all asset partitions are marked as missing and our `gold` asset shows _Never materialized.
 
-A nice touch is the tags at the bottom of each asset (like `bronze`, `python`, `json`) that visually indicate the purpose and technology behind each component without requiring us to examine the code. There's an extensive list of [kind tags](https://docs.dagster.io/guides/build/assets/metadata-and-tags/kind-tags) available in [[articles/tools/dagster|Dagster]], and the system is open to contributions if you need custom ones.
+A nice touch is the tags at the bottom of each asset (like `bronze`, `python`, `json`) that visually indicate the purpose and technology behind each component without requiring us to examine the code. There's an extensive list of [kind tags](https://docs.dagster.io/guides/build/assets/metadata-and-tags/kind-tags) available in [[notes/tools/dagster|Dagster]], and the system is open to contributions if you need custom ones.
 
 Let's try materializing a single partition of one asset to see how it works. Right-click on any `bronze` asset and select **Materialize**. The materialization context will show you the list of available partitions - you can choose one or more partitions to start the materialization or select them all (which would lead to a backfill run). Let's choose a single one and click **Launch run**. You'll see the asset status changing in real-time, and when the materialization finishes, we can examine the asset details in the **Asset Catalog**:
 
@@ -768,11 +768,11 @@ Let's try materializing a single partition of one asset to see how it works. Rig
   <img src="dagster-spotify-single-partition-materialization.png" alt="Single Asset (and Partition) Materialization" width="100%">
 </p>
 
-Notice how the metadata we configured in our code is displayed here in the **Overview** tab. If a metadata item is numeric, [[articles/tools/dagster|Dagster]] can also generate plots automatically - particularly useful for tracking the volume of rows if the asset represents a table. This metadata can even be accessed programmatically by other [[articles/tools/dagster|Dagster]] components.
+Notice how the metadata we configured in our code is displayed here in the **Overview** tab. If a metadata item is numeric, [[notes/tools/dagster|Dagster]] can also generate plots automatically - particularly useful for tracking the volume of rows if the asset represents a table. This metadata can even be accessed programmatically by other [[notes/tools/dagster|Dagster]] components.
 
 There are several other tabs worth exploring: the **Partitions** tab shows the status of each partition with timestamps and run IDs; the **Events** tab displays all actions related to the asset, providing a complete history of materializations; the **Checks** tab shows quality tests for your assets (a powerful feature we're not using in this demo); and the **Lineage** tab visualizes the upstream and downstream dependencies of the selected asset.
 
-Now let's return to the main graph and click the white **Materialize All** button in the top right. This will again open the partition selection context, where we can select all partitions. When you launch this run, you'll see that [[articles/tools/dagster|Dagster]] beautifully handles the execution, respecting the dependencies between assets and partitions. You'll also observe files being created in our Medallion folder structure as each asset completes. When finished, all assets and partitions should be materialized, with the graph showing green status indicators:
+Now let's return to the main graph and click the white **Materialize All** button in the top right. This will again open the partition selection context, where we can select all partitions. When you launch this run, you'll see that [[notes/tools/dagster|Dagster]] beautifully handles the execution, respecting the dependencies between assets and partitions. You'll also observe files being created in our Medallion folder structure as each asset completes. When finished, all assets and partitions should be materialized, with the graph showing green status indicators:
 
 <p align="center">
   <img src="dagster-spotify-materialize-all.png" alt="All Assets (and Partitions) Materialization" width="100%">
@@ -783,7 +783,7 @@ Now it's time to see if we got the expected results.
 ---
 ## Analyzing Our Results
 
-I've tested this workflow step-by-step multiple times, but let's cut to the chase and check the final output. To do this, we just need to query the **artist_insights** `.parquet` file using [[articles/tools/duckdb|DuckDB]]:
+I've tested this workflow step-by-step multiple times, but let's cut to the chase and check the final output. To do this, we just need to query the **artist_insights** `.parquet` file using [[notes/tools/duckdb|DuckDB]]:
 
 ```sql
 SELECT * FROM read_parquet("data/gold/artist_insights")
@@ -813,19 +813,19 @@ And we get something like:
 
 ---
 
-That's it! We've built an entire data pipeline from scratch using only free and open-source tools. This pipeline pattern can adapt to much larger workloads - the architecture remains valid whether processing data for a handful of artists or scaling to thousands. [[articles/tools/dagster|Dagster]]'s asset-oriented approach grows with your needs while maintaining the same fundamental principles.
+That's it! We've built an entire data pipeline from scratch using only free and open-source tools. This pipeline pattern can adapt to much larger workloads - the architecture remains valid whether processing data for a handful of artists or scaling to thousands. [[notes/tools/dagster|Dagster]]'s asset-oriented approach grows with your needs while maintaining the same fundamental principles.
 
-If you want to experiment further, you might try adding more artists, implementing scheduled refreshes using [[articles/tools/dagster|Dagster]]'s scheduling capabilities, or connecting a visualization tool to create dashboards from the insights data.
+If you want to experiment further, you might try adding more artists, implementing scheduled refreshes using [[notes/tools/dagster|Dagster]]'s scheduling capabilities, or connecting a visualization tool to create dashboards from the insights data.
 
-Of course, our design here was simplified to match this standalone project's objective: to explore [[articles/tools/dagster|Dagster]]'s asset-oriented approach and how it transforms well-written code into reliable Data Engineering components. The Spotify API has extraction volume limitations we haven't covered in this project; you may also encounter errors related to unhandled [[articles/tools/duckdb|DuckDB]] multi-write operations in more complex implementations.
+Of course, our design here was simplified to match this standalone project's objective: to explore [[notes/tools/dagster|Dagster]]'s asset-oriented approach and how it transforms well-written code into reliable Data Engineering components. The Spotify API has extraction volume limitations we haven't covered in this project; you may also encounter errors related to unhandled [[notes/tools/duckdb|DuckDB]] multi-write operations in more complex implementations.
 
-It was a fun project to build, and I hope you enjoyed exploring [[articles/tools/dagster|Dagster]]'s capabilities through this musical lens!
+It was a fun project to build, and I hope you enjoyed exploring [[notes/tools/dagster|Dagster]]'s capabilities through this musical lens!
 
 ---
 
 ## Encore: Applying the Factory Pattern
 
-I'm a big fan of keeping code DRY, and [[articles/tools/dagster|Dagster]] opens up excellent opportunities for creating elegant abstractions. Let's apply a factory pattern to transform our asset creation into something more production-ready and maintainable. By the way, if you're interested in this topic, [[articles/tools/dagster|Dagster]]'s [Factory Patterns in Python](https://dagster.io/blog/python-factory-patterns) article is essential reading.
+I'm a big fan of keeping code DRY, and [[notes/tools/dagster|Dagster]] opens up excellent opportunities for creating elegant abstractions. Let's apply a factory pattern to transform our asset creation into something more production-ready and maintainable. By the way, if you're interested in this topic, [[notes/tools/dagster|Dagster]]'s [Factory Patterns in Python](https://dagster.io/blog/python-factory-patterns) article is essential reading.
 
 Let's start by creating a `.yaml` configuration file that defines our assets:
 
@@ -843,7 +843,7 @@ bronze:
     description: Artist top tracks from Spotify API in raw json format.
 ```
 
-Now, let's strengthen our abstraction with some [[articles/tools/pydantic|Pydantic]] models to ensure type safety and validation:
+Now, let's strengthen our abstraction with some [[notes/tools/pydantic|Pydantic]] models to ensure type safety and validation:
 
 ```python
 # encore/assets.py
@@ -914,7 +914,7 @@ class AssetFactory:
         return _
 ```
 
-Finally, we need an `AssetLoader` component to inject the `.yaml` configuration into our factory. This component reads our configuration file, transforms it into validated [[articles/tools/pydantic|Pydantic]] models, and feeds those to our factory:
+Finally, we need an `AssetLoader` component to inject the `.yaml` configuration into our factory. This component reads our configuration file, transforms it into validated [[notes/tools/pydantic|Pydantic]] models, and feeds those to our factory:
 
 ```python
 # encore/assets.py
@@ -948,7 +948,7 @@ To load these assets, we simply need one line of code:
 assets: list[AssetsDefinition] = AssetLoader.bronze()
 ```
 
-When we start our local [[articles/tools/dagster|Dagster]] instance, the `bronze` assets will appear in the UI:
+When we start our local [[notes/tools/dagster|Dagster]] instance, the `bronze` assets will appear in the UI:
 
 <p align="center">
   <img src="dagster-spotify-factory-bronze-models.png" alt="Factory Generated Bronze Assets" width="100%">

@@ -22,7 +22,7 @@ That said, let's talk about the core wisdom behind the `SOLID` principles. They 
 
 I might not be perfectly accurate in every definition, but I'm prioritizing practical understanding over textbook correctness. To make the ideas concrete, I'll use a toy car factory as a running analogy. If you've built data pipelines before, the mental model should feel familiar: products move through stations, each station does one thing and passes the result forward, and the whole line produces something useful at the end.
 
-Before diving into each principle, let's set up the domain. Each car toy has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use [[articles/tools/pydantic|Pydantic]] to model these entities since schemas and validation are already second nature to Data Engineers.
+Before diving into each principle, let's set up the domain. Each car toy has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use [[notes/tools/pydantic|Pydantic]] to model these entities since schemas and validation are already second nature to Data Engineers.
 
 ```python
 from typing import Literal
@@ -438,6 +438,6 @@ To be honest, I think:
 
 > [!success] this is not the right way to do it
 
-These are different approaches to the same problems, each with its own trade-offs. The context determines which one fits better. The code examples throughout this article show clearly that applying these principles adds indirection and abstraction, and that complexity only pays off when the system actually needs the flexibility. The goal is maintainability and adaptability, not architectural elegance for its own sake.
+These are different approaches to the same problems, each with its own trade-offs. The context determines which one fits better. The code examples throughout this note show clearly that applying these principles adds indirection and abstraction, and that complexity only pays off when the system actually needs the flexibility. The goal is maintainability and adaptability, not architectural elegance for its own sake.
 
 This is engineering, not a religion.

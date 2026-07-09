@@ -296,7 +296,7 @@ export async function handleBuild(argv) {
           })
         },
       },
-    ],
+      ],
   })
 
   const buildMutex = new Mutex()

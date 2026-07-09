@@ -1,0 +1,53 @@
+.excalidraw {
+  border: 1px solid var(--lightgray);
+  border-radius: 8px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 1.5rem 0;
+
+  &[data-excalidraw-src] {
+    &.excalidraw-loading {
+      &::before {
+        content: "";
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--lightgray);
+        border-top-color: var(--darkgray);
+        border-radius: 50%;
+        animation: excalidraw-spin 0.6s linear infinite;
+      }
+    }
+  }
+
+  .excalidraw-svg-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: overflow 0.2s ease;
+
+    svg {
+      display: block;
+      transition: width 0.2s ease, max-width 0.2s ease;
+    }
+  }
+
+  .excalidraw-error {
+    color: var(--darkgray);
+    font-style: italic;
+    padding: 2rem;
+  }
+}
+
+@keyframes excalidraw-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Dark mode
+[saved-theme="dark"] .excalidraw {
+  border-color: var(--gray);
+}

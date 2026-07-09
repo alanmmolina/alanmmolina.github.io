@@ -4,3 +4,17 @@
 body[data-slug="index"] .article-title {
   display: none;
 }
+
+// Footnotes — hide the auto-generated heading and clean up emoji backlinks
+.footnotes {
+  border-top: none;
+
+  > h2 {
+    display: none;
+  }
+
+  .data-footnote-backref {
+    font-variant-emoji: text;
+    text-decoration: none;
+  }
+}

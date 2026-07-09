@@ -3,7 +3,7 @@ title: The Gardener’s Guide to Architecture
 date: 2025-07-20
 draft: false
 tags:
-  - articles
+  - notes
   - thoughts
   - engineering
 ---
