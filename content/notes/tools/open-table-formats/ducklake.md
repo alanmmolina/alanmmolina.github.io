@@ -1,6 +1,6 @@
 ---
 title: DuckLake
-date: 2026-07-03
+date: 2026-07-09
 draft: false
 tags:
   - notes

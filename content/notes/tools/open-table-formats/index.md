@@ -1,6 +1,6 @@
 ---
 title: Open Table Formats
-date: 2026-07-06
+date: 2026-07-09
 draft: false
 tags:
   - notes

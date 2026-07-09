@@ -1,6 +1,6 @@
 ---
 title: Delta Lake
-date: 2026-07-01
+date: 2026-07-09
 draft: false
 tags:
   - notes
