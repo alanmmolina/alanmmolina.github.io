@@ -30,21 +30,25 @@ const defaultOptions: Options = {
     return node
   },
   sortFn: (a, b) => {
-    // Sort order: folders first, then files. Sort folders and files alphabeticall
-    if ((!a.isFolder && !b.isFolder) || (a.isFolder && b.isFolder)) {
-      // numeric: true: Whether numeric collation should be used, such that "1" < "2" < "10"
-      // sensitivity: "base": Only strings that differ in base letters compare as unequal. Examples: a ≠ b, a = á, a = A
-      return a.displayName.localeCompare(b.displayName, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      })
+    // Folders first (alphabetically), then files (newest first, ties alphabetical).
+    // Keep this self-contained: it is stringified and re-evaluated in the browser,
+    // so it must not reference helpers closed over from the bundle (e.g. esbuild's __name).
+    if (a.isFolder !== b.isFolder) {
+      return a.isFolder ? -1 : 1
     }
 
-    if (!a.isFolder && b.isFolder) {
-      return 1
-    } else {
-      return -1
+    if (!a.isFolder && !b.isFolder) {
+      const aDate = a.data?.date ? new Date(a.data.date).getTime() : 0
+      const bDate = b.data?.date ? new Date(b.data.date).getTime() : 0
+      if (aDate !== bDate) {
+        return bDate - aDate
+      }
     }
+
+    return a.displayName.localeCompare(b.displayName, undefined, {
+      numeric: true,
+      sensitivity: "base",
+    })
   },
   filterFn: (node) => node.slugSegment !== "tags",
   order: ["filter", "map", "sort"],
