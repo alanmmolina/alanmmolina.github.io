@@ -5,6 +5,16 @@ body[data-slug="index"] .article-title {
   display: none;
 }
 
+// Hide date and reading time on home page only
+body[data-slug="index"] .content-meta {
+  display: none;
+}
+
+// Hide graph ("Graph of Contents") on home page only
+body[data-slug="index"] .graph {
+  display: none;
+}
+
 // Footnotes — hide the auto-generated heading and clean up emoji backlinks
 .footnotes {
   border-top: none;
