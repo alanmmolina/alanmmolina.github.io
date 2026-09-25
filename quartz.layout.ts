@@ -6,12 +6,7 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [],
-  footer: Component.Footer({
-    links: {
-      GitHub: "https://github.com/alanmmolina",
-      LinkedIn: "https://www.linkedin.com/in/alanmmolina",
-    },
-  }),
+  footer: Component.Footer(),
 }
 
 // components for pages that display a single page (e.g. a single note)
@@ -25,7 +20,13 @@ export const defaultContentPageLayout: PageLayout = {
     Component.TagList(),
   ],
   left: [
-    Component.PageTitle(),
+    Component.PageTitle({
+      links: {
+        GitHub: "https://github.com/alanmmolina",
+        LinkedIn: "https://www.linkedin.com/in/alanmmolina",
+        Email: "mailto:mail@alanmmolina.com",
+      },
+    }),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
@@ -33,23 +34,24 @@ export const defaultContentPageLayout: PageLayout = {
           Component: Component.Search(),
           grow: true,
         },
-        { Component: Component.Darkmode() },
-        { Component: Component.ReaderMode() },
       ],
     }),
     Component.Explorer(),
   ],
-  right: [
-    Component.Graph(),
-    Component.DesktopOnly(Component.TableOfContents()),
-  ],
+  right: [Component.Graph(), Component.DesktopOnly(Component.TableOfContents())],
 }
 
 // components for pages that display lists of pages  (e.g. tags or folders)
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
   left: [
-    Component.PageTitle(),
+    Component.PageTitle({
+      links: {
+        GitHub: "https://github.com/alanmmolina",
+        LinkedIn: "https://www.linkedin.com/in/alanmmolina",
+        Email: "mailto:mail@alanmmolina.com",
+      },
+    }),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
@@ -57,7 +59,6 @@ export const defaultListPageLayout: PageLayout = {
           Component: Component.Search(),
           grow: true,
         },
-        { Component: Component.Darkmode() },
       ],
     }),
     Component.Explorer(),
