@@ -1,0 +1,29 @@
+{
+  "name": "page-title",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./components": "./dist/components.js"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "quartz": {
+    "name": "page-title",
+    "displayName": "Page Title",
+    "description": "Site title with socials bar, theme toggle, and focus toggle",
+    "version": "1.0.0",
+    "category": "component",
+    "components": {
+      "PageTitle": {
+        "name": "PageTitle",
+        "displayName": "Page Title",
+        "description": "Site title with socials bar and theme/focus toggles",
+        "version": "1.0.0",
+        "defaultPosition": "left",
+        "defaultPriority": 10
+      }
+    }
+  }
+}

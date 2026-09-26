@@ -1,0 +1,21 @@
+{
+  "name": "content-index",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "quartz": {
+    "name": "content-index",
+    "displayName": "Content Index",
+    "description": "Content index emitter that keeps dates in the index so the explorer can sort by recency",
+    "version": "1.0.0",
+    "category": "emitter",
+    "defaultOrder": 50,
+    "defaultEnabled": true
+  }
+}

@@ -1,4 +1,4 @@
-@use "./base.scss";
+@use "./variables.scss" as *;
 
 // Hide article title on home page only
 body[data-slug="index"] .article-title {
@@ -13,6 +13,28 @@ body[data-slug="index"] .content-meta {
 // Hide graph ("Graph of Contents") on home page only
 body[data-slug="index"] .graph {
   display: none;
+}
+
+// Search spans the sidebar column — edges aligned with the hairline rules above
+// (extra specificity so it wins over the search plugin's own rules)
+body .search {
+  min-width: fit-content;
+  max-width: 100%;
+
+  @media all and ($mobile) {
+    max-width: 14rem;
+    flex-grow: 0.3;
+  }
+}
+
+// Graph title — the plugin ships its own i18n ("Graph View"); keep the site's copy
+body .graph > h3 {
+  font-size: 0;
+
+  &::after {
+    content: "Graph of Contents";
+    font-size: 1rem;
+  }
 }
 
 // Footnotes — hide the auto-generated heading and clean up emoji backlinks

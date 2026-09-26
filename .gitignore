@@ -10,3 +10,6 @@ private/
 .replit
 replit.nix
 .research
+.quartz/
+quartz/cli/tui/dist/
+.turbo/
