@@ -123,7 +123,6 @@ plugins:
       links:
         GitHub: https://github.com/alanmmolina
         LinkedIn: https://www.linkedin.com/in/alanmmolina
-        Email: mailto:mail@alanmmolina.com
     layout:
       position: left
       priority: 10

@@ -60,26 +60,6 @@ const icons: Record<string, JSX.Element> = {
       <path d="M5 21H19a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2z" />
     </svg>
   ),
-  Email: (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      width="20px"
-      height="20px"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      role="img"
-    >
-      <title>Email</title>
-      <path d="M17 20h3.75a1.25 1 0 0 0 1.25-1V5a1.25 1 0 0 0-1.25-1h-3.75z" />
-      <path d="M3.25 20h3.75V4H3.25a1.25 1 0 0 0-1.25 1v14a1.25 1 0 0 0 1.25 1" />
-      <path d="M17 4l-5 4l-5-4" />
-      <path d="m2 6.5l10 7.5l10-7.5" />
-    </svg>
-  ),
 }
 
 const PageTitlePlugin = ((opts?: Options) => {
