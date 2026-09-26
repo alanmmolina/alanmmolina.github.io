@@ -1,4 +1,4 @@
-@use "./base.scss";
+@use "./variables.scss" as *;
 
 // Hide article title on home page only
 body[data-slug="index"] .article-title {
