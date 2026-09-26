@@ -44,6 +44,8 @@ configuration:
 plugins:
   - source: "@quartz-community/note-properties"
     enabled: true
+    options:
+      hidePropertiesView: true
     order: 5
   - source: "@quartz-community/created-modified-date"
     enabled: true
@@ -68,6 +70,9 @@ plugins:
       enableInHtmlEmbed: false
       enableCheckbox: true
     order: 30
+  - source: ./plugins/excalidraw
+    enabled: true
+    order: 35
   - source: "@quartz-community/github-flavored-markdown"
     enabled: true
     order: 40
@@ -168,7 +173,7 @@ plugins:
     layout:
       position: beforeBody
       priority: 5
-  - source: "@quartz-community/footer"
+  - source: ./plugins/footer
     enabled: true
     layout:
       position: footer
