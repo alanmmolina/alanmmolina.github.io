@@ -1,0 +1,21 @@
+{
+  "name": "excalidraw",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "node build.mjs"
+  },
+  "quartz": {
+    "name": "excalidraw",
+    "displayName": "Excalidraw",
+    "description": "Renders embedded .excalidraw files as interactive diagrams",
+    "version": "1.0.0",
+    "category": "transformer",
+    "defaultOrder": 35,
+    "defaultEnabled": true
+  }
+}
