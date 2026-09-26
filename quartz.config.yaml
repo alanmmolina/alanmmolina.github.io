@@ -1,0 +1,191 @@
+# yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
+configuration:
+  pageTitle: "~/.alanmmolina"
+  pageTitleSuffix: ""
+  enableSPA: true
+  enablePopovers: true
+  analytics:
+    provider: plausible
+  locale: en-US
+  baseUrl: alanmmolina.com
+  ignorePatterns:
+    - private
+    - templates
+    - .obsidian
+    - .research
+  theme:
+    fontOrigin: googleFonts
+    cdnCaching: true
+    typography:
+      header: Roboto
+      body: Roboto
+      code: Fira Code
+    colors:
+      lightMode:
+        light: "#FAF8F8"
+        lightgray: "#E5E5E5"
+        gray: "#B8B8B8"
+        darkgray: "#4E4E4E"
+        dark: "#2B2B2B"
+        secondary: "#2B2B2B"
+        tertiary: "#2B2B2B88"
+        highlight: rgba(100, 100, 100, 0.1)
+        textHighlight: "#FAFAFA88"
+      darkMode:
+        light: "#09090B"
+        lightgray: "#292929"
+        gray: "#727272"
+        darkgray: "#EAEAEA"
+        dark: "#FAFAFA"
+        secondary: "#FAFAFA"
+        tertiary: "#FAFAFA88"
+        highlight: rgba(100, 100, 100, 0.1)
+        textHighlight: "#FAFAFA88"
+plugins:
+  - source: "@quartz-community/note-properties"
+    enabled: true
+    order: 5
+  - source: "@quartz-community/created-modified-date"
+    enabled: true
+    options:
+      defaultDateType: created
+      priority:
+        - frontmatter
+        - git
+        - filesystem
+    order: 10
+  - source: "@quartz-community/syntax-highlighting"
+    enabled: true
+    options:
+      theme:
+        light: github-light
+        dark: github-dark
+      keepBackground: false
+    order: 20
+  - source: "@quartz-community/obsidian-flavored-markdown"
+    enabled: true
+    options:
+      enableInHtmlEmbed: false
+      enableCheckbox: true
+    order: 30
+  - source: "@quartz-community/github-flavored-markdown"
+    enabled: true
+    order: 40
+  - source: "@quartz-community/table-of-contents"
+    enabled: true
+    order: 50
+    layout:
+      position: right
+      priority: 20
+      display: desktop-only
+  - source: "@quartz-community/crawl-links"
+    enabled: true
+    options:
+      markdownLinkResolution: shortest
+    order: 60
+  - source: "@quartz-community/description"
+    enabled: true
+    order: 70
+  - source: "@quartz-community/latex"
+    enabled: true
+    options:
+      renderEngine: katex
+    order: 80
+  - source: "@quartz-community/remove-draft"
+    enabled: true
+  - source: "@quartz-community/alias-redirects"
+    enabled: true
+  - source: ./plugins/content-index
+    enabled: true
+    options:
+      enableSiteMap: true
+      enableRSS: true
+  - source: "@quartz-community/favicon"
+    enabled: true
+  - source: "@quartz-community/og-image"
+    enabled: true
+    options:
+      colorScheme: darkMode
+  - source: "@quartz-community/content-page"
+    enabled: true
+  - source: "@quartz-community/folder-page"
+    enabled: true
+  - source: "@quartz-community/tag-page"
+    enabled: true
+  - source: ./plugins/page-title
+    enabled: true
+    options:
+      links:
+        GitHub: https://github.com/alanmmolina
+        LinkedIn: https://www.linkedin.com/in/alanmmolina
+        Email: mailto:mail@alanmmolina.com
+    layout:
+      position: left
+      priority: 10
+  - source: "@quartz-community/spacer"
+    enabled: true
+    layout:
+      position: left
+      priority: 20
+      display: mobile-only
+  - source: "@quartz-community/search"
+    enabled: true
+    layout:
+      position: left
+      priority: 30
+      group: toolbar
+      groupOptions:
+        grow: true
+  - source: "@quartz-community/explorer"
+    enabled: true
+    layout:
+      position: left
+      priority: 40
+  - source: "@quartz-community/graph"
+    enabled: true
+    layout:
+      position: right
+      priority: 10
+  - source: "@quartz-community/article-title"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 10
+  - source: "@quartz-community/content-meta"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 20
+  - source: "@quartz-community/tag-list"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 30
+  - source: "@quartz-community/breadcrumbs"
+    enabled: true
+    options:
+      showCurrentPage: false
+    layout:
+      position: beforeBody
+      priority: 5
+  - source: "@quartz-community/footer"
+    enabled: true
+    layout:
+      position: footer
+      priority: 50
+layout:
+  groups:
+    toolbar:
+      direction: row
+      gap: 1rem
+  byPageType:
+    folder:
+      exclude:
+        - tag-list
+      positions:
+        right: []
+    tag:
+      exclude:
+        - tag-list
+      positions:
+        right: []
