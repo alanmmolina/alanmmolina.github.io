@@ -1,15 +1,15 @@
 {
-  "name": "@jackyzha0/quartz",
-  "description": "🌱 publish your digital garden and notes as a website",
+  "name": "alanmmolina.github.io",
+  "description": "Personal site and digital garden of Alan Molina",
   "private": true,
   "version": "5.0.0",
   "type": "module",
-  "author": "jackyzha0 <j.zhao2k19@gmail.com>",
+  "author": "Alan Molina",
   "license": "MIT",
-  "homepage": "https://quartz.jzhao.xyz",
+  "homepage": "https://alanmmolina.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jackyzha0/quartz.git"
+    "url": "https://github.com/alanmmolina/alanmmolina.github.io.git"
   },
   "scripts": {
     "quartz": "./quartz/bootstrap-cli.mjs",
