@@ -11,14 +11,14 @@ tags:
 ---
 ---
 
-Building a modular data engineering stack requires more than just choosing the right tools - it also means keeping everything organized, reproducible, and easy to manage. Since [[00-concept-and-motivation|Lakeground]] will be made up of multiple independent components, I need a way to handle Python environments in a way that’s both flexible and efficient. That’s where [`uv`](https://github.com/astral-sh/uv) comes in.
+Building a modular data engineering stack requires more than just choosing the right tools - it also means keeping everything organized, reproducible, and easy to manage. Since [[projects/lakeground/index|Lakeground]] will be made up of multiple independent components, I need a way to handle Python environments in a way that’s both flexible and efficient. That’s where [`uv`](https://github.com/astral-sh/uv) comes in.
 
 ---
 ## Why `uv`?  
 
 Python has no shortage of package and environment managers, but `uv` brings something fresh to the table. Built with Rust by the creators of [Ruff](https://docs.astral.sh/ruff/), `uv` is a modern, high-performance tool designed to be _fast_, _lightweight_, and _developer-friendly_. It tackles many of the pain points found in traditional tools like `pip`, `venv`, and `virtualenv`, offering a unified approach to package and environment management. True to its name - _Unified Vision_ - `uv` consolidates the best features of these tools into a single, streamlined utility.  
 
-But what really makes `uv` a perfect fit for [[00-concept-and-motivation|Lakeground]] is its [workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/#using-workspaces) feature.
+But what really makes `uv` a perfect fit for [[projects/lakeground/index|Lakeground]] is its [workspaces](https://docs.astral.sh/uv/concepts/projects/workspaces/#using-workspaces) feature.
 
 > [!tip] What about Rust?
 > There are plenty of modern tools built with Rust that are so good they've become staples in my development setup - like [Polars](https://pola.rs/) and [Starship](https://starship.rs/). A few months ago, I decided to explore Rust while taking a Software Architecture course, and I have to say, the language feels amazing. But for those of us who treat Python as almost a native language, the transition isn’t exactly smooth. Rust forces you to dive deeper into Computer Engineering concepts that Python abstracts away entirely. 
@@ -30,14 +30,14 @@ But what really makes `uv` a perfect fit for [[00-concept-and-motivation|Lakegro
 ---
 ### `uv` workspaces
 
-Since [[00-concept-and-motivation|Lakeground]] is structured as each component functioning as an [[01-repository-scaffold|independent module]], I need an environment management solution that respects that modularity. `uv`’s workspaces allow multiple projects to coexist under a single umbrella while maintaining their own dependencies and configurations.
+Since [[projects/lakeground/index|Lakeground]] is structured as each component functioning as an [[01-repository-scaffold|independent module]], I need an environment management solution that respects that modularity. `uv`’s workspaces allow multiple projects to coexist under a single umbrella while maintaining their own dependencies and configurations.
 
 > [!quote] `uv` [docs](https://docs.astral.sh/uv/concepts/projects/workspaces/#using-workspaces):
 > Inspired by the [Cargo](https://doc.rust-lang.org/cargo/reference/workspaces.html) concept of the same name, a workspace is "a collection of one or more packages, called _workspace members_, that are managed together."
 
 Cargo's workspace feature allows developers to manage multiple interdependent packages in a single repository while maintaining _separate_, but _compatible_, dependency trees for each package. This modular approach promotes efficient development and clear dependency management.
 
-Similarly, `uv` workspaces take the same principles and apply them to Python environments. By mimicking this well-established pattern from Rust, `uv` provides a powerful solution to the challenges of managing dependencies across multiple Python projects. Just like Cargo ensures that each [crate](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html) within a workspace is isolated but can still share dependencies, `uv` allows me to manage each component of [[00-concept-and-motivation|Lakeground]] independently while ensuring that shared libraries are consistently maintained.
+Similarly, `uv` workspaces take the same principles and apply them to Python environments. By mimicking this well-established pattern from Rust, `uv` provides a powerful solution to the challenges of managing dependencies across multiple Python projects. Just like Cargo ensures that each [crate](https://doc.rust-lang.org/book/ch07-01-packages-and-crates.html) within a workspace is isolated but can still share dependencies, `uv` allows me to manage each component of [[projects/lakeground/index|Lakeground]] independently while ensuring that shared libraries are consistently maintained.
 
 ---
 
@@ -281,9 +281,9 @@ This setup is incredibly efficient. Each subproject can define its own dependenc
 ---
 ## What’s Next?  
 
-The foundation is set, and now it’s time to start _filling the Lake_ - not with water, but with data. That’s where [dlt](https://dlthub.com/) comes in. This lightweight ingestion library will help us pull data from APIs and other sources straight into our [[00-concept-and-motivation|Lakeground]], setting the stage for everything that comes next.
+The foundation is set, and now it’s time to start _filling the Lake_ - not with water, but with data. That’s where [dlt](https://dlthub.com/) comes in. This lightweight ingestion library will help us pull data from APIs and other sources straight into our [[projects/lakeground/index|Lakeground]], setting the stage for everything that comes next.
 
-In the next note, I’ll walk through setting up an ingestion pipeline, loading the first datasets, and making sure our [[00-concept-and-motivation|Lakeground]] is ready to handle real-world data.
+In the next note, I’ll walk through setting up an ingestion pipeline, loading the first datasets, and making sure our [[projects/lakeground/index|Lakeground]] is ready to handle real-world data.
 
 ---  
 

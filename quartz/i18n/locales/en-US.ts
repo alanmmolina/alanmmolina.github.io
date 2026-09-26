@@ -39,7 +39,7 @@ export default {
       createdWith: "Created with",
     },
     graph: {
-      title: "Mesh of Contents",
+      title: "Graph of Contents",
     },
     recentNotes: {
       title: "Recent Notes",

@@ -1,5 +1,7 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
+import customLight from "./quartz/styles/themes/custom-light.json"
+import customDark from "./quartz/styles/themes/custom-dark.json"
 
 /**
  * Quartz 4 Configuration
@@ -60,8 +62,8 @@ const config: QuartzConfig = {
       }),
       Plugin.SyntaxHighlighting({
         theme: {
-          light: "github-light",
-          dark: "github-dark",
+          light: customLight as never,
+          dark: customDark as never,
         },
         keepBackground: false,
       }),
@@ -87,7 +89,7 @@ const config: QuartzConfig = {
       Plugin.Static(),
       Plugin.Favicon(),
       Plugin.NotFoundPage(),
-      Plugin.CustomOgImages({colorScheme: "darkMode"}),
+      Plugin.CustomOgImages({ colorScheme: "darkMode" }),
     ],
   },
 }
