@@ -20,7 +20,7 @@ tags:
 
 **Delta Lake** came out of **Databricks** around 2017. The team, led by **Michael Armbrust**, had been building **Spark** workloads on cloud object stores for years. They kept running into the same class of problems: **S3** and **ADLS** give you cheap, durable storage, but they don't give you transactions. The [original paper](https://www.vldb.org/pvldb/vol13/p3411-armbrust.pdf), published at the [VLDB conference](https://www.vldb.org/) in 2020, frames it plainly: cloud object stores are great at storing blobs, terrible at being databases.[^1] **Delta Lake** is the translation layer.
 
-In 2019, **Databricks** open-sourced the project through the [Linux Foundation](https://www.linuxfoundation.org/). This matters. A table format that lives inside a single vendor's platform is a feature. A table format governed by an open community with an [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0) is infrastructure.
+In 2019, **Databricks** open-sourced the project through the [Linux Foundation](https://www.linuxfoundation.org/). A table format that lives inside a single vendor's platform is a feature. A table format governed by an open community with an [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0) is infrastructure.
 
 Today, **Delta Lake** lives under the [`delta-io` GitHub organization](https://github.com/delta-io/delta) with over 190 contributors from more than 70 organizations, including **Adobe**, **Amazon**, **Apple**, **Microsoft**, and others who have no interest in letting one company own the format their data lives in. The project is currently at version 4.3.0 and supports query engines across the board: **Spark**, **Trino**, **Presto**, **Flink**, [[duckdb|DuckDB]], **Snowflake**, **BigQuery**, **Athena**, **Redshift**. You can write with one engine and read with another. The format is the contract.
 
@@ -28,17 +28,13 @@ Today, **Delta Lake** lives under the [`delta-io` GitHub organization](https://g
 
 ## The Three Layers
 
-Every **Delta** table is three things sitting on top of each other:
-
-- **Data:** `.parquet` files in a directory. This is the raw storage. The bytes.
-- **Metadata:** A transaction log in `_delta_log/`. This is the ledger. Every change to the table, adding files, removing files, altering the schema, is an entry in this log.
-- **Catalog:** A registry that maps a table name like `lake.orders` to a path like `s3://my-bucket/orders/`. The catalog tells you where to look. The log tells you what you'll find there.
+Every **Delta** table is three things sitting on top of each other: data, metadata, and a catalog. The data is `.parquet` files in a directory, the raw storage, the bytes. The metadata is a transaction log in `_delta_log/`, the ledger, where every change to the table is an entry: adding files, removing files, altering the schema. The catalog is a registry that maps a table name like `lake.orders` to a path like `s3://my-bucket/orders/`. The catalog tells you where to look. The log tells you what you'll find there.
 
 When you strip everything else away, **Delta Lake** is a directory of `.parquet` files with a directory of `.json` files next to it that say which `.parquet` files matter and which ones don't. The rest is engineering on top of that idea.
 
 ![[assets/delta-lake/architecture.excalidraw]]
 
-### The Data Layer: just `.parquet` (mostly)
+### The Data Layer: Just `.parquet` (Mostly)
 
 The files in a **Delta** table directory are plain `.parquet`. There is no wrapper format, no custom encoding. If **Delta Lake** disappeared tomorrow, you could still read every data file with any `.parquet` reader. The vocabulary column holds strings. The quantity column holds integers. Nothing about the file itself says "I belong to a **Delta** table."
 
@@ -47,9 +43,9 @@ The files in a **Delta** table directory are plain `.parquet`. There is no wrapp
 
 What **Delta Lake** adds is structure around the files. The directory layout follows partition conventions: `date=2024-01-01/part-0000.parquet`, `date=2024-01-02/part-0000.parquet`, and so on. This is a convention, not a requirement of the protocol, but it makes listing and pruning fast. There is also a `_change_data/` directory for **Change Data Feed** files, optional, separate from the main data, used by streaming readers that need to know exactly which rows changed.
 
-Deletion vectors are another piece that lives at the data layer without changing the data files themselves. Instead of rewriting a 5 GB file to remove three rows, **Delta Lake** can write a tiny binary file that marks those three rows as "gone." The data file stays. The deletion vector says which parts to skip. It's a performance trick, not a format change, but it means the data layer sometimes has more than just `.parquet`. Per-file column statistics are stored in the transaction log, not in the `.parquet` files themselves. When you add a file to the table, **Delta Lake** records the min, max, and null count for every column in that file. This is what makes partition pruning work without opening a single file. More on that when we trace a read.
+Deletion vectors are another piece that lives at the data layer without changing the data files themselves. Instead of rewriting a 5 GB file to remove three rows, **Delta Lake** can write a tiny binary file that marks those three rows as "gone." The data file stays. The deletion vector says which parts to skip. The trick buys speed without changing the format, and it means the data layer sometimes has more than just `.parquet`. Per-file column statistics are stored in the transaction log, not in the `.parquet` files themselves. When you add a file to the table, **Delta Lake** records the min, max, and null count for every column in that file. This is what makes partition pruning work without opening a single file.
 
-### The Metadata Layer: "transaction log"
+### The Metadata Layer: "Transaction Log"
 
 Inside every **Delta** table directory, there is a `_delta_log/` subdirectory. It contains `.json` files, one per commit, named with zero-padded version numbers:
 
@@ -67,7 +63,7 @@ Each file is newline-delimited JSON. Each line is an action. The [protocol](http
 - `protocol`: "the minimum reader and writer versions required to work with this table." Bumped when the protocol adds features that older clients can't handle.
 - `txn`: "an application-level marker." Used by streaming systems to record progress and make writes idempotent.
 
-Here is a taste of what a commit looks like. Someone created a table and inserted a few rows:
+Someone created a table and inserted a few rows:
 
 ```json
 {
@@ -136,20 +132,20 @@ Now version 1. Someone ran a DELETE:
 }
 ```
 
-The old file is gone. A new file with 99 rows replaces it. That's how `UPDATE` and `DELETE` work under the hood: read the file, rewrite it without the unwanted rows, commit a remove for the old one and an add for the new one. No file is modified in place. No partial state ever exists.
+The old file is gone. A new file with 99 rows replaces it. That's how `UPDATE` and `DELETE` work under the hood: read the file, rewrite it without the unwanted rows, commit a remove for the old one and an add for the new one. Nothing is modified in place, so no partial state ever exists.
 
 Over time, the log grows. A table with thousands of commits would require readers to replay thousands of `.json` files just to figure out which files exist. That's where checkpoints come in. A checkpoint is a `.parquet` file, `00000000000000000042.checkpoint.parquet`, that contains the complete, reconciled state of the table up to version 42. Reconciliation means all the adds and removes have been resolved. If version 10 added a file and version 15 removed it, the checkpoint at version 42 does not mention that file at all. It only shows the final answer.
 
 Checkpoints let readers skip the early log entirely. A reader finds the latest checkpoint, loads it (a single `.parquet` read), then replays only the `.json` commits after that version. The `_last_checkpoint` file in `_delta_log/` is a shortcut. It points to the most recent checkpoint version so readers don't have to list the entire directory.
 
-This is **MVCC** taken to its logical conclusion. Every version is a point-in-time snapshot of the table. A reader that starts at version 50 sees version 50, even if version 51 commits while the reader is still running. The reader does not lock anything. It does not block writers. It just replays the log up to the version it started with and ignores everything after. That is snapshot isolation.
+This is **MVCC** taken to its logical conclusion. Every version is a point-in-time snapshot of the table. A reader that starts at version 50 sees version 50, even if version 51 commits while the reader is still running. The reader locks nothing and blocks no writers. It just replays the log up to the version it started with and ignores everything after. That is snapshot isolation.
 
 > [!info] Why readers don't block
 > Snapshot isolation is what makes reads cheap. You never wait for a write to finish. You never hold a lock. You just pick a version number, replay the log to that point, and read. Writes happening in parallel are invisible to you until the next query starts fresh.
 
 ### The Catalog Layer
 
-So far we have assumed you already know where your table lives. But how does `spark.read.table("lake.orders")` turn into `s3://my-bucket/orders/`? That's the catalog. In most setups, it's the **Hive** metastore, a small database that maps table names to paths and stores a cached copy of the schema for quick lookup. Spark's default catalog is the **Hive** metastore. **Databricks** uses **Unity Catalog**. **AWS Glue**, **Polaris**, and others do the same job.
+So far we have assumed you already know where your table lives. But how does `spark.read.table("lake.orders")` turn into `s3://my-bucket/orders/`? That's the catalog. In most setups, it's the **Hive** metastore, a small database that maps table names to paths and stores a cached copy of the schema for quick lookup. **Spark**'s default catalog is the **Hive** metastore. **Databricks** uses **Unity Catalog**. **AWS Glue**, **Polaris**, and others do the same job.
 
 The catalog is not the source of truth for your table's state. It stores the table location. Everything else, the actual schema, the list of partitions, the table properties, lives in the transaction log at that location. If someone runs `ALTER TABLE ADD COLUMN`, the change goes into the next commit in `_delta_log/`, and the catalog may or may not get updated. The next reader looks at the log, sees the new schema, and adapts.
 
@@ -160,7 +156,7 @@ The catalog is not the source of truth for your table's state. It stores the tab
 
 ## The Read Path
 
-Let's trace a read from the query down to the bytes. You run:
+A read goes from the query down to the bytes. You run:
 
 ```sql
 SELECT * FROM lake.orders WHERE order_date = '2024-06-15' AND amount > 100
@@ -183,7 +179,7 @@ Finally, the engine reads the remaining `.parquet` files, applies any additional
 
 ## The Write Path
 
-Writes follow the same pattern with one critical addition: the commit itself is a race. Let's trace an `INSERT`. You run:
+Writes follow the same pattern with one critical addition: the commit itself is a race. An `INSERT` shows it. You run:
 
 ```sql
 INSERT INTO lake.orders VALUES (...)
@@ -193,7 +189,7 @@ INSERT INTO lake.orders VALUES (...)
 
 The engine follows the same read path to build the current snapshot (let's say version 144). But this time, it's not done. It now writes new `.parquet` files to the table directory, `part-00000-xyz.snappy.parquet`, inside the appropriate partition subdirectory. These files are optimistically written. No lock is held. No other writer knows they exist yet.
 
-Now comes the commit. The engine constructs a new `.json` commit file containing an `add` action for each new file. It writes this file to `_delta_log/_staged_commits/00000000000000000145.<uuid>.json` and then attempts to make it visible by placing it at `_delta_log/00000000000000000145.json`. This is where the storage system earns its keep. The commit must be atomic. The file either appears in its entirety or does not appear at all.[^3]
+The commit is next. The engine constructs a new `.json` commit file containing an `add` action for each new file. It writes this file to `_delta_log/_staged_commits/00000000000000000145.<uuid>.json` and then attempts to make it visible by placing it at `_delta_log/00000000000000000145.json`. This is where the storage system earns its keep. The commit must be atomic. The file either appears in its entirety or does not appear at all.[^3]
 
 > [!example] Atomic commits by storage
 > How different storage systems provide atomic commits: **HDFS** and **ADLS Gen2** have native atomic renames, so the commit just renames a temp file into place. **S3** single-cluster relies on the fact that writing the same key from the same **Spark** driver is safe (no true mutual exclusion, but no competing writers). **S3** multi-cluster uses a **DynamoDB** table to lock the version number before the file lands. Each backend plugs in through **Delta**'s [LogStore API](https://github.com/delta-io/delta/blob/master/storage/src/main/java/io/delta/storage/LogStore.java).[^4]
@@ -209,7 +205,7 @@ The entire write path is optimistic. Writers assume they're the only ones changi
 
 ---
 
-The transaction log is a remarkably simple idea. A directory of `.json` files, one per operation, written atomically by whoever gets there first. Everything else, time travel, schema enforcement, snapshot isolation, the ability to list a table's entire history with a single directory listing, falls out of that. You could build it yourself with a bash script and an **S3** bucket, and a team at Databricks did, more or less, before they productized it, open-sourced it, and handed it to a foundation.
+The transaction log is a remarkably simple idea. A directory of `.json` files, one per operation, written atomically by whoever gets there first. Everything else, time travel, schema enforcement, snapshot isolation, the ability to list a table's entire history with a single directory listing, falls out of that. You could build it yourself with a bash script and an **S3** bucket, and a team at **Databricks** did, more or less, before they productized it, open-sourced it, and handed it to a foundation.
 
 ---
 

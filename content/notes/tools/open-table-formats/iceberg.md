@@ -16,7 +16,7 @@ Open table formats give a directory of `.parquet` files a memory. [[delta-lake|D
 
 ---
 
-Let me show you the problem **Iceberg** was built to solve. You have a table with a decade of sales data, millions of `.parquet` files spread across **S3**. A query comes in: "last month, region West, product category shoes." With a flat commit log, your engine needs to list the metadata directory, find the latest checkpoint, then walk forward through `.json` files to build a snapshot. It works. But the initial listing gets slower as commits accumulate. At Netflix scale, where tables routinely held tens of millions of files, just listing a directory to plan a query was taking longer than running the query itself.
+The problem **Iceberg** was built to solve shows up at scale. You have a table with a decade of sales data, millions of `.parquet` files spread across **S3**. A query comes in: "last month, region West, product category shoes." With a flat commit log, your engine needs to list the metadata directory, find the latest checkpoint, then walk forward through `.json` files to build a snapshot. It works. But the initial listing gets slower as commits accumulate. At Netflix scale, where tables routinely held tens of millions of files, just listing a directory to plan a query was taking longer than running the query itself.
 
 **Iceberg** sidesteps this entirely. Instead of listing, it follows pointers. The metadata tree tells you exactly where to look, one pointer at a time, and every pointer narrows the search. You never ask "what files are in this directory?" You ask "what does this manifest say is relevant?"
 
@@ -43,15 +43,11 @@ Today, **Iceberg** lives under the [`apache/iceberg` GitHub organization](https:
 
 ## The Three Layers
 
-Every **Iceberg** table is three things stacked together:
-
-- **Data:** `.parquet` (or `.orc`, `.avro`) files in a directory. Same as **Delta**. Plain, fully portable.
-- **Metadata:** A tree of pointer files that describe which data files exist, what they contain, and how to find them without listing directories.
-- **Catalog:** A registry that stores the location of the current `metadata.json` and performs the atomic swap that commits every transaction.
+Every **Iceberg** table is three things stacked together. The data is `.parquet` files in a directory, same as **Delta**: plain, fully portable (`.orc` and `.avro` work too). The metadata is a tree of pointer files that describe which data files exist, what they contain, and how to find them without listing directories. The catalog is a registry that stores the location of the current `metadata.json` and performs the atomic swap that commits every transaction.
 
 When you strip everything else away, **Iceberg** is a directory of `.parquet` files with a set of `.avro` and `.json` files next to it that form a tree. You start at the root and walk down. The rest is engineering on top of that idea.
 
-### The Data Layer: `.parquet`, same as always
+### The Data Layer: `.parquet`, Same as Always
 
 The files in an **Iceberg** table are plain `.parquet`. The files use standard `.parquet` encoding, nothing proprietary. (`.orc` and `.avro` are also supported, though `.parquet` is the most common.) If **Iceberg** disappeared tomorrow, every data file would still be readable by **Pandas**, [[duckdb|DuckDB]], or any `.parquet`-compatible tool.
 
@@ -64,7 +60,7 @@ Schema evolution works on the same principle. Every column has a unique integer 
 > [!info] Your data stays portable
 > Like **Delta**, **Iceberg** does not invent a new file format. The metadata files are `.avro` and `.json`, readable by any tool that understands the **Iceberg** spec. No proprietary binary format. No vendor wall around your data.
 
-Per-file column statistics are stored in the manifest files, not in the `.parquet` footers. When a file is added to the table, the writer records the min, max, null count, record count, and nan count for every column. These stats live in the manifest so the engine can prune files without opening them. More on that in the read path.
+Per-file column statistics are stored in the manifest files, not in the `.parquet` footers. When a file is added to the table, the writer records the min, max, null count, record count, and nan count for every column. These stats live in the manifest so the engine can prune files without opening them.
 
 ### The Metadata Layer: "manifest tree"
 
@@ -74,15 +70,15 @@ Inside every **Iceberg** table directory, sitting next to the data files, is a m
 
 Here is the tree, from root to leaves. Each level carries just enough information to guide the next step down.
 
-**`metadata.json`** is the root. It lives at a location the catalog knows, typically something like `s3://bucket/table/metadata/00001-abc.metadata.json`. This file stores the table schema (each column by name, type, and unique integer ID), the partition specs (all of them, current and historical), the snapshot log (a list of every committed snapshot with timestamp and summary), the current snapshot ID, and the table's configuration properties. It does not contain data file paths. It points to a snapshot, which points to a manifest list, which points down.
+`metadata.json` is the root. It lives at a location the catalog knows, typically something like `s3://bucket/table/metadata/00001-abc.metadata.json`. This file stores the table schema (each column by name, type, and unique integer ID), the partition specs (all of them, current and historical), the snapshot log (a list of every committed snapshot with timestamp and summary), the current snapshot ID, and the table's configuration properties. It does not contain data file paths. It points to a snapshot, which points to a manifest list, which points down.
 
-**A snapshot** captures what the table looked like at a specific moment. Each one carries a unique ID, a sequence number, a timestamp, an operation type (append, overwrite, delete), and a pointer to a manifest list file. Snapshots are immutable once committed. You can time-travel to any snapshot by asking the engine to use that snapshot ID instead of the current one. The snapshot log in `metadata.json` is your table's entire history, stored as a list of snapshot entries, each no bigger than a few hundred bytes.
+A snapshot captures what the table looked like at a specific moment. Each one carries a unique ID, a sequence number, a timestamp, an operation type (append, overwrite, delete), and a pointer to a manifest list file. Snapshots are immutable once committed. You can time-travel to any snapshot by asking the engine to use that snapshot ID instead of the current one. The snapshot log in `metadata.json` is your table's entire history, stored as a list of snapshot entries, each no bigger than a few hundred bytes.
 
-**A manifest list** is a `.avro` file that lists manifest files. Each entry includes the manifest's path, its length, the number of data files it contains, the number of rows added and deleted, and, critically, a partition summary: the min and max values for each partition field across all files in that manifest. This is what makes partition pruning work in a single read.
+A manifest list is a `.avro` file that lists manifest files. Each entry includes the manifest's path, its length, the number of data files it contains, the number of rows added and deleted, and, critically, a partition summary: the min and max values for each partition field across all files in that manifest. This is what makes partition pruning work in a single read.
 
-**A manifest file** is a `.avro` file that lists individual data files. Each entry records the data file path, format, record count, file size, partition values, and per-column statistics (lower bound, upper bound, null count, nan count for floats). A manifest can hold entries for files from any partition. Rather than rewriting every manifest on every commit, the engine reuses manifests from the previous snapshot for partitions that did not change. If only 5 out of 100 partitions changed in a commit, the writer reuses the manifests for the unchanged 95 partitions and writes new manifests only for the 5 that changed.
+A manifest file is a `.avro` file that lists individual data files. Each entry records the data file path, format, record count, file size, partition values, and per-column statistics (lower bound, upper bound, null count, nan count for floats). A manifest can hold entries for files from any partition. Rather than rewriting every manifest on every commit, the engine reuses manifests from the previous snapshot for partitions that did not change. If only 5 out of 100 partitions changed in a commit, the writer reuses the manifests for the unchanged 95 partitions and writes new manifests only for the 5 that changed.
 
-**Data files** are `.parquet`, `.orc`, or `.avro`. The manifest entries say where they are and what they contain.
+Data files are `.parquet`, `.orc`, or `.avro`. The manifest entries say where they are and what they contain.
 
 ```json
 {
@@ -134,7 +130,7 @@ This is a `metadata.json` at version 42. The schema says the table has three col
 
 But the catalog does something **Delta**'s catalog does not: it commits transactions. Every write to an **Iceberg** table ends with the writer asking the catalog to point to a new metadata file instead of the old one, and to make that change atomically. This is the commit. The file is never renamed into place; the pointer swap is the operation. The catalog performs a compare-and-swap: if the current pointer is what the writer expected, it updates to the new pointer and the commit succeeds. If another writer swapped it first, the compare fails and the writer retries.
 
-The catalog is the linearization point for all writes. It is the one place where concurrent operations meet and serialize themselves. More on this in the write path.
+The catalog is the linearization point for all writes, the one place where concurrent operations meet and serialize themselves.
 
 > [!info] The catalog as commit coordinator
 > Different catalog implementations provide the atomic swap differently. The **Hive Metastore** uses database transactions. **AWS Glue** uses conditional updates. **Nessie** ([Project Nessie](https://projectnessie.org/)) versions the catalog itself, giving you a `git`-like branch/tag/commit model on top of **Iceberg** tables. **JDBC** catalogs use a row-level lock or optimistic locking on a metadata pointer table. The catalog API is the same regardless: `commit(old-metadata-location, new-metadata-location)` returns success or conflict.
@@ -145,7 +141,7 @@ The catalog is the linearization point for all writes. It is the one place where
 
 ## The Read Path
 
-Let us trace a read from the query down to the bytes. You run:
+A read runs from the query down to the bytes. You run:
 
 ```sql
 SELECT * FROM lake.orders WHERE order_date = '2024-06-15' AND amount > 100
@@ -159,7 +155,7 @@ The engine reads the manifest list. This is a single `.avro` file containing ent
 
 For the few manifests whose partition summaries overlap the query, the engine reads the manifest files. Each manifest file lists individual data files with full column statistics. The engine checks file-level stats: a file with `amount` stats showing `min: 5, max: 50` gets skipped if the query filters `amount > 100`. A file with `order_date` min and max both outside `2024-06-15` gets skipped. This is file-level pruning, and it costs only the `.avro` reads for the surviving manifest entries. Finally, the engine reads the remaining `.parquet` files and returns the rows.
 
-The entire read path is pointer dereferences. At no point does the engine ask "what is in this directory?" It asks only "what does this metadata file say is here?" The catalog points to the root. The root points to the snapshot. The snapshot points to the manifest list. The manifest list points to manifests. The manifests point to data files. Every arrow narrows the search. By the time the engine touches `.parquet`, it is reading exactly the files that matter.
+The entire read path is pointer dereferences. The engine never asks "what is in this directory?" It asks only "what does this metadata file say is here?" and follows the answer down: catalog to root, root to snapshot, snapshot to manifest list, manifest list to manifests, manifests to data files. By the time it touches `.parquet`, it is reading exactly the files that matter.
 
 > [!info] Snapshot isolation
 > Like **Delta**, **Iceberg** guarantees snapshot isolation. Even if a writer commits a new snapshot while a reader is mid-query, the reader stays pinned to the version it opened with. No lock is acquired. No write is blocked. The reader simply follows the pointer it grabbed at the start, which points to a frozen moment in the table's history.
@@ -168,7 +164,7 @@ The entire read path is pointer dereferences. At no point does the engine ask "w
 
 ## The Write Path
 
-Writes follow a similar tree-building pattern but end with an atomic swap. Let us trace an `INSERT`. You run:
+Writes follow a similar tree-building pattern but end with an atomic swap. An `INSERT` shows the shape. You run:
 
 ```sql
 INSERT INTO lake.orders VALUES (...)
@@ -191,7 +187,7 @@ This is optimistic concurrency. A writer only finds out someone else got there f
 
 `UPDATE` and `DELETE` do not modify data files in place. An `UPDATE` reads the current snapshot, identifies rows that match the predicate, writes new `.parquet` files with the modified rows, and writes delete files to mark the original rows as removed. The commit creates a new snapshot with the new data files, the delete files, and all unchanged files from the previous snapshot. Files are never modified in place. The old snapshot stays intact while the new one takes over as current.
 
-The entire write path is a tree-building operation. New data files go on disk. New manifests point to them. A new manifest list points to the manifests. A new metadata file points to the manifest list. The catalog swaps the root pointer. That is the whole thing. The catalog is the commit. The pointers are the state.[^3]
+The entire write path is a tree-building operation. New data files go on disk, new manifests point to them, a new manifest list points to the manifests, and a new metadata file points to the manifest list. The catalog swaps the root pointer. That is the whole thing: the catalog commits, and the pointers hold the state.[^3]
 
 ---
 
@@ -199,13 +195,13 @@ The entire write path is a tree-building operation. New data files go on disk. N
 
 Most table formats treat partitioning as a physical layout decision. Your partition column becomes a directory name: `date=2024-01-01/`. If you want to change the scheme later, every file has to move. **Iceberg** decouples partitioning from file paths entirely. Partition values are fields in the manifest, not strings in a directory listing. The partition spec is metadata. The files stay wherever they were written.[^4]
 
-This sounds like a small change. It is not. It means partitioning stops being a decision you have to get right on day one, with heavy consequences for getting it wrong. It becomes something the table grows into.
+The change sounds small and is anything but. Partitioning stops being a decision with heavy consequences for getting it wrong on day one. It becomes something the table grows into.
 
 ### Hidden Partitioning
 
 You launch a product. The sales table gets a thousand rows a day. Partitioning by month makes sense. The data is small, the writes are sparse. Monthly partitions give you reasonable pruning and keep things tidy.
 
-A year later the table ingests fifty million rows a day. Monthly partitioning means every query scans billions of rows even when you only need last Tuesday's revenue. You need hourly partitioning. With directory-based formats, this is a full table rewrite. Terabytes of `.parquet` reshuffled into new directories, a maintenance window, a backfill job, a lot of crossed fingers.
+A year later the table ingests fifty million rows a day. Monthly partitioning means every query scans billions of rows even when you only need last Tuesday's revenue. The table needs hourly partitioning now. With directory-based formats, this is a full table rewrite. Terabytes of `.parquet` reshuffled into new directories, a maintenance window, a backfill job, a lot of crossed fingers.
 
 With **Iceberg**, the migration is a single DDL statement. You change the partition spec, and new files adopt the hourly transform. The old files keep their monthly partition values. They do not move. They do not get rewritten. Queries use whichever spec was active when each file was written. A filter on `order_date = '2024-06-15 14:00:00'` prunes by hour for new files and by month for old ones. Both specs coexist inside the same table, and the engine handles the difference transparently.
 
@@ -213,15 +209,17 @@ Scale is the obvious reason to evolve a partition scheme. But sometimes what nee
 
 In a directory-based format, fixing this means rewriting everything. Every `.parquet` file moves from one directory hierarchy to another. In **Iceberg**, you add a new partition spec that transforms `country` instead of `region`. Old files stay partitioned by region under the old spec. New files get partitioned by country under the new one. The engine derives partition filters from column predicates, not from directory names, so a query that says `WHERE country = 'Brazil'` automatically prunes files written under the new spec while ignoring the region-based partitions that cannot possibly match.
 
-You do not need a backfill job. There is no window where the table is unavailable. You do not need to get partitioning right on the first try. The table adapts.
+There is no backfill job and no window where the table is unavailable. Partitioning does not have to be right on the first try. The table grows into the scheme that fits.
 
 ---
 
-The manifest tree is a navigation system built on a simple idea. Instead of listing everything and deciding what matters, you follow pointers placed there by the last writer who knew exactly what mattered. Every read starts at the root and walks down. Every write builds a new set of pointers and swaps the root. The catalog holds one address. Everything else flows from there.
+The manifest tree is a navigation system built on a simple idea: instead of listing everything and deciding what matters, you follow pointers placed there by the last writer who knew exactly what mattered. Every read starts at the root and walks down. Every write builds a new set of pointers and swaps the root. The catalog holds one address.
+
+Everything else flows from there.
 
 ---
 
 [^1]: [_Iceberg Table Spec_](https://github.com/apache/iceberg/blob/main/format/spec.md), apache/iceberg, GitHub. The authoritative specification for the Iceberg table format, documenting the full metadata hierarchy, schema evolution, partition transforms, and optimistic concurrency model.
 [^2]: [_Iceberg Catalog Spec_](https://iceberg.apache.org/spec/#catalogs), Apache Iceberg. Documents the catalog interface including the atomic commit operation and the compare-and-swap semantics required from catalog implementations.
 [^3]: [_Iceberg Table Spec: Optimistic Concurrency_](https://github.com/apache/iceberg/blob/main/format/spec.md#optimistic-concurrency), apache/iceberg, GitHub. Describes the snapshot-based optimistic concurrency model and the conditions under which writers may retry.
-[^4]: [_Iceberg Table Spec: Partitioning_](https://github.com/apache/iceberg/blob/main/format/spec.md#partitioning), apache/iceberg, GitHub. Documents hidden partitioning, partition transforms, and partition spec evolution — the basis for changing partition schemes without rewriting data files.
+[^4]: [_Iceberg Table Spec: Partitioning_](https://github.com/apache/iceberg/blob/main/format/spec.md#partitioning), apache/iceberg, GitHub. Documents hidden partitioning, partition transforms, and partition spec evolution, the basis for changing partition schemes without rewriting data files.

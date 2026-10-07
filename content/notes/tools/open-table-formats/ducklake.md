@@ -19,13 +19,13 @@ There is something quietly obvious about **DuckLake**, and it takes about thirty
 
 ## The Minds Behind It
 
-**DuckLake** comes from the people behind [[duckdb|DuckDB]], specifically **[Hannes Mühleisen](https://hannes.muehleisen.org/)** and **[Mark Raasveldt](https://www.linkedin.com/in/mark-raasveldt-256b9a70/)** at **[DuckDB Labs](https://duckdblabs.com/)**. If you have followed [[duckdb|DuckDB]] at all, the move feels familiar. [[duckdb|DuckDB]] looked at the analytics landscape and asked why you needed a cluster to query a few gigabytes of data. **DuckLake** looks at lakehouse formats and asks why you need a maze of metadata files when a database does the same job with less ceremony.
+**DuckLake** comes from the people behind [[duckdb|DuckDB]], specifically [Hannes Mühleisen](https://hannes.muehleisen.org/) and [Mark Raasveldt](https://www.linkedin.com/in/mark-raasveldt-256b9a70/) at [DuckDB Labs](https://duckdblabs.com/). If you have followed [[duckdb|DuckDB]] at all, the move feels familiar. [[duckdb|DuckDB]] looked at analytics and asked why you needed a cluster to query a few gigabytes of data. **DuckLake** looks at lakehouse formats and asks why you need a maze of metadata files when a database does the same job with less ceremony.
 
-**[Jordan Tigani](https://motherduck.com/)**, co-founder of **[MotherDuck](https://motherduck.com/)** and former engineering lead for **BigQuery** at **Google**, helped shape the philosophy and was among the first to deploy it in production. The **MotherDuck** connection matters. **DuckLake** needed more than a neat spec. It needed a path into real workloads, and **MotherDuck** provided one, giving the format its first production scars before v1.0 ever shipped.
+[Jordan Tigani](https://motherduck.com/), co-founder of [MotherDuck](https://motherduck.com/) and former engineering lead for **BigQuery** at **Google**, helped shape the philosophy and was among the first to deploy it in production. The **MotherDuck** connection matters. **DuckLake** needed more than a neat spec. It needed a path into real workloads, and **MotherDuck** provided one, giving the format its first production scars before v1.0 ever shipped.
 
 The project began as an experiment in 2025. Version 0.1 shipped with a minimal set of catalog tables and the `ducklake` [[duckdb|DuckDB]] extension as its first implementation. Version 1.0 landed in April 2026 alongside [[duckdb|DuckDB]] v1.5.2, with a backward-compatibility promise: data written by a v1.x implementation stays readable by future v1.x implementations.[^1] The [specification](https://ducklake.select/docs/stable/specification/introduction) and the reference implementation are both released under the MIT license, governed by the [DuckDB Foundation](https://duckdb.org/foundation/).
 
-The governance structure is worth noting. The foundation holds the intellectual property, with statutes designed to guarantee **DuckLake** remains open-source under MIT in perpetuity, even if **DuckDB Labs** is acquired. **DuckDB Labs**, a spin-off from **[CWI Amsterdam](https://www.cwi.nl/en/)**, does the engineering. [MotherDuck](https://motherduck.com/) provides the hosted cloud service. Research, engineering, IP stewardship, and commercial hosting are legally separated under different organizations. It is a deliberate choice, and it means no single company can close the format.
+The foundation holds the intellectual property, with statutes designed to guarantee **DuckLake** remains open-source under MIT in perpetuity, even if **DuckDB Labs** is acquired. **DuckDB Labs**, a spin-off from [CWI Amsterdam](https://www.cwi.nl/en/), does the engineering. [MotherDuck](https://motherduck.com/) provides the hosted cloud service. Research, engineering, IP stewardship, and commercial hosting are legally separated under different organizations. It is a deliberate choice, and it means no single company can close the format.
 
 Current engine support is still growing. The [[duckdb|DuckDB]] extension is the reference implementation and the most complete one. **Apache DataFusion**, **Apache Spark**, **Trino**, and **Pandas** connectors exist, but the ecosystem is younger than what [[iceberg|Iceberg]] or [[delta-lake|Delta]] have built over years. If your lake already depends on **Spark**, **Trino**, and **Flink** all hitting the same tables, [[iceberg|Iceberg]] with a REST catalog is the more proven choice today. For new stacks and teams already building around [[duckdb|DuckDB]], **DuckLake** fits naturally.
 
@@ -33,17 +33,13 @@ Current engine support is still growing. The [[duckdb|DuckDB]] extension is the 
 
 ## The Three Layers
 
-Every **DuckLake** setup has three pieces:
-
-- **Data:** `.parquet` files sitting on object storage. Same as every other format. Plain, portable, nothing proprietary.
-- **Metadata:** SQL tables inside a database. Schemas, snapshots, file registrations, column statistics. All of it lives in rows, not files.
-- **Catalog:** The database itself. There is no separate catalog service, no REST API, no additional process to run. The database that stores the metadata *is* the catalog.
+Every **DuckLake** setup has three pieces. The data is `.parquet` files sitting on object storage, same as every other format: plain, portable, nothing proprietary. The metadata is SQL tables inside a database, where schemas, snapshots, file registrations, and column statistics all live in rows rather than files. The catalog is the database itself. There is no separate catalog service, no REST API, no additional process to run. The database that stores the metadata *is* the catalog.
 
 When you strip everything else away, **DuckLake** is a database that knows which `.parquet` files belong to your table. The data stays open. The metadata lives where metadata belongs. This also means **DuckLake** replaces the entire lakehouse stack. It is both a table format and a catalog. Where other setups need [[iceberg|Iceberg]] plus a REST catalog like **Polaris**, or [[delta-lake|Delta]] plus **Unity Catalog**, **DuckLake** is both halves in one piece.
 
 ![[assets/ducklake/architecture.excalidraw]]
 
-### The Data Layer: `.parquet`, same as always
+### The Data Layer: `.parquet`, Same as Always
 
 The files **DuckLake** writes to storage are plain `.parquet`. There is no wrapper format, no custom encoding. If **DuckLake** disappeared tomorrow, every data file would still be readable by **Pandas**, [[duckdb|DuckDB]], or any `.parquet`-compatible tool. The files carry [[iceberg|Iceberg]]-compatible field identifiers in the `.parquet` `field_id` metadata, which means you can migrate from **DuckLake** to [[iceberg|Iceberg]] without rewriting a single data file.[^2]
 
@@ -60,15 +56,17 @@ The `DATA_PATH` parameter points to the directory where `.parquet` files land. E
 
 Partition values are stored in the catalog, not in directory names. A file's partition membership is a set of rows in `ducklake_file_partition_value`, not a path convention like `date=2024-01-01/`. This means partition evolution works the same way it does in [[iceberg|Iceberg]]: change the partition scheme, and new files adopt it. Old files keep their old partition values. No data gets rewritten.
 
-Per-file column statistics live in `ducklake_file_column_stats`: min, max, null count, and record count for every column in every file. When the engine plans a query, it reads these stats from the catalog database, not from `.parquet` footers and not from a manifest tree. One SQL query against indexed database tables replaces all the metadata IO that other formats do through file listings and `.avro` reads. More on that when we trace a read.
+Per-file column statistics live in `ducklake_file_column_stats`: min, max, null count, and record count for every column in every file. When the engine plans a query, it reads these stats from the catalog database, not from `.parquet` footers and not from a manifest tree. One SQL query against indexed database tables replaces all the metadata IO that other formats do through file listings and `.avro` reads.
 
 ### The Metadata Layer: "the database"
 
 This is where **DuckLake** departs from every other format. [[delta-lake|Delta]]'s metadata is a flat sequence of `.json` files in `_delta_log/`. [[iceberg|Iceberg]]'s metadata is a tree of `.avro` and `.json` files in `metadata/`. **DuckLake**'s metadata is a set of SQL tables inside a database. No `.json` files. No `.avro` manifests. No checkpoint `.parquet` files. Just rows.
 
-The core tables are straightforward and few. `ducklake_data_file` stores one row per `.parquet` file: its path, record count, size, format, and the snapshot range during which it is active. `ducklake_snapshot` stores one row per commit: snapshot ID, timestamp, schema version, and a summary of what changed. `ducklake_file_column_stats` stores per-column min, max, null count, and record count for every file. `ducklake_column` stores the table schema with field identifiers that survive renames and type changes. `ducklake_table` stores the table name, schema reference, and configuration. Around twenty tables total cover the full catalog. A handful of fundamental tables hold snapshots, schemas, and data file mappings. Another set tracks table and column statistics for query planning. Tables for partitioning, sorting, macros, views, and tags round out the rest. The full specification is available on the **DuckLake** site, but the important thing is not the count. It is that every one of them is a plain SQL table you can query directly.
+The core tables are straightforward and few. `ducklake_data_file` stores one row per `.parquet` file: its path, record count, size, format, and the snapshot range during which it is active. `ducklake_snapshot` stores one row per commit: snapshot ID, timestamp, schema version, and a summary of what changed. `ducklake_file_column_stats` stores per-column min, max, null count, and record count for every file. `ducklake_column` stores the table schema with field identifiers that survive renames and type changes. `ducklake_table` stores the table name, schema reference, and configuration.
 
-Here is what a commit looks like under the hood. Someone creates a table and inserts a couple of rows:
+Around twenty tables cover the full catalog. A handful of them hold snapshots, schemas, and data file mappings. Another set tracks table and column statistics for query planning. Tables for partitioning, sorting, macros, views, and tags round out the rest. The full specification is available on the **DuckLake** site, and every one of those tables is plain SQL you can query directly.
+
+A commit is small. Someone creates a table and inserts a couple of rows:
 
 ```sql
 BEGIN TRANSACTION;
@@ -88,7 +86,7 @@ COMMIT;
 
 That is the whole thing. Four `INSERT`s inside a transaction. The `.parquet` file was written to storage before this transaction started. The transaction records what happened and where the file lives. No matter how many rows were inserted, two or two million, the catalog transaction has the same low cost. The heavy part is writing the `.parquet` file. The metadata part is a handful of database rows.
 
-A snapshot is a row in a table with a primary key. There is no file to write, no directory to scan. **DuckLake** can support millions of snapshots without the overhead that other formats hit when their log directories grow large. No pressure to aggressively expire old snapshots. The database handles the scale.
+A snapshot is a row in a table with a primary key. There is no file to write, no directory to scan. **DuckLake** can support millions of snapshots without the overhead that other formats hit when their log directories grow large. There is no pressure to aggressively expire old snapshots. The database handles the scale.
 
 Partial files make this possible. In other formats, every snapshot needs at least one new data file. With streaming workloads producing thousands of snapshots, that means thousands of tiny files. **DuckLake** lets a single `.parquet` file serve multiple snapshots by tracking which row ranges belong to which snapshot in the catalog. One file can carry rows from ten thousand different commits. The catalog records the offsets, and queries filter by snapshot range. It is the difference between "every snapshot costs a file" and "every snapshot costs a row."
 
@@ -126,7 +124,7 @@ The catalog backend is just a connection string. Switch from [[duckdb|DuckDB]] t
 
 ## The Read Path
 
-Let us trace a read from the query down to the bytes. You run:
+A read runs from the query down to the bytes. You run:
 
 ```sql
 SELECT * FROM lake.orders WHERE order_date = '2024-06-15' AND amount > 100;
@@ -147,7 +145,7 @@ The engine receives a list of file paths. It reads only those `.parquet` files f
 
 ## The Write Path
 
-Writes follow a pattern you will recognize from other lakehouse formats. The data goes to storage first. The metadata commit happens second. The difference is where the commit lives. Let us trace an `INSERT`. You run:
+Writes follow a pattern you will recognize from other lakehouse formats. The data goes to storage first. The metadata commit happens second. The difference is where the commit lives. An `INSERT` shows the shape. You run:
 
 ```sql
 INSERT INTO lake.orders VALUES (...)
@@ -218,13 +216,15 @@ USE archive;
 SELECT * FROM events WHERE ts > '2025-01-01';
 ```
 
-In **Mark Harrison**'s Frozen **DuckLake**s post, a team at **[Madhive](https://www.madhive.com/)** used this pattern for a production archive.[^7] After publishing to **S3**, any [[duckdb|DuckDB]] client could query the dataset without a running catalog service.
+In **Mark Harrison**'s Frozen **DuckLake**s post, a team at [Madhive](https://www.madhive.com/) used this pattern for a production archive.[^7] After publishing to **S3**, any [[duckdb|DuckDB]] client could query the dataset without a running catalog service.
 
 For read-only datasets, the publishing story is simple: publish the `.parquet` files and the catalog file together. The catalog is tiny relative to the data because it stores only file paths and statistics, not the rows themselves.
 
 ---
 
-**DuckLake** looks at the lakehouse stack and removes a layer everyone had learned to live with. If metadata coordination keeps acting like a database problem, putting it in a database starts to look like the obvious choice.
+**DuckLake** looks at the lakehouse stack and removes a layer everyone had learned to live with.
+
+If metadata coordination keeps acting like a database problem, putting it in a database starts to look like the obvious choice.
 
 ---
 

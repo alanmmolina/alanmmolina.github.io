@@ -11,13 +11,9 @@ tags:
 
 A directory of `.parquet` files is not a table. It's just files. Files don't know about each other. They don't know what changed, who changed it, or whether two writes stepped on each other's toes. They sit there, quiet, waiting for someone to sort out the mess.
 
-It is the default experience of using files as tables. A pipeline writes bad data and there is no rollback, only "find the bad file and hope you can rebuild the state without it." An upstream system adds a column and downstream readers crash because no one checked whether the files agree on a schema. Two jobs write to the same partition at the same time and one silently overwrites the other. Careful scheduling and manual cleanup paper over these gaps, but careful is not a protocol.
+That is the default experience of files as tables. A pipeline writes bad data and there is no rollback, only "find the bad file and hope you can rebuild the state without it." An upstream system adds a column and downstream readers crash because no one checked whether the files agree on a schema. Two jobs write to the same partition at the same time and one silently overwrites the other. Careful scheduling and manual cleanup paper over these gaps, but careful is not a protocol.
 
-What files alone cannot give you boils down to three things:
-
-- **Memory:** no snapshots, no history, no way to ask "what did this table look like last Tuesday?"
-- **Rules:** no schema enforcement across files, no guarantee that column `amount` is an integer in every file
-- **Coordination:** no protection against concurrent writes corrupting each other
+Files alone cannot give you three things: memory, rules, and coordination. Without memory there are no snapshots and no history, so you cannot ask "what did this table look like last Tuesday?" Without rules nothing enforces a schema across files, so nothing guarantees that column `amount` is an integer in every file. Without coordination two jobs writing at once can corrupt each other, and nothing stops them.
 
 A table needs all three. A directory of files provides none.
 
