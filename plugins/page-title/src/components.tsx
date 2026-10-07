@@ -272,6 +272,43 @@ const PageTitlePlugin = ((opts?: Options) => {
   stroke: var(--tertiary);
 }
 
+/* Phone: the left sidebar is a single horizontal strip (explorer + title + search),
+   so drop the tall column furniture — hairlines, negative margins, 6rem logo. */
+@media (max-width: 800px) {
+  .page-title {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    font-size: 1.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-title > a {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .page-title-logo {
+    width: 2.25rem;
+    height: 2.25rem;
+    margin: 0;
+  }
+
+  .page-title-divider {
+    display: none;
+  }
+
+  .page-title-socials {
+    margin: 0;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
 :root[saved-theme="dark"] {
   color-scheme: dark;
 }
@@ -312,16 +349,19 @@ const PageTitlePlugin = ((opts?: Options) => {
   display: none;
 }
 
-/* Focus mode fades both sidebars until hovered (was readermode.scss) */
-:root[reader-mode="on"] .sidebar.left,
-:root[reader-mode="on"] .sidebar.right {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
+/* Focus mode fades both sidebars until hovered (was readermode.scss).
+   Hover-only reveal: on touch there is no way back, so keep sidebars visible there. */
+@media (hover: hover) {
+  :root[reader-mode="on"] .sidebar.left,
+  :root[reader-mode="on"] .sidebar.right {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
 
-:root[reader-mode="on"] .sidebar.left:hover,
-:root[reader-mode="on"] .sidebar.right:hover {
-  opacity: 1;
+  :root[reader-mode="on"] .sidebar.left:hover,
+  :root[reader-mode="on"] .sidebar.right:hover {
+    opacity: 1;
+  }
 }
 `
 
