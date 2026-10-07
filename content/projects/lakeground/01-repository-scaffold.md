@@ -10,34 +10,34 @@ tags:
 ---
 ---
 
-The foundation of [[projects/lakeground/index|Lakeground]] is all about modularity without sacrificing cohesion. To achieve this, I’m structuring the project around a **monorepo-ish** design, where all components live under a single repository. At the same time, I want each major part to stay self-contained. That’s where `git` **submodules** come in - they let each component function as an independent repository while still being part of the larger whole. It might sound a bit unconventional (or just plain confusing) at first, but by the end of this note, I promise it’ll make a lot more sense.
+[[projects/lakeground/index|Lakeground]] needs modularity without losing cohesion. Every component lives under a single repository, and each major part stays self-contained. `git` **submodules** make that possible: each component functions as an independent repository while still belonging to the larger whole. Unconventional, and honestly a bit confusing at first.
 
 ---
 
 ## A Monorepo-ish Design?
 
-A **monorepo** is a single repository that houses multiple related projects. This setup makes it easier to share code, ensure consistency, and manage dependencies between different parts of the stack. However, it also comes with challenges - keeping clear module boundaries, avoiding unnecessary coupling, and handling repository size over time.
+A **monorepo** is a single repository holding several related projects. Sharing code gets easier and dependencies between parts of the stack stay visible. So does coupling. Boundaries blur, and repository size becomes its own problem over time.
 
-On the other hand, a **multi-repo** approach splits projects into separate repositories, where each module or service is developed, versioned, and deployed independently. This structure offers flexibility, cleaner ownership, and a reduced risk of unintended dependencies. The downside? Coordinating changes across multiple repositories can be a pain, and maintaining visibility into the overall project state isn’t always straightforward.
+A **multi-repo** approach splits projects into separate repositories. Each module or service is developed, versioned, and deployed on its own, which keeps ownership clean and accidental dependencies rare. Coordinating a change that spans repositories is the painful part, and the overall project state is harder to see.
 
-So, technically, my approach isn’t a **monorepo**. While everything is linked within a central repository, each module exists as its own independent repository with its own versioning and lifecycle - making this a **multi-repo** design at its core. My goal is to get the best of both worlds: the visibility and cohesion of a **monorepo** while keeping the flexibility of a **multi-repo** approach.
+Technically, what I'm building isn't a **monorepo**. Everything links into a central repository, but each module is its own repository with its own versioning and lifecycle, which makes this a **multi-repo** design at its core. The aim is the visibility and cohesion of a **monorepo** with the flexibility of a **multi-repo**.
 
-That’s why I’m structuring the project around a **core-repo** - a _single entry point_ that tracks all modules without centralizing development. Each module is housed in its own repository and functions as an independent **component**, but everything is still connected within the core structure. This setup allows me to maintain modularity while keeping a high-level view of the entire system. It’s not exactly conventional, but that’s what makes it interesting.
+That's why the project is built around a **core-repo**, a _single entry point_ that tracks all modules without centralizing development. Each module lives in its own repository and works as an independent **component**, and the core structure still ties them together. Modularity on one side, a high-level view of the whole system on the other. Unconventional, which is part of the point.
 
 > [!note] monorepos vs. multi-repos
-> To be honest, I don’t believe in silver bullets - just in the right tool for the job. There’s a whole debate about **monorepos** vs. **multi-repos**, and my take is simple: _it depends_. The best approach varies based on the solution being built, the company structure, and even the team’s maturity level.
-> 
-> In my case, everything is experimental. I want to see how this setup influences the coupling between different parts of the data stack. Maybe it works perfectly, maybe I’ll regret it in a few weeks - but that’s the fun of it.
-> 
-> If you’re curious about **monorepos** and want to dive deeper, [this site](https://monorepo.tools/) is an amazing resource. For a great breakdown of the differences, pros/cons between **monorepo** and **multi-repo** approaches, I highly recommend [this article](https://www.thoughtworks.com/insights/blog/agile-engineering-practices/monorepo-vs-multirepo).
+> I don't believe in silver bullets, only in the right tool for the job. The debate about **monorepos** vs. **multi-repos** is loud, and my take is simple: _it depends_. The best approach varies with the solution being built, the company structure, and the team's maturity level.
+>
+> In my case, everything is experimental. I want to see how this setup influences the coupling between different parts of the data stack. Maybe it works perfectly, maybe I'll regret it in a few weeks. Either way I'll learn something.
+>
+> [monorepo.tools](https://monorepo.tools/) maps the territory well, and [this article](https://www.thoughtworks.com/insights/blog/agile-engineering-practices/monorepo-vs-multirepo) breaks down the differences, pros and cons between **monorepo** and **multi-repo** approaches.
 
 ---
 
 ## Why Submodules?
 
-The first time I saw a GitHub repo where a folder was actually a link to another repository, I was fascinated. It felt awesome - having a single central repository while keeping multiple projects independent but connected. With `git` **submodules**, each component of [[projects/lakeground/index|Lakeground]] remains its own separate repository, meaning I can version and manage them independently while still linking them back to the main structure.
+The first time I saw a **GitHub** repo where a folder was actually a link to another repository, I was fascinated. One central repository, several projects independent but connected. With `git` **submodules**, each component of [[projects/lakeground/index|Lakeground]] stays its own repository, so I can version and manage it separately while still linking it back to the main structure.
 
-**Submodules** allow me to develop a component in isolation and then seamlessly integrate it into the broader project. This approach keeps things clean and avoids the typical downsides of a massive monolithic repository where everything is tangled together.
+**Submodules** let me develop a component in isolation and then integrate it into the broader project. Things stay clean instead of collapsing into a monolithic repository where everything is tangled together.
 
 ### Working with Submodules
 
@@ -47,13 +47,13 @@ To add a **submodule**:
 git submodule add REPO_URL PATH
 ```
 
-For example, if we want to add a repository for the ingestion module under `component`, the command looks like this:
+For example, to add a repository for the ingestion module under `component`:
 
 ```sh
 git submodule add https://github.com/alanmmolina/lakeground-component.git component
 ```
 
-Cloning a repository with **submodules** requires an extra step. Instead of a regular `git clone`, we initialize and update **submodules** with:
+Cloning a repository with **submodules** takes an extra step. Instead of a plain `git clone`, initialize and update them as part of the clone:
 
 ```sh
 git clone --recurse-submodules REPO_URL
@@ -65,7 +65,7 @@ Or, if we forgot to do that when cloning, we can initialize them later:
 git submodule update --init --recursive
 ```
 
-Each **submodule** is treated as an independent repository, so changes inside it won’t automatically reflect in the main repository. To update a **submodule** to its latest version, we navigate inside it and pull the latest changes:
+Each **submodule** is its own repository, so changes inside it do not show up in the main repository automatically. To update a **submodule** to its latest version, we navigate inside it and pull the latest changes:
 
 ```sh
 cd component
@@ -80,34 +80,34 @@ git add component
 git commit -m "update component"
 ```
 
-When working with **submodules**, `git` needs a way to track their locations and source repositories. That’s where the `.gitmodules` file comes in. This file lives at the root of the main repository and keeps a record of every **submodule** we’ve added. 
+When working with **submodules**, `git` needs to track their locations and source repositories. The `.gitmodules` file does that. It lives at the root of the main repository and keeps a record of every **submodule** we've added.
 
-A typical `.gitmodules` file looks like this:  
+A typical `.gitmodules` file:  
 
 ```ini
 [submodule "component"]
-    path = component
-    url = https://github.com/alanmmolina/lakeground-component.git
+    path = component
+    url = https://github.com/alanmmolina/lakeground-component.git
 ``` 
 
-Each section corresponds to a **submodule** and contains its name, the path where it lives inside the main repository, and the external repository URL from which it is fetched. This file ensures that whenever someone clones the repository, they know where each **submodule** comes from.
+Each section names a **submodule** and records the path where it lives inside the main repository plus the external repository URL it is fetched from. Anyone who clones the repository can see where each **submodule** came from.
 
 > [!tip] Managing `git` the easy way
-> As much as I appreciate the power of the command line, I have to admit - I’m a bit lazy. I prefer working with `git` through **VSCode**, where I can visualize changes, manage branches, and switch between **submodules** effortlessly. The `git` panel in VS Code makes it easy to see which files have changed, stage updates, and resolve conflicts in a much more intuitive way than dealing with raw commands. 
+> As much as I appreciate the command line, I have to admit I'm a bit lazy. I prefer working with `git` through **VS Code**, where I can visualize changes, manage branches, and switch between **submodules** without thinking about it. The `git` panel shows which files changed, stages updates, and resolves conflicts in a way raw commands never do for me. 
 > 
-> For **submodules**, VSCode’s interface allows me to open them as separate repositories, making it simple to commit changes to a specific module without affecting the main repo. This workflow keeps everything neat and helps me stay focused on the code rather than on `git` mechanics.
+> For **submodules**, **VS Code** opens each one as its own repository, so committing to a specific module does not touch the main repo. Everything stays neat and I keep my attention on the code rather than on `git` mechanics.
 > 
-> If you want to learn more about it, you can find plenty of information [here](https://code.visualstudio.com/docs/sourcecontrol/overview)
+> More on that in the [source control docs](https://code.visualstudio.com/docs/sourcecontrol/overview).
 
 ---
-## What’s Next?
+## What's Next?
 
-With the **core-repo** and **components** design in place, the next challenge is managing Python environments efficiently across all these components. That’s where [uv](https://docs.astral.sh/uv/) comes in. It offers a _workspace_ feature that aligns perfectly with this modular structure, allowing me to maintain separate dependencies for each submodule while keeping everything under one roof.
+With the **core-repo** and **components** design in place, the next challenge is managing Python environments across all these components. [uv](https://docs.astral.sh/uv/) has a _workspace_ feature that fits this modular structure: separate dependencies for each submodule, everything in one place.
 
-In the next post, I’ll dive into **uv** and how it fits into the [[projects/lakeground/index|Lakeground]] ecosystem.
+The next post covers **uv** and how it fits into [[projects/lakeground/index|Lakeground]].
 
 ---
 
-The goal of this setup is to keep the project structured, flexible, and scalable. Whether I’m tweaking an ingestion pipeline or refining data storage, I can do so in isolation without disrupting the entire system. It’s still early, and I’m sure there will be plenty of lessons along the way - but I’m excited to see how it all unfolds.
+The point of this setup is isolation. Whether I'm tweaking an ingestion pipeline or refining data storage, I can do it without disrupting the rest of the system. It's early, and the lessons will come.
 
-If you're working with **monorepos**, **multi-repos**, or **submodules**, or if you have a different approach to structuring multi-component projects, I’d love to hear your thoughts!
+Each component moves on its own, and the core just remembers where they live.

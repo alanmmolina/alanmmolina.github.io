@@ -9,20 +9,20 @@ tags:
   - python
 ---
 ---
-A few weeks ago I came across [this](https://www.youtube.com/watch?v=uxwjXLjJOoM) great [Arjan Egges](https://www.arjancodes.com/) video about `SOLID` principles in Python, and it inspired me to build a small project around them. Some of these principles weren't totally clear to me before, and working through them hands-on turned out to be the best way to make them stick. There's a tendency to dismiss `SOLID` as a relic from an older era, but the underlying ideas are as relevant as ever. In this project I'm exploring each principle through practical examples and real world analogies.
+A few weeks ago I came across [this talk](https://www.youtube.com/watch?v=uxwjXLjJOoM) by [Arjan Egges](https://www.arjancodes.com/) on `SOLID` principles in Python, and it inspired me to build a small project around them. Some of the principles weren't totally clear to me before, and working through them hands-on turned out to be the way they stuck. There's a tendency to dismiss `SOLID` as a relic from an older era. The underlying ideas still earn their place. Each principle below gets a practical example and a real-world analogy.
 
 ---
 
-First things first: I'm not the clean code purist who blocks a PR because a function has more than five lines. Please, don't think the idea of this project is to enforce universal (and rigid) rules around software design and architecture. I actually think every company has its own ecosystem, culture, and constraints, and blindly applying any set of rules tends to create more problems than it solves. Part of the engineering work is reading the environment and deciding what actually makes sense.
+First things first: I'm not the clean code purist who blocks a PR because a function has more than five lines. Nothing here is a universal (and rigid) rule about software design and architecture. Every company has its own ecosystem, culture, and constraints, and blindly applying any set of rules tends to create more problems than it solves. Part of the engineering work is reading the environment and deciding what actually makes sense.
 
-That said, let's talk about the core wisdom behind the `SOLID` principles. They were introduced in the context of object-oriented programming, but the underlying ideas apply much more broadly. In Data Engineering, when we're not running transformations in something like `dbt`, we're often building pipelines by hand. The same goes for Data Platforms, where systems need to evolve with changing requirements without collapsing. Having `SOLID` as a compass, not a rulebook, can help us design things that stay maintainable as they grow.
+The core wisdom behind the `SOLID` principles still travels. They were introduced in the context of object-oriented programming, and the ideas apply much more broadly. In Data Engineering, when we're not running transformations in something like **dbt**, we're often building pipelines by hand. The same goes for Data Platforms, where systems need to evolve with changing requirements without collapsing. `SOLID` works as a compass, not a rulebook, for designs that have to stay maintainable as they grow.
 
 > [!abstract] SOLID
-> The acronym `SOLID` was coined by **Michael Feathers** around 2004, but the principles themselves came from **Robert C. Martin**'s work a few years earlier. Martin didn't invent all of them from scratch. He collected and refined ideas that had been floating around the object-oriented community for decades, drawing on contributions from **Barbara Liskov**, **Bertrand Meyer**, and others. What he did was package them into a coherent set of guidelines that could be taught and applied together. The result is a framework that's been battle-tested across countless codebases and remains surprisingly relevant even outside traditional object-oriented contexts.
+> The acronym `SOLID` was coined by **Michael Feathers** around 2004, but the principles themselves came from **Robert C. Martin**'s work a few years earlier. Martin didn't invent all of them from scratch. He collected and refined ideas that had been floating around the object-oriented community for decades, drawing on contributions from **Barbara Liskov**, **Bertrand Meyer**, and others. What he did was package them into a coherent set of guidelines that could be taught and applied together. The result is a framework that has held up across a lot of codebases and still applies outside traditional object-oriented contexts.
 
 I might not be perfectly accurate in every definition, but I'm prioritizing practical understanding over textbook correctness. To make the ideas concrete, I'll use a toy car factory as a running analogy. If you've built data pipelines before, the mental model should feel familiar: products move through stations, each station does one thing and passes the result forward, and the whole line produces something useful at the end.
 
-Before diving into each principle, let's set up the domain. Each car toy has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use [[notes/tools/pydantic|Pydantic]] to model these entities since schemas and validation are already second nature to Data Engineers.
+The domain comes first. Each toy car has a SKU and a color, and tracks its assembly state along with any defects discovered during production. Once it passes inspection, it goes into a box with documentation and a shipping label. We'll use [[notes/tools/pydantic|Pydantic]] to model these entities since schemas and validation are already second nature to Data Engineers.
 
 ```python
 from typing import Literal
@@ -57,14 +57,14 @@ class Box(BaseModel):
 
 ## Single Responsibility Principle
 
-**Robert C. Martin** introduced the **Single Responsibility Principle** in his 2000 paper, he framed it around a simple question: *how many reasons does this code have to change?* I think the common interpretation of "a class (or component) should do only one thing" misses the point. The real insight is about change pressure. When multiple unrelated concerns live in the same place, a change to one of them risks breaking the others.
+**Robert C. Martin** introduced the **Single Responsibility Principle** in a 2000 paper and framed it around a simple question: *how many reasons does this code have to change?* I think the common interpretation, "a class (or component) should do only one thing," misses the point. The insight is change pressure. When multiple unrelated concerns live in the same place, a change to one of them risks breaking the others.
 
 > [!info] Robert C. Martin aka "Uncle Bob"
 > **Robert C. Martin** is a software engineer and author who has shaped how we think about code quality and design. He began programming in the 1970s and went on to co-author the *Agile Manifesto* in 2001. His books, including *Clean Code* and *Clean Architecture*, have become standard reading for developers.
 
 Think about it in terms of our toy factory. The chassis station builds the frame. The paint booth applies color. The wheel station attaches the wheels. The inspector checks for defects. The packaging crew boxes everything up, and the labeling station slaps on a shipping label. Each station owns one concern, and that separation is what makes the whole line manageable.
 
-Now imagine cramming all of that into a single mega-station. The person running it needs to understand wheel torque, paint chemistry, defect criteria, and box dimensions. When the paint formula changes, they risk breaking the chassis logic. When the labeling printer jams (like printers always do), fixing it might fry a motor. This is exactly what happens in software when unrelated concerns are bundled into the same component: every change becomes a high-risk deployment.
+Imagine cramming all of that into a single mega-station. The person running it needs to understand wheel torque, paint chemistry, defect criteria, and box dimensions. When the paint formula changes, they risk breaking the chassis logic. When the labeling printer jams (like printers always do), fixing it might fry a motor. This is exactly what happens in software when unrelated concerns are bundled into the same component: every change becomes a high-risk deployment.
 
 <p align="center">
   <img src="single-responsibility-principle.svg" alt="Single Responsibility Principle" width="100%">
@@ -165,18 +165,18 @@ Now imagine cramming all of that into a single mega-station. The person running 
 >         return box
 > ```
 
-Now each station can evolve independently. A new paint color only touches `PaintStation`, a chassis redesign stays in `ChassisStation`, and complex shipping logic gets absorbed by `LabelStation` without rippling through the rest of the pipeline. Each component has exactly one reason to change. Forget the dogma about tiny classes or five-line functions. The real goal is organizing code so that unrelated changes don't step on each other.
+Each station evolves independently. A new paint color only touches `PaintStation`, a chassis redesign stays in `ChassisStation`, and complex shipping logic gets absorbed by `LabelStation` without rippling through the rest of the pipeline. Each component has exactly one reason to change. Forget the dogma about tiny classes or five-line functions. Organize code so unrelated changes don't step on each other.
 
 ---
 
 ## Open/Closed Principle
 
-**Bertrand Meyer** articulated this idea back in the 1980s, and it became a cornerstone of how we think about extensible systems. The intuition is straightforward: once code is working and tested, you shouldn't need to crack it open every time requirements evolve. Instead, you design the system so new capabilities can be plugged in without surgery on existing components.
+**Bertrand Meyer** articulated this idea back in the 1980s, and it shaped how we think about extensible systems. The intuition is straightforward: once code is working and tested, you shouldn't need to crack it open every time requirements evolve. You design the system so new capabilities can be plugged in without surgery on existing components.
 
 > [!info] Bertrand Meyer
 > **Bertrand Meyer** is a French computer scientist who created the Eiffel programming language and pioneered *Design by Contract*. His 1988 book *Object-Oriented Software Construction* introduced the Open/Closed Principle and influenced a generation of software engineers thinking about reliability and correctness.
 
-Back to our factory floor. Suppose the business wants to offer expedited shipping for premium SKUs. Then they add an economy tier. Then a holiday special. If your shipping logic lives in a single function full of conditionals, each new tier means editing that function, retesting everything, and praying nothing broke. But if the system is designed around pluggable rules, adding a new tier is just dropping in a new rule object. The core routing logic never changes.
+Suppose the business wants to offer expedited shipping for premium SKUs. Then they add an economy tier. Then a holiday special. If your shipping logic lives in a single function full of conditionals, each new tier means editing that function, retesting everything, and praying nothing broke. But if the system is designed around pluggable rules, adding a new tier is just dropping in a new rule object. The core routing logic never changes.
 
 <p align="center">
   <img src="open-closed-principle.svg" alt="Open/Closed Principle" width="80%">
@@ -241,7 +241,7 @@ Back to our factory floor. Suppose the business wants to offer expedited shippin
 >     raise RuntimeError("No carrier rule matched")
 > ```
 
-The conditional version grows with every new carrier tier: more branches, more test cases, more risk of regression. The refactored version treats carrier selection as a chain of rule objects. Adding a holiday express tier is now just a matter of writing a `HolidayCarrierRule` class and dropping it into the list. The `choose_carrier` function stays untouched while the system gains new capabilities. No need to dig through conditionals and no risk of breaking existing logic. The code is open for extension but closed for modification.
+The conditional version grows with every new carrier tier: more branches, more test cases, more risk of regression. The refactored version treats carrier selection as a chain of rule objects. Adding a holiday express tier is now just a matter of writing a `HolidayCarrierRule` class and dropping it into the list. The `choose_carrier` function stays untouched while the system gains new capabilities. You never dig through conditionals and nothing existing breaks. The code is open for extension but closed for modification.
 
 ---
 
@@ -292,7 +292,7 @@ In our factory, every station along the line makes implicit promises to the next
 >         return CarResult(ok=True, car=car)
 > ```
 
-The first version breaks its promise: the type signature says `Car`, but sometimes it returns `None`. Downstream code that trusts the signature will crash. The fix makes the contract explicit about the possibility of rejection. Every implementation now returns a `CarResult`, and callers know to check the `ok` field before proceeding. We didn't remove the possibility of rejection, we made it part of the type system. When the next station receives a `CarResult`, it can branch on the outcome deliberately rather than discovering a `None` where it expected a car.
+The first version breaks its promise: the type signature says `Car`, but sometimes it returns `None`. Downstream code that trusts the signature will crash. The fix makes the contract explicit about the possibility of rejection. Every implementation now returns a `CarResult`, and callers know to check the `ok` field before proceeding. Rejection is still possible, and now the type system says so. When the next station receives a `CarResult`, it can branch on the outcome deliberately rather than discovering a `None` where it expected a car.
 
 ---
 
@@ -342,17 +342,17 @@ Picture the factory control panel again. If every station had to implement contr
 >     def process(self, box: Box) -> Box: ...
 > ```
 
-With the bloated interface, a station that only handles cars still needs to implement `process_box`, `calibrate`, and `emit_metrics` even if those methods do nothing meaningful. The focused version splits responsibilities: a car-processing station implements `CarStation`, a box-processing station implements `BoxStation`, and if something needs to emit metrics, that's a separate interface entirely. No dead methods or placeholder implementations. Components depend only on what they use.
+With the bloated interface, a station that only handles cars still needs to implement `process_box`, `calibrate`, and `emit_metrics` even if those methods do nothing meaningful. The focused version splits responsibilities: a car-processing station implements `CarStation`, a box-processing station implements `BoxStation`, and if something needs to emit metrics, that's a separate interface entirely. Components depend only on what they use, which leaves no dead methods and no placeholder implementations to carry.
 
 ---
 
 ## Dependency Inversion Principle
 
-This is by far my favorite principle in `SOLID`. The core insight is that high-level business logic shouldn't be tightly coupled to low-level implementation details. Both should depend on abstractions that live between them, so swapping infrastructure is just a matter of plugging in a different implementation.
+This is by far my favorite principle in `SOLID`. High-level business logic shouldn't be tightly coupled to low-level implementation details. Both should depend on abstractions that live between them, so swapping infrastructure is just a matter of plugging in a different implementation.
 
 When your code directly instantiates a database client, an HTTP client, or a file writer, the business logic ends up knowing about connection strings, retry policies, and serialization formats. Testing requires spinning up real infrastructure or mocking internals you shouldn't care about. Migrating to a different vendor means hunting through the codebase for every place that touches the old one.
 
-Our factory doesn't hardwire itself to a specific brand of defect-logging database. It defines what defect storage looks like as an interface, and the actual storage mechanism, whether that's `SQLite` today or a cloud service tomorrow, plugs into that interface.
+Our factory doesn't hardwire itself to a specific brand of defect-logging database. It defines what defect storage looks like as an interface, and the actual storage mechanism, whether that's **SQLite** today or a cloud service tomorrow, plugs into that interface.
 
 <p align="center">
   <img src="dependency-inversion-principle.svg" alt="Dependency Inversion Principle" width="80%">
@@ -399,14 +399,12 @@ Our factory doesn't hardwire itself to a specific brand of defect-logging databa
 >         return car
 > ```
 
-The hardcoded version creates its own `SqliteDefectStore` internally, so testing requires a real `SQLite` database or monkey-patching, and switching to PostgreSQL means cracking open the class. The inverted version receives its storage dependency from outside: a fake store for tests, the real database client in production. The station doesn't know (or care) which one it's using, only that it conforms to the `DefectStore` interface. That's the inversion. High-level logic depends on an abstraction it defines, and low-level infrastructure adapts to fit.
+The hardcoded version creates its own `SqliteDefectStore` internally, so testing requires a real **SQLite** database or monkey-patching, and switching to **PostgreSQL** means cracking open the class. The inverted version receives its storage dependency from outside: a fake store for tests, the real database client in production. The station doesn't know (or care) which one it's using, only that it conforms to the `DefectStore` interface. That's the inversion. High-level logic depends on an abstraction it defines, and low-level infrastructure adapts to fit.
 
 > [!question] Dependency Inversion vs Dependency Injection
 > These terms get conflated all the time, but they're different things. **Dependency Inversion** is a design principle: depend on abstractions, not concrete implementations. **Dependency Injection** is a technique for achieving that: pass dependencies in from outside rather than creating them internally. **Injection** is one way to implement **Inversion**, but the principle stands on its own regardless of how you wire things up.
 
 ---
-
-Here's a small runner that connects all the stations into a working pipeline.
 
 ```python
 def run_line(sku: str, color: str, defect_store: DefectStore) -> Box:
@@ -422,22 +420,20 @@ def run_line(sku: str, color: str, defect_store: DefectStore) -> Box:
     return box
 ```
 
-Each station focuses on one concern, new behaviors arrive as new components rather than edits to existing ones, every station delivers what its interface promises, interfaces stay small and purposeful, and dependencies flow through abstractions. The five principles reinforce each other in ways that only become obvious once you start applying them together.
+The runner wires every station into one working pipeline. Each station focuses on one concern, new behaviors arrive as new components rather than edits to existing ones, every station delivers what its interface promises, interfaces stay small and purposeful, and dependencies flow through abstractions. The five principles reinforce each other in ways that only become obvious once you start applying them together.
 
 ---
 
 ## ... My Final Thoughts
 
-This tiny project was exactly what I needed to make these principles stick. Reading about `SOLID` is one thing, but actually writing the code, drawing the station diagrams, and stretching the factory analogy until it broke helped me understand the ideas in a way that articles and videos never could. I tried to focus on the core wisdom behind each principle rather than just the patterns.
+This tiny project was exactly what I needed to make these principles stick. Writing the code, drawing the station diagrams, and stretching the factory analogy until it broke taught me more than reading ever did. I kept after the core wisdom behind each principle instead of the patterns.
 
 My final takeaway about applying `SOLID` in real projects is simply "it depends." I would never use these principles as a checklist to enforce across a codebase. Whether the abstractions and indirection make sense depends on the project, the company culture, the team's experience, and the constraints you're operating under.
-
-To be honest, I think:
 
 > [!failure] this is not a wrong way to do it
 
 > [!success] this is not the right way to do it
 
-These are different approaches to the same problems, each with its own trade-offs. The context determines which one fits better. The code examples throughout this note show clearly that applying these principles adds indirection and abstraction, and that complexity only pays off when the system actually needs the flexibility. The goal is maintainability and adaptability, not architectural elegance for its own sake.
+Different approaches to the same problems, each with its own trade-offs. The context decides. The code examples throughout this note make the cost obvious: these principles add indirection and abstraction, and that complexity only pays off when the system needs the flexibility. What you are buying is maintainability and adaptability.
 
 This is engineering, not a religion.
