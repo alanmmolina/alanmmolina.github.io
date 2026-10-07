@@ -36,6 +36,7 @@ const PageFooterStyles = `footer {
     padding: 0;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 1rem;
     margin-top: -1rem;
   }

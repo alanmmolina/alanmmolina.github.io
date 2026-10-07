@@ -22,8 +22,9 @@ body .search {
   max-width: 100%;
 
   @media all and ($mobile) {
-    max-width: 14rem;
-    flex-grow: 0.3;
+    // Fill the rest of the top strip instead of sitting capped at 14rem
+    max-width: 100%;
+    flex-grow: 1;
   }
 }
 
