@@ -2,9 +2,7 @@ let excalidrawLib: any = undefined
 
 async function loadExcalidrawLib() {
   if (!excalidrawLib) {
-    excalidrawLib = await import(
-      "https://esm.sh/@excalidraw/excalidraw@0.18.0"
-    )
+    excalidrawLib = await import("https://esm.sh/@excalidraw/excalidraw@0.18.0")
   }
   return excalidrawLib
 }
@@ -84,9 +82,10 @@ async function renderExcalidraw(element: HTMLElement) {
     }
 
     const viewBox = svg.getAttribute("viewBox")?.split(" ").map(parseFloat)
-    const initialVB = viewBox && viewBox.length === 4
-      ? [...viewBox] as [number, number, number, number]
-      : [0, 0, 800, 600] as [number, number, number, number]
+    const initialVB =
+      viewBox && viewBox.length === 4
+        ? ([...viewBox] as [number, number, number, number])
+        : ([0, 0, 800, 600] as [number, number, number, number])
 
     let currentVB: [number, number, number, number] = [...initialVB]
     let isPanning = false
@@ -122,7 +121,8 @@ async function renderExcalidraw(element: HTMLElement) {
       cursor: grab;
       user-select: none;
       -webkit-user-select: none;
-      touch-action: none;
+      /* pan-y keeps vertical page scroll working on touch; horizontal drag still pans the diagram */
+      touch-action: pan-y;
       border-radius: 8px;
     `
 
@@ -162,12 +162,7 @@ async function renderExcalidraw(element: HTMLElement) {
       const rect = container.getBoundingClientRect()
       const scaleX = currentVB[2] / rect.width
       const scaleY = currentVB[3] / rect.height
-      currentVB = [
-        vbStart[0] - dx * scaleX,
-        vbStart[1] - dy * scaleY,
-        currentVB[2],
-        currentVB[3],
-      ]
+      currentVB = [vbStart[0] - dx * scaleX, vbStart[1] - dy * scaleY, currentVB[2], currentVB[3]]
       applyViewBox(currentVB)
     })
 
@@ -228,8 +223,11 @@ async function renderExcalidraw(element: HTMLElement) {
     zoomOutBtn.innerHTML = "\u2212"
     zoomOutBtn.style.cssText = btnStyle
     zoomOutBtn.title = "Zoom out"
-    zoomOutBtn.addEventListener("mouseenter", () => zoomOutBtn.style.cssText = btnStyle + btnHoverStyle)
-    zoomOutBtn.addEventListener("mouseleave", () => zoomOutBtn.style.cssText = btnStyle)
+    zoomOutBtn.addEventListener(
+      "mouseenter",
+      () => (zoomOutBtn.style.cssText = btnStyle + btnHoverStyle),
+    )
+    zoomOutBtn.addEventListener("mouseleave", () => (zoomOutBtn.style.cssText = btnStyle))
     zoomOutBtn.addEventListener("click", (e) => {
       e.stopPropagation()
       zoomStep(1.22)
@@ -239,8 +237,11 @@ async function renderExcalidraw(element: HTMLElement) {
     zoomInBtn.innerHTML = "+"
     zoomInBtn.style.cssText = btnStyle
     zoomInBtn.title = "Zoom in"
-    zoomInBtn.addEventListener("mouseenter", () => zoomInBtn.style.cssText = btnStyle + btnHoverStyle)
-    zoomInBtn.addEventListener("mouseleave", () => zoomInBtn.style.cssText = btnStyle)
+    zoomInBtn.addEventListener(
+      "mouseenter",
+      () => (zoomInBtn.style.cssText = btnStyle + btnHoverStyle),
+    )
+    zoomInBtn.addEventListener("mouseleave", () => (zoomInBtn.style.cssText = btnStyle))
     zoomInBtn.addEventListener("click", (e) => {
       e.stopPropagation()
       zoomStep(0.82)
@@ -250,8 +251,11 @@ async function renderExcalidraw(element: HTMLElement) {
     resetBtn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>`
     resetBtn.style.cssText = btnStyle
     resetBtn.title = "Reset view"
-    resetBtn.addEventListener("mouseenter", () => resetBtn.style.cssText = btnStyle + btnHoverStyle)
-    resetBtn.addEventListener("mouseleave", () => resetBtn.style.cssText = btnStyle)
+    resetBtn.addEventListener(
+      "mouseenter",
+      () => (resetBtn.style.cssText = btnStyle + btnHoverStyle),
+    )
+    resetBtn.addEventListener("mouseleave", () => (resetBtn.style.cssText = btnStyle))
     resetBtn.addEventListener("click", (e) => {
       e.stopPropagation()
       currentVB = [...initialVB]
