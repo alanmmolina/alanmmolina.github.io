@@ -11,23 +11,23 @@ tags:
 ---
 ---
 
-[[notes/tools/duckdb|DuckDB]] has been making waves as a no-fuss, high-performance database you can run right from your laptop. Forget clusters, forget setup headaches - this thing just works. To see what it can really do, let's play with the MovieLens dataset: 32 million ratings across nearly 90,000 movies. Instead of toy data, we’ll dive into something messy, real, and big enough to push [[notes/tools/duckdb|DuckDB]] a little harder.
+[[notes/tools/duckdb|DuckDB]] is a no-fuss, high-performance database you run on a laptop. No clusters, no setup. To push it a little, this note works through **MovieLens**: 32 million ratings across nearly 90,000 movies. Messy, real, and big enough to be worth the trip.
 
 ---
 
-[[notes/tools/duckdb|DuckDB]] is ridiculously easy to get started with - no servers, no setup headaches. You can run it directly from the command line, embed it inside applications, or use it as a database library in languages like C++, Python, Rust, and so on. But for me, the real magic happens in Python.
+Getting started with [[notes/tools/duckdb|DuckDB]] takes no servers. It runs from the command line, embeds inside applications, or works as a database library in C++, Python, Rust. I use it from Python.
 
-With its seamless integration into Pandas, Polars, and Apache Arrow, [[notes/tools/duckdb|DuckDB]] feels like it was made for data analysis. Instead of dealing with a heavyweight database setup, you can just load your data, run SQL queries on DataFrames, and get results instantly - all within a Python environment.
+Integration with **Pandas**, **Polars**, and **Apache Arrow** is tight enough that [[notes/tools/duckdb|DuckDB]] reads as a tool for analysis rather than for running a database. Load data, run SQL against DataFrames, get results, all inside a Python environment.
 
-When it comes to exploring data like this, **Jupyter Notebooks** are my go-to - whether it’s a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or even [Google Colab](https://colab.google/). They’re great for prototyping because you can run each step independently, check the results instantly, and tweak things without rerunning the entire script or setting up breakpoints. It’s a fast, flexible way to iterate, making it a perfect match for [[notes/tools/duckdb|DuckDB]]. So let’s skip the fluff and get it running.
+For exploring data like this, **Jupyter Notebooks** are my go-to: a [pure Jupyter setup](https://jupyter.org/install), the [native VS Code support](https://code.visualstudio.com/docs/datascience/jupyter-notebooks), or [Google Colab](https://colab.google/). Each step runs on its own, results appear immediately, and I can tweak things without rerunning the whole script or setting breakpoints. That matches how [[notes/tools/duckdb|DuckDB]] wants to be used.
 
-[[notes/tools/duckdb|DuckDB]] can be installed directly from [PyPI](https://pypi.org/project/duckdb/). Since it's a pre-compiled binary, there are no external dependencies - just install and go. Pretty slick.
+[[notes/tools/duckdb|DuckDB]] installs from [PyPI](https://pypi.org/project/duckdb/). It ships as a pre-compiled binary with no external dependencies.
 
 ```sh
 pip install duckdb
 ```
 
-I’ll also be using a few extra dependencies. If you want to set up your environment beforehand, here’s my stack:
+A few extras come along. My stack, for reference:
 
 ```toml
 dependencies = [
@@ -40,7 +40,7 @@ dependencies = [
 ]
 ```
 
-We’re not here to play with toy datasets - let’s work with real-world data. I found [MovieLens 32M](https://grouplens.org/datasets/movielens/32m/), a dataset containing 32 million ratings and 2 million tag applications across 87,585 movies from 200,948 users. It comes as a compressed `.zip` file, so the following snippet will download and extract everything for us.
+Real data rather than toys. [MovieLens 32M](https://grouplens.org/datasets/movielens/32m/) holds 32 million ratings and 2 million tag applications across 87,585 movies from 200,948 users. It arrives as a compressed `.zip`, which this downloads and extracts:
 
 ```python
 import zipfile
@@ -61,7 +61,7 @@ with zipfile.ZipFile(Path(FILE), "r") as file:
     file.extractall()
 ```
 
-Once extracted, here’s what we get:
+Extracted, the tree looks like this:
 
 ```
 ml-32m
@@ -73,7 +73,7 @@ ml-32m
 └── tags.csv
 ```
 
-Let’s fire up [[notes/tools/duckdb|DuckDB]] as an **in-memory** database:
+[[notes/tools/duckdb|DuckDB]] runs **in-memory** like this:
 
 ```python
 import duckdb
@@ -83,7 +83,7 @@ import duckdb
 connection = duckdb.connect(database=":memory:")
 ```
 
-Now, we can load and inspect the `movies.csv` file:
+Load and inspect `movies.csv`:
 
 ```python
 movies = connection.read_csv("ml-32m/movies.csv")
@@ -110,9 +110,9 @@ connection.query("SELECT * FROM movies LIMIT 10")
 └────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-Did you notice something interesting? We referenced a Python variable inside an SQL query. Since [[notes/tools/duckdb|DuckDB]] runs inside Python, it can access local variables - meaning you can directly query Python datasets using SQL.
+The query referenced a Python variable directly. Because [[notes/tools/duckdb|DuckDB]] runs inside Python it can reach local variables, so a Python dataset can be queried with SQL.
 
-For example, let’s create a dataset in Pandas and query it using [[notes/tools/duckdb|DuckDB]]:
+A **Pandas** dataset queried through [[notes/tools/duckdb|DuckDB]]:
 
 ```python
 import pandas as pd
@@ -144,35 +144,35 @@ connection.query("SELECT * FROM fast_and_furious")
 └───────────┴─────────────────────────┴───────┘
 ```
 
-It’s a nice trick, but honestly, it feels like too much magic for me.
+A nice trick. Still too much magic for my taste.
 
-Instead of relying on [[notes/tools/duckdb|DuckDB]] automatically recognizing variable names, I prefer to explicitly register Python variables as tables. This keeps the code a bit more readable, preventing unexpected behavior in larger scripts.
+I would rather register Python variables as tables than let [[notes/tools/duckdb|DuckDB]] recognize the names on its own. The code stays readable, and larger scripts behave the way you expect.
 
 ```python
 connection.register("movies", movies)
 ```
 
-Switching between [[notes/tools/duckdb|DuckDB]] and Pandas is effortless. We can take any query result and turn it into a [Pandas DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) in a single step:
+Any query result becomes a [**Pandas** DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) in one step:
 
 ```python
 pandas_df = connection.query("SELECT * FROM movies").df()
 ```
 
-... or into a [Polars DataFrame](https://docs.pola.rs/py-polars/html/reference/dataframe/index.html):
+... or a [**Polars** DataFrame](https://docs.pola.rs/py-polars/html/reference/dataframe/index.html):
 
 ```python
 polars_df = connection.query("SELECT * FROM movies").pl()
 ```
 
-... or into a [PyArrow Table](https://arrow.apache.org/docs/python/generated/pyarrow.Table.html):
+... or a [**PyArrow** Table](https://arrow.apache.org/docs/python/generated/pyarrow.Table.html):
 
 ```python
 arrow_df = connection.query("SELECT * FROM movies").arrow()
 ```
 
-If you're used to SQL, [[notes/tools/duckdb|DuckDB]] has some neat tricks up its sleeve. It offers what they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)" - a set of enhancements that make queries more concise and powerful.
+If you write SQL, [[notes/tools/duckdb|DuckDB]] has a dialect worth knowing. What they call "[friendly SQL](https://duckdb.org/docs/stable/sql/dialect/friendly_sql.html)" is a set of enhancements that make queries shorter and clearer.
 
-Let’s extract the year from the movie `title` using regex:
+Extract the year from the movie `title` with regex:
 
 ```python
 connection.query("""
@@ -202,7 +202,7 @@ connection.query("""
 └────────────────────────────────────────────────────────┘
 ```
 
-The `genres` column is another great example. Each movie can have multiple genres stored as a pipe-separated string. [[notes/tools/duckdb|DuckDB]] lets us split these:
+The `genres` column works the same way. Each movie carries several genres in a pipe-separated string, and [[notes/tools/duckdb|DuckDB]] splits them:
 
 ```python
 connection.query("""
@@ -233,13 +233,13 @@ connection.query("""
 └───────────────────────────────────────────────┘
 ```
 
-So far, we've been running everything in-memory, which is great for quick analysis. But sometimes, we need something more permanent - maybe you want to store multiple tables, perform joins, or keep your data available across sessions. That’s where [[notes/tools/duckdb|DuckDB]]’s **persistent** storage comes in. Instead of parsing `.csv` files every time, we can load everything into a `.duckdb` file and even store it in the cloud.
+So far everything has run in-memory, which is right for quick analysis. Sometimes the work needs to outlive the session: several tables, joins, data that stays available. [[notes/tools/duckdb|DuckDB]] has **persistent** storage for that. Load once into a `.duckdb` file instead of parsing `.csv` files every run, and the file can live in the cloud.
 
 ```python
 connection = duckdb.connect(database="database.duckdb", read_only=False)
 ```
 
-To automate the process, let’s load all the CSV files into [[notes/tools/duckdb|DuckDB]] with a quick loop:
+A loop loads every `.csv` file into [[notes/tools/duckdb|DuckDB]]:
 
 ```python
 for file in Path("ml-32m").glob("*.csv"):
@@ -266,7 +266,7 @@ connection.sql("SHOW TABLES")
 └─────────┘
 ```
 
-Now, we have all our datasets stored as tables inside our database. Checking the contents of the ratings table confirms we’ve successfully loaded everything:
+Every dataset is now a table. The ratings table confirms the load:
 
 ```python
 connection.sql("SELECT * FROM ratings LIMIT 20")
@@ -302,7 +302,7 @@ connection.sql("SELECT * FROM ratings LIMIT 20")
 └───────────────────────────────────────┘
 ```
 
-As expected, each row represents a user’s rating for a specific movie. And yes, the dataset lives up to its name - running `COUNT(*)` on the ratings table gives us over 32 million rows. To make things easier, let’s compute the average rating for each movie and save it as a new table.
+Each row is one user's rating for one movie, and `COUNT(*)` on the ratings table returns over 32 million of them. The dataset lives up to its name. Compute the average rating per movie and save it as a new table:
 
 ```python
 connection.sql("""
@@ -337,7 +337,7 @@ connection.sql("SELECT * FROM average_ratings LIMIT 10")
 └──────────────────────────┘
 ```
 
-Now that we have a cleaner view of the data, let’s find the highest-rated movies. To keep things fair, we’ll only consider movies that have received at least 10,000 ratings:
+From this cleaner view, the highest-rated movies. Only those with at least 10,000 ratings, so the ranking stays honest:
 
 ```python
 connection.sql("""
@@ -370,8 +370,10 @@ connection.sql("""
 └───────────────────────────────────────────────────────────────┘
 ```
 
-The final result? A solid must-watch list.
+The list that comes out is worth reading twice.
 
 ---
 
-We scratched the surface of [[notes/tools/duckdb|DuckDB]]’s capabilities, but it’s already clear that this tool has serious potential. It’s being used in production by some of the biggest names in data, and I wouldn’t be surprised if it keeps growing its adoption. For now, it’s my go-to for personal projects. Haven’t had a chance to use it in production yet, but I’m pretty sure that opportunity will come soon.
+We only scratched the surface here. Enough to see why teams reach for it. It already runs in production at companies whose names you would recognize.
+
+For personal projects it is my default. Production will come.
