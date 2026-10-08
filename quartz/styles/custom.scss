@@ -22,9 +22,33 @@ body .search {
   max-width: 100%;
 
   @media all and ($mobile) {
-    // Fill the rest of the top strip instead of sitting capped at 14rem
+    // Fill the toolbar wrapper (which spans the row below the title strip)
+    flex: 1 1 auto;
+    min-width: 0;
     max-width: 100%;
-    flex-grow: 1;
+  }
+}
+
+// Phone header strip: explorer + title/socials on one row, search below full width.
+// The spacer plugin is a vertical filler for the desktop column; in this row it
+// just steals width from the title and the search.
+@media all and ($mobile) {
+  #quartz-body .sidebar.left {
+    flex-wrap: wrap;
+    row-gap: 0.75rem;
+    column-gap: 0.5rem;
+  }
+
+  .spacer {
+    display: none;
+  }
+
+  // search lives in an unclassed flex-component toolbar group — make that the
+  // full-width row so the input can stretch edge-to-edge
+  #quartz-body .sidebar.left > .flex-component {
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 }
 
