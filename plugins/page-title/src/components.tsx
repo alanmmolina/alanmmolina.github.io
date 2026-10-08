@@ -278,23 +278,27 @@ const PageTitlePlugin = ((opts?: Options) => {
   .page-title {
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    /* flex-start: centering overflowed and clipped the logo off the left edge */
+    justify-content: flex-start;
     align-items: center;
-    gap: 0.5rem 1rem;
+    gap: 0.5rem 0.5rem;
     font-size: 1.25rem;
-    flex: 1;
+    /* flex-basis 0 so it shares the row with the explorer hamburger */
+    flex: 1 1 0;
     min-width: 0;
   }
 
   .page-title > a {
     flex-direction: row;
     gap: 0.5rem;
+    min-width: 0;
   }
 
   .page-title-logo {
     width: 2.25rem;
     height: 2.25rem;
     margin: 0;
+    flex-shrink: 0;
   }
 
   .page-title-divider {
@@ -303,9 +307,9 @@ const PageTitlePlugin = ((opts?: Options) => {
 
   .page-title-socials {
     margin: 0;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 0.5rem;
+    /* one row of icons — wrap the group, never the icons */
+    flex-wrap: nowrap;
   }
 }
 
