@@ -75,3 +75,20 @@ body .graph > h3 {
     text-decoration: none;
   }
 }
+
+// External-site marker on the talks listing item title — the entry opens the slides
+body[data-slug="talks/index"] {
+  --external-site-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M320 0H288V64h32 82.7L201.4 265.4 178.7 288 224 333.3l22.6-22.6L448 109.3V192v32h64V192 32 0H480 320zM32 32H0V64 480v32H32 456h32V480 352 320H424v32 96H64V96h96 32V32H160 32z'/%3E%3C/svg%3E");
+
+  .page-listing .desc h3 a::after {
+    content: "";
+    display: inline-block;
+    width: 1ex;
+    height: 1ex;
+    margin: 0 0.15em;
+    vertical-align: baseline;
+    background-color: var(--dark);
+    -webkit-mask: var(--external-site-icon) no-repeat center / contain;
+    mask: var(--external-site-icon) no-repeat center / contain;
+  }
+}
