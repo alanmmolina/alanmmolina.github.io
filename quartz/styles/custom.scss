@@ -29,9 +29,15 @@ body .search {
   }
 }
 
-// Phone header strip: explorer + title/socials on one row, search below full width.
-// The spacer plugin is a vertical filler for the desktop column; in this row it
-// just steals width from the title and the search.
+// The Explorer's own heading is a second top level we don't want — Notes,
+// Projects and Talks are already the root. Drop the toggle and keep the tree.
+body .explorer > button.desktop-explorer {
+  display: none;
+}
+
+// Phone header strip: explorer toggle + title/socials on one row, search below
+// full width. The spacer plugin is a vertical filler for the desktop column; in
+// this row it just steals width from the title and the search.
 @media all and ($mobile) {
   #quartz-body .sidebar.left {
     flex-wrap: wrap;
