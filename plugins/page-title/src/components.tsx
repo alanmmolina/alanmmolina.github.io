@@ -3,6 +3,8 @@ import { JSX } from "preact"
 import darkmodeScript from "./scripts/darkmode.inline"
 // @ts-ignore
 import readermodeScript from "./scripts/readermode.inline"
+// @ts-ignore
+import pageLogoScript from "./scripts/page-logo.inline"
 import { pathToRoot, classNames } from "@quartz-community/utils"
 import type {
   QuartzComponent,
@@ -62,6 +64,52 @@ const icons: Record<string, JSX.Element> = {
   ),
 }
 
+// The brain mark's own graph — the same nodes and bars as the solid logo path,
+// at the Graph of Contents weight. Rest points live in the SVG viewBox so the
+// spring script can read them straight off the markup.
+const logoNodes: { x: number; y: number }[] = [
+  { x: 47.244, y: 30.383 }, // 0
+  { x: 66.751, y: 34.161 }, // 1
+  { x: 28.487, y: 36.37 }, // 2
+  { x: 74.996, y: 44.589 }, // 3
+  { x: 44.964, y: 45.437 }, // 4
+  { x: 62.246, y: 55.183 }, // 5
+  { x: 83.196, y: 56.684 }, // 6
+  { x: 21.745, y: 58.883 }, // 7
+  { x: 62.264, y: 67.852 }, // 8
+  { x: 75.012, y: 67.867 }, // 9
+  { x: 48.765, y: 68.615 }, // 10
+  { x: 34.502, y: 67.876 }, // 11
+]
+
+const logoEdges: [number, number][] = [
+  [0, 1],
+  [0, 2],
+  [0, 4],
+  [1, 3],
+  [2, 7],
+  [3, 5],
+  [3, 6],
+  [4, 5],
+  [4, 7],
+  [4, 10],
+  [5, 8],
+  [6, 9],
+  [7, 11],
+  [8, 9],
+  [8, 10],
+  [10, 11],
+]
+
+// The short brainstem hanging off node 8 — a bare round-capped stroke, no node at the tip.
+const logoStemFrom = 8
+
+// The original mark's own mass: a uniform node at r = 4.5 in path space, which
+// is 3.375 once the path's scale(0.75) is applied. Drawn as a circle on top of
+// its bars rather than fused into one silhouette, a touch under that reads as
+// the same proportion at 6rem.
+const NODE_RADIUS = 3
+
 const PageTitlePlugin = ((opts?: Options) => {
   const PageTitle: QuartzComponent = ({ fileData, cfg, displayClass }: QuartzComponentProps) => {
     const title = cfg?.pageTitle ?? i18n(cfg.locale).propertyDefaults.title
@@ -69,18 +117,48 @@ const PageTitlePlugin = ((opts?: Options) => {
     const links = opts?.links ?? {}
     return (
       <h2 class={classNames(displayClass, "page-title")}>
-        <a href={baseDir}>
+        <a href={baseDir} draggable="false">
           <svg
             class="page-title-logo"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 100 100"
             aria-hidden="true"
           >
-            <g transform="translate(15, 15) scale(0.75)">
-              <path
-                d="M91,51c-0.5,0-0.9,0.1-1.3,0.2l-6-9.2c0.5-0.7,0.8-1.6,0.8-2.5c0-2.5-2-4.5-4.5-4.5c-0.4,0-0.8,0.1-1.2,0.2l-5.9-7.5c0.3-0.6,0.6-1.4,0.6-2.1c0-2.5-2-4.5-4.5-4.5c-1.5,0-2.8,0.7-3.6,1.8l-18.1-3.6C46.7,17.4,45,16,43,16c-2.3,0-4.2,1.8-4.5,4.1l-17,5.7C20.7,24.7,19.5,24,18,24c-2.5,0-4.5,2-4.5,4.5c0,1.2,0.5,2.4,1.3,3.2L8.1,54.1c-2.1,0.4-3.6,2.2-3.6,4.4C4.5,61,6.5,63,9,63c0.6,0,1.1-0.1,1.7-0.3l10.9,7.1c0,0.2-0.1,0.5-0.1,0.7c0,2.5,2,4.5,4.5,4.5c1.8,0,3.4-1.1,4.1-2.7l10.8,0.9c0.7,1.6,2.3,2.8,4.1,2.8c1.9,0,3.5-1.2,4.2-2.8l9.7-0.9c0.2,0.4,0.4,0.7,0.7,1.1l-3.9,8.6c-0.3,0.8,0,1.6,0.7,2C56.6,84,56.8,84,57,84c0.6,0,1.1-0.3,1.4-0.9l3.8-8.3c0.3,0.1,0.6,0.1,0.9,0.1c2,0,3.6-1.3,4.2-3.1h8.5C76.4,73.7,78,75,80,75c2.5,0,4.5-2,4.5-4.5c0-0.8-0.2-1.5-0.6-2.2l6-8.4c0.4,0.1,0.7,0.2,1.1,0.2c2.5,0,4.5-2,4.5-4.5S93.5,51,91,51z M80,66c-1.9,0-3.6,1.2-4.2,2.9h-8.6c-0.5-1.3-1.5-2.3-2.9-2.7l0.7-8.7c1.5-0.7,2.5-2.2,2.5-4c0-0.2,0-0.4-0.1-0.7l10.7-9.3c0.6,0.3,1.2,0.4,1.8,0.4c0.4,0,0.9-0.1,1.3-0.2l6,9.3c-0.5,0.7-0.7,1.6-0.7,2.5c0,1,0.3,1.9,0.9,2.7l-5.8,8.1C81.1,66.1,80.6,66,80,66z M26,66c-1.1,0-2.2,0.4-3,1.2L13,60.6c0.3-0.6,0.5-1.3,0.5-2.1c0-0.3,0-0.5-0.1-0.8l23.1-14.4c0.6,0.8,1.5,1.4,2.6,1.6l3.5,22.8c-0.9,0.6-1.6,1.5-1.9,2.5l-10.4-0.9C29.8,67.4,28.1,66,26,66z M18,33c2.4,0,4.4-1.9,4.5-4.4L39.3,23c0.4,0.7,1.1,1.2,1.8,1.6l-2.2,11.6c-1.9,0.5-3.4,2.2-3.4,4.3L11.9,55.1c-0.3-0.2-0.5-0.4-0.8-0.6l6.5-21.6C17.7,32.9,17.8,33,18,33z M69,30c0.6,0,1.2-0.1,1.7-0.3l5.6,7.2c-0.5,0.7-0.8,1.6-0.8,2.6c0,0.7,0.2,1.4,0.5,2l-10,8.7c-0.8-0.7-1.8-1.1-3-1.1c-1.1,0-2.1,0.4-2.9,1.1l-15.7-9.4c0,0,0-0.1,0-0.1c0-1.8-1.1-3.4-2.6-4.1L44,24.9c1.4-0.3,2.5-1.3,3.1-2.6l17.4,3.4C64.6,28.1,66.6,30,69,30z M45.5,67l-3.4-22.5c0.5-0.3,0.9-0.6,1.3-1l15.2,9.2c-0.1,0.3-0.1,0.6-0.1,0.9c0,2.1,1.5,3.9,3.5,4.4l-0.7,8.4c-1.3,0.5-2.2,1.6-2.6,3l-9.4,0.9C48.7,68.4,47.3,67.2,45.5,67z"
-                fill="currentColor"
+            <g class="logo-edges">
+              {logoEdges.map(([a, b]) => (
+                <line
+                  key={`${a}-${b}`}
+                  class="logo-edge"
+                  data-a={a}
+                  data-b={b}
+                  x1={logoNodes[a].x}
+                  y1={logoNodes[a].y}
+                  x2={logoNodes[b].x}
+                  y2={logoNodes[b].y}
+                />
+              ))}
+              <line
+                class="logo-stem"
+                data-stem={logoStemFrom}
+                x1={logoNodes[logoStemFrom].x}
+                y1={logoNodes[logoStemFrom].y}
+                x2={logoNodes[logoStemFrom].x - 4.589}
+                y2={logoNodes[logoStemFrom].y + 9.248}
               />
+            </g>
+            <g class="logo-nodes">
+              {logoNodes.map((node, index) => (
+                <g
+                  key={index}
+                  class="logo-node"
+                  data-index={index}
+                  data-x={node.x}
+                  data-y={node.y}
+                  transform={`translate(${node.x} ${node.y})`}
+                >
+                  <circle r={NODE_RADIUS} />
+                </g>
+              ))}
             </g>
           </svg>
           <span>{title}</span>
@@ -210,6 +288,81 @@ const PageTitlePlugin = ((opts?: Options) => {
   height: 6rem;
   margin-top: -1.25rem;
   margin-bottom: -1rem;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+}
+
+.page-title-logo:active {
+  cursor: grabbing;
+}
+
+/* The mark keeps the original logo's mass — bars at their path weight, nodes
+   solid and even — while the Graph of Contents supplies the behaviour: on
+   focus everything outside the 1-ring fades to 0.2, and the linked nodes open
+   into hollow rings. */
+.page-title-logo .logo-edge,
+.page-title-logo .logo-stem {
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  fill: none;
+  opacity: 1;
+  transition: opacity 0.3s ease, stroke-width 0.3s ease;
+}
+
+.page-title-logo .logo-node circle {
+  fill: currentColor;
+  fill-opacity: 1;
+  stroke: currentColor;
+  stroke-width: 0;
+  /* The circle sits at 0,0 inside its translated group, so scale about that
+     origin. transform-origin: center would resolve against the viewBox and
+     throw the node out from under the cursor. */
+  transform-origin: 0 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.2s ease,
+    fill-opacity 0.3s ease,
+    stroke-width 0.3s ease;
+}
+
+.page-title-logo.is-focusing .logo-edge,
+.page-title-logo.is-focusing .logo-stem {
+  opacity: 0.15;
+}
+
+.page-title-logo.is-focusing .logo-node circle {
+  opacity: 0.2;
+}
+
+.page-title-logo.is-focusing .logo-edge.is-lit,
+.page-title-logo.is-focusing .logo-stem.is-lit {
+  opacity: 0.5;
+}
+
+.page-title-logo.is-focusing .logo-node.is-lit circle {
+  opacity: 1;
+}
+
+/* Linked nodes open into the graph's hollow rings. */
+.page-title-logo.is-focusing .logo-node.is-ring circle {
+  fill-opacity: 0;
+  stroke-width: 1.5;
+}
+
+/* The focused node scales up 1.1x — the graph does exactly this to its label. */
+.page-title-logo.is-focusing .logo-node.is-focus circle {
+  transform: scale(1.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-title-logo .logo-edge,
+  .page-title-logo .logo-stem,
+  .page-title-logo .logo-node circle {
+    transition: none;
+  }
 }
 
 .page-title-divider {
@@ -370,6 +523,7 @@ const PageTitlePlugin = ((opts?: Options) => {
 `
 
   PageTitle.beforeDOMLoaded = [darkmodeScript, readermodeScript]
+  PageTitle.afterDOMLoaded = [pageLogoScript]
 
   return PageTitle
 }) satisfies QuartzComponentConstructor
