@@ -10,7 +10,7 @@ A quiet, terminal-adjacent digital garden. The mood is "personal zettelkasten, o
 
 - **Density:** Art-Gallery Airy (2–3). Generous whitespace, one column of prose flanked by side panels. No dashboard cramming.
 - **Variance:** Predictable Symmetric (2–3). A stable three-column grid. Deliberate — this is a reading surface, not a portfolio splash. Asymmetry lives inside the articles (diagrams, code, notes), never in the chrome.
-- **Motion:** Static Restrained (2–3). Transitions are short (0.2s ease), functional, and silent. No choreography. The only living element is the graph view.
+- **Motion:** Static Restrained (2–3). Transitions are short (0.2s ease), functional, and silent. No choreography. The only living elements are the graph view and the logo graph — both physics, both asleep the instant they rest.
 
 The site must feel **engineered, not decorated**. Every visual element — the highlight-tinted internal links, the bordered code blocks, the 1px hairlines — reads like a deliberate typographic decision, not a theme default.
 
@@ -135,7 +135,8 @@ Callouts are the one place color enters the site. Each Obsidian callout type get
 
 - **Transition standard:** `0.2s ease` on color and opacity only. Applies to links, anchor reveals, footnote backrefs, checkbox states, the 3px reading-progress bar.
 - **Scroll:** smooth (`scroll-behavior: smooth`), with `scroll-padding-top: 4rem` on mobile so headings don't hide under controls.
-- **Graph view:** the one sanctioned living component — force-directed, springs, repositions on drag. Its motion is physics, not decoration; it never obstructs reading.
+- **Graph view:** one of two sanctioned living components — force-directed, springs, repositions on drag. Its motion is physics, not decoration; it never obstructs reading.
+- **Logo graph:** the brain mark above the site title is the same kind of thing — the logo's own nodes and bars as a spring mesh. It settles into the mark on load, flexes when you drag a node and springs back, and lights a node's 1-ring on hover (the rest steps back). Then it sleeps: no idle drift, ever. Physics runs only where a pointer can actually use it (desktop); the small mobile mark stays still.
 - **Popovers:** hover-preview of internal notes, fade-in, dismiss on leave.
 - **Performance rules:** animate `transform`/`opacity` exclusively (progress bar animates `width` only because it's a 3px fixed strip — no layout thrash). No parallax, no scroll-jacking, no grain/noise overlays.
 - **No perpetual micro-loops.** A reading site does not pulse. If something moves forever, it gets deleted.
@@ -197,7 +198,7 @@ Before merging any visual change, verify:
 1. Does it use only tokens from section 2? (No new colors without updating this file.)
 2. Does it respect the no-cards, no-shadows, borders-only rule?
 3. Does it collapse to one column below 800px with no horizontal scroll?
-4. Is every new animation `0.2s ease` on color/opacity, or the graph view?
+4. Is every new animation `0.2s ease` on color/opacity, or one of the two living graphs (graph view, logo graph)?
 5. Does it introduce an accent color, emoji, or Inter? If yes, stop.
 6. Would it still look right with the terminal-first identity of `~/.alanmmolina`?
 7. Do any new or edited diagrams still render in Excalifont with transparent canvas, a theme pair, and honest hand-drawn strokes? If a sketch got "cleaned up," it's wrong.
